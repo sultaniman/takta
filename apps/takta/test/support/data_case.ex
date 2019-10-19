@@ -28,6 +28,8 @@ defmodule Takta.DataCase do
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Takta.Repo)
 
+    Takta.Fixtures.run()
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Takta.Repo, {:shared, self()})
     end

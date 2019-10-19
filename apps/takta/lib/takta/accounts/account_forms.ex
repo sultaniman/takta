@@ -1,4 +1,4 @@
-defmodule Idp.Accounts.AccountForms do
+defmodule Takta.Accounts.AccountForms do
   use Takta.Model
   use Takta.Query
 
