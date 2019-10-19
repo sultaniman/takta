@@ -5,7 +5,12 @@ defmodule Idp.Accounts.AccountForms do
   alias Takta.Accounts.User
   alias Takta.Validators
 
-  @password_min_length Application.get_env(:takta, :password_min_length, 6)
+  @default_password_length 6
+  @password_min_length Application.get_env(
+    :takta,
+    :password_min_length,
+    @default_password_length
+  )
 
   def base(%User{} = user, attrs) do
     fields = ~w(email full_name is_active is_admin)a
