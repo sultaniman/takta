@@ -1,9 +1,9 @@
 defmodule Takta.Fixtures do
   use Takta.Query
-  alias Takta.Accounts
+  alias Takta.{Accounts, Whiteboards}
 
   def run do
-    Accounts.create(%{
+    {:ok, user1} = Accounts.create(%{
       email: "su@example.com",
       full_name: "Sudo name",
       password: "12345678",
@@ -33,6 +33,12 @@ defmodule Takta.Fixtures do
       password: "12345678",
       is_active: true,
       is_admin: false
+    })
+
+    Whiteboards.create(%{
+      name: "xyz",
+      path: "my/path.png",
+      owner_id: user1.id
     })
   end
 end
