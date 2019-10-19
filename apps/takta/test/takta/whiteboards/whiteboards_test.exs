@@ -13,6 +13,10 @@ defmodule Takta.WhiteboarsTest do
       assert Whiteboards.find_by_id(one.id)
     end
 
+    test "find_by_id returns nil if whiteboard not found" do
+      refute Whiteboards.find_by_id(UUID.uuid4())
+    end
+
     test "can create new whiteboard" do
       user = Accounts.all() |> List.first()
 
