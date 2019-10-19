@@ -16,3 +16,14 @@ config :takta_web, TaktaWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :takta,
+  password_min_length: 3
+
+config :auth,
+  password_hash_salt: "saltysalty",
+
+  # Argon2
+  t_cost: 1,
+  m_cost: 8,
+  hashlen: 4
