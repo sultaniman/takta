@@ -23,7 +23,7 @@ defmodule Takta.MixProject do
   def application do
     [
       mod: {Takta.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :auth]
     ]
   end
 
@@ -38,7 +38,8 @@ defmodule Takta.MixProject do
     [
       {:ecto_sql, "~> 3.1"},
       {:postgrex, ">= 0.0.0"},
-      {:jason, "~> 1.0"}
+      {:jason, "~> 1.0"},
+      {:auth, in_umbrella: true}
     ]
   end
 

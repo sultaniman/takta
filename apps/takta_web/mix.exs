@@ -24,7 +24,7 @@ defmodule TaktaWeb.MixProject do
   def application do
     [
       mod: {TaktaWeb.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :storage]
     ]
   end
 
@@ -43,7 +43,8 @@ defmodule TaktaWeb.MixProject do
       {:gettext, "~> 0.11"},
       {:takta, in_umbrella: true},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:storage, in_umbrella: true}
     ]
   end
 
