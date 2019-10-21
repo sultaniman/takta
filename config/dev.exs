@@ -1,5 +1,13 @@
 import Config
 
+config :auth, Auth.Repo,
+  username: "postgres",
+  password: "postgres",
+  database: "takta_dev",
+  hostname: "localhost",
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+
 # Configure your database
 config :takta, Takta.Repo,
   username: "postgres",

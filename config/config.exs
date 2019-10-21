@@ -28,13 +28,15 @@ config :takta,
   password_min_length: 8
 
 config :auth,
+  ecto_repos: [Auth.Repo],
+
+config :auth,
   password_hash_salt: System.get_env("PASSWORD_HASH_SALT", "hash-hash"),
 
   # Argon2
   t_cost: 1,
   m_cost: 8,
   hashlen: 4
-
 
 # config :oauth2, debug: true
 
