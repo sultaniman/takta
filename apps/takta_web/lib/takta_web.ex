@@ -30,6 +30,7 @@ defmodule TaktaWeb do
     quote do
       use Phoenix.View,
         root: "lib/takta_web/templates",
+        pattern: "**/*",
         namespace: TaktaWeb
 
       # Import convenience functions from controllers

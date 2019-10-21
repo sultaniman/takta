@@ -35,6 +35,37 @@ config :auth,
   m_cost: 8,
   hashlen: 4
 
+
+# config :oauth2, debug: true
+
+# Ueberauth
+config :ueberauth, Ueberauth,
+  providers: [
+    google: {
+      Ueberauth.Strategy.Google,
+      [
+        default_scope: "email profile",
+        prompt: "select_account",
+        access_type: "offline"
+      ]
+    },
+    github: {
+      Ueberauth.Strategy.Github,
+      [
+        default_scope: "user",
+        send_redirect_uri: false
+      ]
+    }
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
+
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+  client_id: System.get_env("GITHUB_CLIENT_ID"),
+  client_secret: System.get_env("GITHUB_CLIENT_SECRET")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

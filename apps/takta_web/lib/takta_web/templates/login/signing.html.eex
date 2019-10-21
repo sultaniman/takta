@@ -1,0 +1,7 @@
+<div class="auth">
+<p>Please choose existing login method</p>
+
+<%= render "button.html", net: "Github", conn: @conn %>
+<%= render "button.html", net: "Google", conn: @conn %>
+<%= render "button.html", net: "Twitter", conn: @conn %>
+</div>

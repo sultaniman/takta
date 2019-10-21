@@ -1,0 +1,4 @@
+<a class="signin">
+  <img class="signin__img" src="<%= Routes.static_path(@conn, "/img/#{String.downcase(@net)}.svg") %>"/>
+  Sign using <%= @net %>
+</a>
