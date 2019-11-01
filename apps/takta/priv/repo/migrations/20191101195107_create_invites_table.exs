@@ -4,7 +4,6 @@ defmodule Takta.Repo.Migrations.CreateInvitesTable do
   def change do
     create table(:invites, primary_key: false) do
       add :id, :uuid, primary_key: true
-
       add :used, :boolean, default: false
       add :code, :string
 
