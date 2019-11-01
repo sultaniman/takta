@@ -1,6 +1,5 @@
 defmodule Takta.WhiteboarsTest do
-  use Takta.DataCase
-  use Takta.Query
+  use Takta.{DataCase, Query}
   alias Takta.{Accounts, Whiteboards}
 
   describe "whiteboards 🚧 ::" do

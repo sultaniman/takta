@@ -11,7 +11,6 @@ defmodule Takta.Whiteboards.WhiteboardForms do
     wb
     |> cast(attrs, fields)
     |> validate_required(required_fields)
-    # |> foreign_key_constraint(:owner_id)
   end
 
   def new(%Whiteboard{} = wb, params), do: wb |> base(params)

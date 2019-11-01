@@ -6,6 +6,7 @@ config :takta,
 
 config :takta_web,
   ecto_repos: [Takta.Repo],
+  signing_salt: "salt",
   generators: [context_app: :takta, binary_id: true]
 
 # Configures the endpoint
@@ -28,7 +29,7 @@ config :takta,
   password_min_length: 8
 
 config :auth,
-  ecto_repos: [Auth.Repo],
+  ecto_repos: [Auth.Repo]
 
 config :auth,
   password_hash_salt: System.get_env("PASSWORD_HASH_SALT", "hash-hash"),

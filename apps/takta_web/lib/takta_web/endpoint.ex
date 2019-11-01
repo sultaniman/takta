@@ -35,7 +35,7 @@ defmodule TaktaWeb.Endpoint do
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
-  signing_salt = Application.get_env(:idp_web, "signing_salt")
+  signing_salt = Application.get_env(:takta_web, "signing_salt")
 
   plug Plug.Session,
     store: :cookie,

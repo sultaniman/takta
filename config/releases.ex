@@ -1,6 +1,6 @@
 import Config
 
-config :idp_web, TaktaWeb.Endpoint,
+config :takta_web, TaktaWeb.Endpoint,
   secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),
   signing_salt: System.fetch_env!("SIGNING_SALT")
 
