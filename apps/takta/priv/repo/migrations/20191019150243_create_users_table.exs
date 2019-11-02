@@ -15,5 +15,6 @@ defmodule Takta.Repo.Migrations.CreateUsersTable do
     end
 
     create unique_index(:users, [:email])
+    create index(:users, [:full_name])
   end
 end
