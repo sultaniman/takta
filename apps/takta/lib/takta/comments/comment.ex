@@ -5,8 +5,9 @@ defmodule Takta.Comments.Comment do
 
   schema "comments" do
     field :content, :string
-    field :code, :string
 
     belongs_to :author, User
+
+    timestamps()
   end
 end

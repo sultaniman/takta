@@ -8,5 +8,7 @@ defmodule Takta.Annotations.Annotation do
     field :coords, :map
 
     belongs_to :comment, Comment
+
+    timestamps()
   end
 end

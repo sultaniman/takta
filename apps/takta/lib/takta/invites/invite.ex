@@ -10,5 +10,7 @@ defmodule Takta.Invites.Invite do
 
     belongs_to :used_by, User
     belongs_to :whiteboard, Whiteboard
+
+    timestamps()
   end
 end
