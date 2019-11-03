@@ -1,6 +1,5 @@
 defmodule Takta.Whiteboards.WhiteboardForms do
-  use Takta.Model
-  use Takta.Query
+  use Takta.{Model, Query}
 
   alias Takta.Whiteboards.Whiteboard
 
