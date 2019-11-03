@@ -14,10 +14,15 @@ defmodule Takta.Accounts do
   end
 
   def find_comments(user_id) do
-    case find_by_id(user_id) do
-      nil -> {:error, :not_found}
-      user -> Repo.preload(user, :comments).comments
-    end
+    user_id
+    |> preloaded(:comments)
+    |> Map.get(:comments)
+  end
+
+  def find_whiteboards(user_id) do
+    user_id
+    |> preloaded(:whiteboards)
+    |> Map.get(:whiteboards)
   end
 
   def create(params) do
@@ -36,5 +41,12 @@ defmodule Takta.Accounts do
     user
     |> AccountForms.change_password(new_password)
     |> Repo.update()
+  end
+
+  defp preloaded(user_id, field) do
+    case find_by_id(user_id) do
+      nil -> {:error, :not_found}
+      user -> Repo.preload(user, field)
+    end
   end
 end

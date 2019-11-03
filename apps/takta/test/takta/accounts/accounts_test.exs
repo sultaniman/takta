@@ -116,5 +116,10 @@ defmodule Takta.AccountsTest do
       user = Accounts.find_by_email("su@example.com")
       assert length(Accounts.find_comments(user.id)) == 4
     end
+
+    test "can list whiteboards for user" do
+      user = Accounts.find_by_email("su@example.com")
+      assert length(Accounts.find_whiteboards(user.id)) == 1
+    end
   end
 end
