@@ -13,6 +13,13 @@ defmodule Takta.Accounts do
     Repo.one(from u in User, where: u.email == ^email)
   end
 
+  def find_comments(user_id) do
+    case find_by_id(user_id) do
+      nil -> {:error, :not_found}
+      user -> Repo.preload(user, :comments).comments
+    end
+  end
+
   def create(params) do
     %User{}
     |> AccountForms.new(params)

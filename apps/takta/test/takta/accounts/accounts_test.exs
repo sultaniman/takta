@@ -111,5 +111,10 @@ defmodule Takta.AccountsTest do
 
       assert changeset.errors == [new_password_confirmation: {"Passwords do not match", []}]
     end
+
+    test "can list comments for user" do
+      user = Accounts.find_by_email("su@example.com")
+      assert length(Accounts.find_comments(user.id)) == 4
+    end
   end
 end

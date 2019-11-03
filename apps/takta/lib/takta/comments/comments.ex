@@ -3,7 +3,7 @@ defmodule Takta.Comments do
   use Takta.Query
   alias Takta.Comments.{Comment, CommentForms}
 
-  def all, do: Repo.all(Whiteboard)
+  def all, do: Repo.all(Comment)
 
   def find_by_id(cid) do
     Repo.one(from c in Comment, where: c.id == ^cid)

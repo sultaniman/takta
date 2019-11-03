@@ -2,8 +2,9 @@ defmodule Takta.Accounts.User do
   @moduledoc false
   use Takta.Model
 
-  alias Takta.Whiteboards.Whiteboard
+  alias Takta.Comments.Comment
   alias Takta.Members.Member
+  alias Takta.Whiteboards.Whiteboard
 
   schema "users" do
     field :email, :string
@@ -22,6 +23,7 @@ defmodule Takta.Accounts.User do
 
     has_many :whiteboards, Whiteboard, foreign_key: :owner_id
     has_many :memberships, Member, foreign_key: :member_id
+    has_many :comments, Comment, foreign_key: :author_id
 
     timestamps()
   end
