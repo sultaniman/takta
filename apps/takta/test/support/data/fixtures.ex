@@ -3,6 +3,7 @@ defmodule Takta.Fixtures do
   alias Takta.{
     Accounts,
     Comments,
+    Invites,
     Whiteboards
   }
 
@@ -23,7 +24,7 @@ defmodule Takta.Fixtures do
       is_admin: true
     })
 
-    Accounts.create(%{
+    {:ok, consultant} = Accounts.create(%{
       email: "consultant1@example.com",
       full_name: "Con1 name",
       password: "12345678",
@@ -39,7 +40,7 @@ defmodule Takta.Fixtures do
       is_admin: false
     })
 
-    Whiteboards.create(%{
+    {:ok, wb} = Whiteboards.create(%{
       name: "xyz",
       path: "my/path.png",
       owner_id: user1.id
@@ -63,6 +64,28 @@ defmodule Takta.Fixtures do
     Comments.create(%{
       content: "Comment 4",
       author_id: user1.id
+    })
+
+    Invites.create(%{
+      used: false,
+      code: "my-shiny-invite",
+      created_by_id: user1.id,
+      whiteboard_id: wb.id
+    })
+
+    Invites.create(%{
+      used: false,
+      code: "my-1m-bucks-invite",
+      created_by_id: user1.id,
+      whiteboard_id: wb.id
+    })
+
+    Invites.create(%{
+      used: false,
+      code: "my-1b-bucks-invite",
+      used_by_id: consultant.id,
+      created_by_id: user1.id,
+      whiteboard_id: wb.id
     })
   end
 end
