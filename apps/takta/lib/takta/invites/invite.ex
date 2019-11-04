@@ -8,6 +8,10 @@ defmodule Takta.Invites.Invite do
     field :used, :boolean, default: false
     field :code, :string
 
+    # Invite by user (owner of white board)
+    # to `used_by` future user which will be
+    # created upon registration of a new user
+    # or be assigned to an existing user
     belongs_to :used_by, User
     belongs_to :created_by, User
     belongs_to :whiteboard, Whiteboard

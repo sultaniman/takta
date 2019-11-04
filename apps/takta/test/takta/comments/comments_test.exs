@@ -1,6 +1,10 @@
 defmodule Takta.CommentsTest do
   use Takta.{DataCase, Query}
-  alias Takta.{Accounts, Comments}
+  alias Takta.{
+    Accounts,
+    Comments,
+    Whiteboards
+  }
 
   describe "comments 💬 ::" do
     test "find all works as expected" do
@@ -17,11 +21,13 @@ defmodule Takta.CommentsTest do
     end
 
     test "can create new comment" do
+      wb = Whiteboards.all() |> List.first()
       user = Accounts.all() |> List.first()
 
       {:ok, comment} = Comments.create(%{
         content: "test-comment",
-        author_id: user.id
+        author_id: user.id,
+        whiteboard_id: wb.id
       })
 
       assert Comments.find_by_id(comment.id).id
@@ -34,7 +40,8 @@ defmodule Takta.CommentsTest do
 
       assert changeset.errors
       assert changeset.errors == [
-        author_id: {"can't be blank", [validation: :required]}
+        author_id: {"can't be blank", [validation: :required]},
+        whiteboard_id: {"can't be blank", [validation: :required]}
       ]
     end
 

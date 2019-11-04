@@ -9,6 +9,18 @@ defmodule Takta.Whiteboards do
     Repo.one(from w in Whiteboard, where: w.id == ^wb_id)
   end
 
+  def find_comments(wid) do
+    wid
+    |> preloaded(:comments)
+    |> Map.get(:comments)
+  end
+
+  def find_annotations(wid) do
+    wid
+    |> preloaded(:annotations)
+    |> Map.get(:annotations)
+  end
+
   def create(params) do
     %Whiteboard{}
     |> WhiteboardForms.new(params)
@@ -19,5 +31,12 @@ defmodule Takta.Whiteboards do
     wb
     |> WhiteboardForms.update(params)
     |> Repo.update()
+  end
+
+  defp preloaded(wid, field) do
+    case find_by_id(wid) do
+      nil -> {:error, :not_found}
+      user -> Repo.preload(user, field)
+    end
   end
 end

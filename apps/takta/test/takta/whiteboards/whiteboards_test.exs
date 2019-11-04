@@ -16,6 +16,16 @@ defmodule Takta.WhiteboarsTest do
       refute Whiteboards.find_by_id(UUID.uuid4())
     end
 
+    test "can access comments" do
+      one = Whiteboards.all() |> List.first()
+      assert length(Whiteboards.find_comments(one.id)) == 4
+    end
+
+    test "can access annotations" do
+      one = Whiteboards.all() |> List.first()
+      assert length(Whiteboards.find_annotations(one.id)) == 2
+    end
+
     test "can create new whiteboard" do
       user = Accounts.all() |> List.first()
 

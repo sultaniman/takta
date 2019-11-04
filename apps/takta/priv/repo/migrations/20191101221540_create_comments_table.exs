@@ -7,6 +7,7 @@ defmodule Takta.Repo.Migrations.CreateCommentsTable do
       add :content, :string
 
       add :author_id, references(:users, on_delete: :delete_all, type: :binary_id)
+      add :whiteboard_id, references(:whiteboards, on_delete: :delete_all, type: :binary_id)
 
       timestamps()
     end

@@ -2,6 +2,7 @@ defmodule Takta.Fixtures do
   use Takta.Query
   alias Takta.{
     Accounts,
+    Annotations,
     Comments,
     Invites,
     Whiteboards
@@ -46,24 +47,46 @@ defmodule Takta.Fixtures do
       owner_id: user1.id
     })
 
-    Comments.create(%{
+    {:ok, comment1} = Comments.create(%{
       content: "Comment 1",
-      author_id: user1.id
+      author_id: user1.id,
+      whiteboard_id: wb.id
     })
 
-    Comments.create(%{
+    {:ok, comment2} = Comments.create(%{
       content: "Comment 2",
-      author_id: user1.id
+      author_id: user1.id,
+      whiteboard_id: wb.id
     })
 
     Comments.create(%{
       content: "Comment 3",
-      author_id: user1.id
+      author_id: user1.id,
+      whiteboard_id: wb.id
     })
 
     Comments.create(%{
       content: "Comment 4",
-      author_id: user1.id
+      author_id: user1.id,
+      whiteboard_id: wb.id
+    })
+
+    Annotations.create(%{
+      coords: %{
+        x: 1,
+        y: 1
+      },
+      comment_id: comment1.id,
+      whiteboard_id: wb.id
+    })
+
+    Annotations.create(%{
+      coords: %{
+        x: 8,
+        y: 8
+      },
+      comment_id: comment2.id,
+      whiteboard_id: wb.id
     })
 
     Invites.create(%{

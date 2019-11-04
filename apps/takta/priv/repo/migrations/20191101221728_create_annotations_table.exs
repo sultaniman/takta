@@ -7,6 +7,7 @@ defmodule Takta.Repo.Migrations.CreateAnnotationsTable do
       add :coords, :map
 
       add :comment_id, references(:comments, on_delete: :delete_all, type: :binary_id)
+      add :whiteboard_id, references(:whiteboards, on_delete: :delete_all, type: :binary_id)
 
       timestamps()
     end
