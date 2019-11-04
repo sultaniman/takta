@@ -9,6 +9,7 @@ defmodule Takta.Invites.Invite do
     field :code, :string
 
     belongs_to :used_by, User
+    belongs_to :created_by, User
     belongs_to :whiteboard, Whiteboard
 
     timestamps()
