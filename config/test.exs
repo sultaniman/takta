@@ -6,13 +6,15 @@ config :takta, Takta.Repo,
   password: "postgres",
   database: "takta_test",
   hostname: "localhost",
+  migration_timestamps: [type: :naive_datetime_usec],
   pool: Ecto.Adapters.SQL.Sandbox
 
-  config :auth, Auth.Repo,
+config :auth, Auth.Repo,
   username: "postgres",
   password: "postgres",
   database: "takta_test",
   hostname: "localhost",
+  migration_timestamps: [type: :naive_datetime_usec],
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,

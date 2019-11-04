@@ -5,6 +5,7 @@ config :auth, Auth.Repo,
   password: "postgres",
   database: "takta_dev",
   hostname: "localhost",
+  migration_timestamps: [type: :naive_datetime_usec],
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -14,6 +15,7 @@ config :takta, Takta.Repo,
   password: "postgres",
   database: "takta_dev",
   hostname: "localhost",
+  migration_timestamps: [type: :naive_datetime_usec],
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

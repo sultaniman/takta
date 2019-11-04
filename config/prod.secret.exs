@@ -14,11 +14,13 @@ database_url =
 config :takta, Takta.Repo,
   # ssl: true,
   url: database_url,
+  migration_timestamps: [type: :naive_datetime_usec],
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
 config :auth, Auth.Repo,
   # ssl: true,
   url: database_url,
+  migration_timestamps: [type: :naive_datetime_usec],
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
 secret_key_base =
