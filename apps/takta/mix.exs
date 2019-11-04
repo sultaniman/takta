@@ -8,6 +8,7 @@ defmodule Takta.MixProject do
     {:postgrex, ">= 0.0.0"},
     {:jason, "~> 1.0"},
     {:uuid, "~> 1.1"},
+    {:timex, "~> 3.5"},
     {:auth, in_umbrella: true}
   ]
 
@@ -36,7 +37,7 @@ defmodule Takta.MixProject do
   def application do
     [
       mod: {Takta.Application, []},
-      extra_applications: [:logger, :runtime_tools, :auth]
+      extra_applications: [:logger, :runtime_tools, :auth, :timex]
     ]
   end
 
