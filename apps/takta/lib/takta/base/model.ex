@@ -9,7 +9,7 @@ defmodule Takta.Model do
       import Ecto.Query
 
       # Set all datetimes to UTC by default
-      @timestamp_opts [type: :utc_datetime]
+      @timestamps_opts [type: :utc_datetime_usec]
       @primary_key {:id, :binary_id, autogenerate: true}
       @foreign_key_type :binary_id
     end
