@@ -1,4 +1,5 @@
 defmodule Takta.Comments.CommentForms do
+  @moduledoc false
   use Takta.{Model, Query}
 
   alias Takta.Comments.Comment

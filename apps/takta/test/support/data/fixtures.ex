@@ -5,6 +5,7 @@ defmodule Takta.Fixtures do
     Annotations,
     Comments,
     Invites,
+    Members,
     Whiteboards
   }
 
@@ -17,7 +18,7 @@ defmodule Takta.Fixtures do
       is_admin: true
     })
 
-    Accounts.create(%{
+    {:ok, admin} = Accounts.create(%{
       email: "admin@example.com",
       full_name: "Admin name",
       password: "12345678",
@@ -41,7 +42,13 @@ defmodule Takta.Fixtures do
       is_admin: false
     })
 
-    {:ok, wb} = Whiteboards.create(%{
+    {:ok, wb1} = Whiteboards.create(%{
+      name: "xyz",
+      path: "my/path.png",
+      owner_id: user1.id
+    })
+
+    {:ok, wb2} = Whiteboards.create(%{
       name: "xyz",
       path: "my/path.png",
       owner_id: user1.id
@@ -50,25 +57,25 @@ defmodule Takta.Fixtures do
     {:ok, comment1} = Comments.create(%{
       content: "Comment 1",
       author_id: user1.id,
-      whiteboard_id: wb.id
+      whiteboard_id: wb1.id
     })
 
     {:ok, comment2} = Comments.create(%{
       content: "Comment 2",
       author_id: user1.id,
-      whiteboard_id: wb.id
+      whiteboard_id: wb1.id
     })
 
     Comments.create(%{
       content: "Comment 3",
       author_id: user1.id,
-      whiteboard_id: wb.id
+      whiteboard_id: wb1.id
     })
 
     Comments.create(%{
       content: "Comment 4",
       author_id: user1.id,
-      whiteboard_id: wb.id
+      whiteboard_id: wb1.id
     })
 
     Annotations.create(%{
@@ -77,7 +84,7 @@ defmodule Takta.Fixtures do
         y: 1
       },
       comment_id: comment1.id,
-      whiteboard_id: wb.id
+      whiteboard_id: wb1.id
     })
 
     Annotations.create(%{
@@ -86,21 +93,21 @@ defmodule Takta.Fixtures do
         y: 8
       },
       comment_id: comment2.id,
-      whiteboard_id: wb.id
+      whiteboard_id: wb1.id
     })
 
     Invites.create(%{
       used: false,
       code: "my-shiny-invite",
       created_by_id: user1.id,
-      whiteboard_id: wb.id
+      whiteboard_id: wb1.id
     })
 
     Invites.create(%{
       used: false,
       code: "my-1m-bucks-invite",
       created_by_id: user1.id,
-      whiteboard_id: wb.id
+      whiteboard_id: wb1.id
     })
 
     Invites.create(%{
@@ -108,7 +115,22 @@ defmodule Takta.Fixtures do
       code: "my-1b-bucks-invite",
       used_by_id: consultant.id,
       created_by_id: user1.id,
-      whiteboard_id: wb.id
+      whiteboard_id: wb1.id
+    })
+
+    Members.create(%{
+      member_id: user1.id,
+      whiteboard_id: wb1.id
+    })
+
+    Members.create(%{
+      member_id: consultant.id,
+      whiteboard_id: wb2.id
+    })
+
+    Members.create(%{
+      member_id: admin.id,
+      whiteboard_id: wb2.id
     })
   end
 end
