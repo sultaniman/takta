@@ -64,9 +64,9 @@ defmodule Takta.AccountsTest do
         assert changeset.errors
 
         assert changeset.errors == [
-                 email: {"can't be blank", [validation: :required]},
-                 full_name: {"can't be blank", [validation: :required]}
-               ]
+          email: {"can't be blank", [validation: :required]},
+          full_name: {"can't be blank", [validation: :required]}
+        ]
       end
     end
 
@@ -119,7 +119,7 @@ defmodule Takta.AccountsTest do
 
     test "can list whiteboards for user" do
       user = Accounts.find_by_email("su@example.com")
-      assert length(Accounts.find_whiteboards(user.id)) == 1
+      assert length(Accounts.find_whiteboards(user.id)) == 2
     end
   end
 end
