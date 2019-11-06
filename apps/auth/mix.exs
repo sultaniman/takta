@@ -6,7 +6,8 @@ defmodule Auth.MixProject do
   @deps [
     {:argon2_elixir, "~> 2.0"},
     {:ecto_sql, "~> 3.1"},
-    {:postgrex, ">= 0.0.0"}
+    {:postgrex, ">= 0.0.0"},
+    {:guardian, "~> 2.0"}
   ]
 
   @aliases [
