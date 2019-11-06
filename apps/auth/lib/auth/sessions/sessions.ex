@@ -3,11 +3,10 @@ defmodule Auth.Sessions do
   use Auth.Query
 
   alias Auth.Sessions.Token
-  alias Auth.Guardian
 
   def create_token(user_id) do
     %{
-      token: Guardian.subject_for_token(user_id, nil),
+      token: Auth.Guardian.encode_and_sign(user_id),
       user_id: user_id
     }
     |> Token.new()
@@ -15,6 +14,9 @@ defmodule Auth.Sessions do
   end
 
   def is_valid?(token) do
-    Guardian.decode_and_verify(token)
+    case Auth.Guardian.decode_and_verify(token) do
+      {:ok, _claims} -> true
+      {:error, _reason} -> false
+    end
   end
 end
