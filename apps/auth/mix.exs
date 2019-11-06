@@ -9,6 +9,12 @@ defmodule Auth.MixProject do
     {:postgrex, ">= 0.0.0"}
   ]
 
+  @aliases [
+    "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+    "ecto.reset": ["ecto.drop", "ecto.setup"],
+    test: ["ecto.drop", "ecto.create --quiet", "ecto.migrate", "test"]
+  ]
+
   def project do
     [
       app: :auth,
@@ -19,7 +25,8 @@ defmodule Auth.MixProject do
       lockfile: "../../mix.lock",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
-      deps: @deps
+      deps: @deps,
+      aliases: @aliases
     ]
   end
 
