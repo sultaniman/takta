@@ -4,11 +4,14 @@ defmodule Auth.Sessions do
 
   alias Auth.Sessions.Token
 
+  def all_tokens, do: Repo.all(Token)
+
   def create_token(user_id) do
-    %{
-      token: Auth.Guardian.encode_and_sign(user_id),
-      user_id: user_id
-    }
+    {:ok, token, _claims} =
+      user_id
+      |> Auth.Guardian.encode_and_sign()
+
+    %{token: token, user_id: user_id}
     |> Token.new()
     |> Repo.insert()
   end

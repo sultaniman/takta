@@ -5,7 +5,7 @@ defmodule Auth.Repo.Migrations.CreateTokensTable do
     create table(:tokens, primary_key: false) do
       add :id, :uuid, primary_key: true
 
-      add :token, :string
+      add :token, :text
       add :user_id, :uuid
 
       timestamps()

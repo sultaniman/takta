@@ -33,7 +33,8 @@ config :auth,
 
 config :auth, Auth.Guardian,
   issuer: "auth",
-  secret_key: System.get_env("SECRET_KEY_BASE", "DEFAULT_SECRET_KEY")
+  secret_key: System.get_env("SECRET_KEY_BASE", "DEFAULT_SECRET_KEY"),
+  ttl: {15, :minutes}
 
 config :auth,
   password_hash_salt: System.get_env("PASSWORD_HASH_SALT", "hash-hash"),

@@ -7,7 +7,9 @@ defmodule Auth.MixProject do
     {:argon2_elixir, "~> 2.0"},
     {:ecto_sql, "~> 3.1"},
     {:postgrex, ">= 0.0.0"},
-    {:guardian, "~> 2.0"}
+    {:guardian, "~> 2.0"},
+    {:uuid, "~> 1.1"},
+    {:poison, "~> 4.0"}
   ]
 
   @aliases [
@@ -25,6 +27,7 @@ defmodule Auth.MixProject do
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
       elixir: "~> 1.9",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: @deps,
       aliases: @aliases
@@ -38,4 +41,8 @@ defmodule Auth.MixProject do
       mod: {Auth.Application, []}
     ]
   end
+
+  # Specifies which paths to compile per environment.
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib", "test/support/data"]
 end
