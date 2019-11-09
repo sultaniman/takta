@@ -2,9 +2,9 @@ defmodule Auth.Sessions do
   @moduledoc false
   use Auth.Query
 
-  alias Auth.Sessions.Token
+  alias Auth.Sessions.MagicToken
 
-  def all_tokens, do: Repo.all(Token)
+  def all_tokens, do: Repo.all(MagicToken)
 
   def create_token(user_id) do
     {:ok, token, _claims} =
@@ -12,7 +12,7 @@ defmodule Auth.Sessions do
       |> Auth.Guardian.encode_and_sign()
 
     %{token: token, user_id: user_id}
-    |> Token.new()
+    |> MagicToken.new()
     |> Repo.insert()
   end
 

@@ -1,9 +1,9 @@
-defmodule Auth.Sessions.Token do
+defmodule Auth.Sessions.MagicToken do
   @moduledoc false
   use Auth.{Model, Query}
-  alias Auth.Sessions.Token
+  alias Auth.Sessions.MagicToken
 
-  schema "tokens" do
+  schema "magic_tokens" do
     field :token, :string
     field :user_id, :binary_id
 
@@ -13,7 +13,7 @@ defmodule Auth.Sessions.Token do
   def new(params) do
     fields = [:token, :user_id]
 
-    %Token{}
+    %MagicToken{}
     |> cast(params, fields)
     |> validate_required(fields)
   end
