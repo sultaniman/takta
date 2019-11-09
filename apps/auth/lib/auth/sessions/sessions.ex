@@ -1,7 +1,6 @@
 defmodule Auth.Sessions do
   @moduledoc false
   use Auth.Query
-
   alias Auth.Sessions.MagicToken
 
   def all_tokens, do: Repo.all(MagicToken)
