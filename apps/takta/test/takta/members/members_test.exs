@@ -2,7 +2,6 @@ defmodule Takta.MembersTest do
   use Takta.{DataCase, Query}
   alias Takta.{
     Accounts,
-    Comments,
     Members,
     Whiteboards
   }
