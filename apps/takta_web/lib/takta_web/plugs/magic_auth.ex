@@ -1,5 +1,3 @@
 defmodule TaktaWeb.Plugs.MagicAuth do
-  import Plug.Conn
-
-
+  # import Plug.Conn
 end

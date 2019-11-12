@@ -30,6 +30,8 @@ defmodule TaktaWeb.Router do
     get("/signout", AuthController, :signout)
     get("/:provider", AuthController, :request)
     get("/:provider/callback", AuthController, :signin)
+
+    # Login w/ JWT token
     get("/t/:magic_token", MagicController, :magic_signin)
   end
 end
