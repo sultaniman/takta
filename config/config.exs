@@ -6,14 +6,13 @@ config :takta,
 
 config :takta_web,
   ecto_repos: [Takta.Repo],
-  signing_salt: "salt",
+  signing_salt: System.get_env("SIGNING_SALT", "DEFAULT_SIGNING_SALT"),
   generators: [context_app: :takta, binary_id: true]
 
 # Configures the endpoint
 config :takta_web, TaktaWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: System.get_env("SECRET_KEY_BASE", "DEFAULT_SECRET_KEY"),
-  signing_salt: System.get_env("SIGNING_SALT", "DEFAULT_SIGNING_SALT"),
   render_errors: [view: TaktaWeb.ErrorView, accepts: ~w(json)],
   pubsub: [name: TaktaWeb.PubSub, adapter: Phoenix.PubSub.PG2]
 
