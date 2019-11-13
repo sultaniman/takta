@@ -1,4 +1,4 @@
-defmodule Auth.Guardian do
+defmodule Auth.Magic do
   @moduledoc false
   use Guardian, otp_app: :auth
 

@@ -8,7 +8,7 @@ defmodule Auth.Sessions do
   def create_token(user_id) do
     {:ok, token, _claims} =
       user_id
-      |> Auth.Guardian.encode_and_sign()
+      |> Auth.Magic.encode_and_sign()
 
     %{token: token, user_id: user_id}
     |> MagicToken.new()
@@ -23,7 +23,7 @@ defmodule Auth.Sessions do
   end
 
   def is_valid?(token) do
-    case Auth.Guardian.decode_and_verify(token) do
+    case Auth.Magic.decode_and_verify(token) do
       {:ok, _claims} -> true
       {:error, _reason} -> false
     end

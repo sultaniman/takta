@@ -10,8 +10,16 @@ defmodule Auth.SessionsTest do
       assert Sessions.all_tokens() |> length() > 0
     end
 
+    test "can create token works as expected" do
+      assert {:ok, token} = Sessions.create_token(UUID.uuid4())
+    end
+
+    test "can create token fails if no input given" do
+      assert {:error, _changeset} = Sessions.create_token(nil)
+    end
+
     test "is_valid? token works as expected" do
-      token = Sessions.all_tokens() |> List.first()
+      {:ok, token} = Sessions.create_token(UUID.uuid4())
       assert Sessions.is_valid?(token.token)
     end
 

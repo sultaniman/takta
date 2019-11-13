@@ -30,10 +30,15 @@ config :takta,
 config :auth,
   ecto_repos: [Auth.Repo]
 
-config :auth, Auth.Guardian,
+config :auth, Auth.Magic,
   issuer: "auth",
   secret_key: System.get_env("SECRET_KEY_BASE", "DEFAULT_SECRET_KEY"),
   ttl: {15, :minutes}
+
+config :auth, Auth.SessionToken,
+  issuer: "auth",
+  secret_key: System.get_env("SECRET_KEY_BASE", "DEFAULT_SECRET_KEY"),
+  ttl: {2, :weeks}
 
 config :auth,
   password_hash_salt: System.get_env("PASSWORD_HASH_SALT", "hash-hash"),
