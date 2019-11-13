@@ -15,6 +15,13 @@ defmodule Auth.Sessions do
     |> Repo.insert()
   end
 
+  def find(token) do
+    Repo.one(
+      from t in MagicToken,
+      where: t.token == ^token
+    )
+  end
+
   def is_valid?(token) do
     case Auth.Guardian.decode_and_verify(token) do
       {:ok, _claims} -> true
