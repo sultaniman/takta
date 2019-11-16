@@ -8,7 +8,7 @@ defmodule Takta.MixProject do
     {:postgrex, ">= 0.0.0"},
     {:jason, "~> 1.0"},
     {:uuid, "~> 1.1"},
-    {:timex, "~> 3.5"},
+    {:timex, "~> 3.6"},
     {:auth, in_umbrella: true}
   ]
 

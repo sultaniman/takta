@@ -8,6 +8,7 @@ defmodule Auth.MixProject do
     {:ecto_sql, "~> 3.1"},
     {:postgrex, ">= 0.0.0"},
     {:guardian, "~> 2.0"},
+    {:timex, "~> 3.6"},
     {:plug, "~> 1.8.3"},
     {:uuid, "~> 1.1"},
     {:poison, "~> 4.0"}
