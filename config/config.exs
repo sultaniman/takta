@@ -43,6 +43,9 @@ config :auth, Auth.SessionToken,
 config :auth,
   password_hash_salt: System.get_env("PASSWORD_HASH_SALT", "hash-hash"),
 
+  # How long session should live in days?
+  session_ttl_days: 20,
+
   # Argon2
   t_cost: 1,
   m_cost: 8,
