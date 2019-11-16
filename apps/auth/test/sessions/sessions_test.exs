@@ -6,24 +6,33 @@ defmodule Auth.SessionsTest do
   alias Auth.Sessions
 
   describe "sessions 🍪 ::" do
-    test "find all_tokens works as expected" do
-      assert Sessions.all_tokens() |> length() > 0
+    test "find all works as expected" do
+      assert Sessions.all() |> length() > 0
     end
 
-    test "can create token works as expected" do
-      assert {:ok, token} = Sessions.create_token(UUID.uuid4())
+    test "find by user id works as expected" do
+      assert {:ok, session} = Sessions.create(UUID.uuid4())
+      assert (%Sessions.Session{} = _session) = Sessions.find_by_user_id(session.user_id)
     end
 
-    test "can create token fails if no input given" do
-      assert {:error, _changeset} = Sessions.create_token(nil)
+    test "find by user id returns nil if not found" do
+      assert Sessions.find_by_user_id(UUID.uuid4()) == nil
+    end
+
+    test "can create session works as expected" do
+      assert {:ok, token} = Sessions.create(UUID.uuid4())
+    end
+
+    test "can create session fails if no input given" do
+      assert {:error, _changeset} = Sessions.create(nil)
     end
 
     test "is_valid? token works as expected" do
-      {:ok, token} = Sessions.create_token(UUID.uuid4())
+      {:ok, token} = Sessions.create(UUID.uuid4())
       assert Sessions.is_valid?(token.token)
     end
 
-    test "is_valid? token works as expected if token is invalid or malformed" do
+    test "is_valid? session works as expected if token is invalid or malformed" do
       refute Sessions.is_valid?(@invalid_token)
     end
   end

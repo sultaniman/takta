@@ -1,7 +1,7 @@
-defmodule Auth.Sessions.MagicToken do
+defmodule Auth.MagicTokens.MagicToken do
   @moduledoc false
   use Auth.{Model, Query}
-  alias Auth.Sessions.MagicToken
+  alias Auth.MagicTokens.MagicToken
 
   schema "magic_tokens" do
     field :token, :string

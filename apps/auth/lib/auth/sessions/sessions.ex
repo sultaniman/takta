@@ -1,29 +1,29 @@
 defmodule Auth.Sessions do
   @moduledoc false
   use Auth.Query
-  alias Auth.Sessions.MagicToken
+  alias Auth.Sessions.Session
 
-  def all_tokens, do: Repo.all(MagicToken)
+  def all, do: Repo.all(Session)
 
-  def create_token(user_id) do
+  def create(user_id) do
     {:ok, token, _claims} =
       user_id
-      |> Auth.Magic.encode_and_sign()
+      |> Auth.SessionToken.encode_and_sign()
 
     %{token: token, user_id: user_id}
-    |> MagicToken.new()
+    |> Session.new()
     |> Repo.insert()
   end
 
-  def find(token) do
+  def find_by_user_id(user_id) do
     Repo.one(
-      from t in MagicToken,
-      where: t.token == ^token
+      from t in Session,
+      where: t.user_id == ^user_id
     )
   end
 
   def is_valid?(token) do
-    case Auth.Magic.decode_and_verify(token) do
+    case Auth.SessionToken.decode_and_verify(token) do
       {:ok, _claims} -> true
       {:error, _reason} -> false
     end
