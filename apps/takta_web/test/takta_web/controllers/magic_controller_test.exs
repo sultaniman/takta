@@ -1,6 +1,6 @@
 defmodule TaktaWeb.MagicControllerTest do
   use TaktaWeb.ConnCase, async: true
-  alias Auth.Sessions
+  alias Auth.MagicTokens
   alias Takta.Accounts
 
   describe "magic controller ✨ ::" do
@@ -13,7 +13,7 @@ defmodule TaktaWeb.MagicControllerTest do
         is_admin: true
       })
 
-      {:ok, magic_token} = Sessions.create_token(user1.id)
+      {:ok, magic_token} = MagicTokens.create_token(user1.id)
 
       conn
       |> get(Routes.magic_path(conn, :magic_signin, magic_token.token))
