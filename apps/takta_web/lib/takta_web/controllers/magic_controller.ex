@@ -31,7 +31,7 @@ defmodule TaktaWeb.MagicController do
 
   defp get_or_create_session(user_id) do
     # Find valid session
-    case Sessions.find_by_user_id(user_id) do
+    case Sessions.find_active(user_id) do
       nil ->
         {:ok, session} = Sessions.create(user_id)
         session

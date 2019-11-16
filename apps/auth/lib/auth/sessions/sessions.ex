@@ -3,6 +3,8 @@ defmodule Auth.Sessions do
   use Auth.Query
   alias Auth.Sessions.Session
 
+  @session_ttl Application.get_env(:auth, :session_ttl_days)
+
   def all, do: Repo.all(Session)
 
   def create(user_id) do
@@ -19,6 +21,17 @@ defmodule Auth.Sessions do
     Repo.one(
       from t in Session,
       where: t.user_id == ^user_id
+    )
+  end
+
+  def find_active(user_id) do
+    valid_from =
+      Timex.now("Etc/UTC")
+      |> Timex.shift(days: -1 * @session_ttl)
+
+    Repo.one(
+      from t in Session,
+      where: t.user_id == ^user_id and t.inserted_at > ^valid_from
     )
   end
 
