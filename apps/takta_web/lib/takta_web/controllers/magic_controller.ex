@@ -1,6 +1,6 @@
 defmodule TaktaWeb.MagicController do
   use TaktaWeb, :controller
-  alias Auth.MagicTokens
+  alias Auth.{MagicTokens, Sessions}
   alias Takta.Accounts
 
   def magic_signin(conn, %{"magic_token" => token}) do
@@ -21,10 +21,22 @@ defmodule TaktaWeb.MagicController do
   defp sign_in(conn, user_id) do
     case Accounts.find_by_id(user_id) do
       nil -> conn |> deny()
-      user ->
+      _user ->
+        session = get_or_create_session(user_id)
         conn
-        |> put_session(:user, user)
+        |> put_session(:session_id, session.id)
         |> redirect(to: "/")
+    end
+  end
+
+  defp get_or_create_session(user_id) do
+    # Find valid session
+    case Sessions.find_by_user_id(user_id) do
+      nil ->
+        {:ok, session} = Sessions.create(user_id)
+        session
+
+      session -> session
     end
   end
 
