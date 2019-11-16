@@ -17,10 +17,17 @@ defmodule Auth.Sessions do
     |> Repo.insert()
   end
 
+  def find_by_id(session_id) do
+    Repo.one(
+      from s in Session,
+      where: s.id == ^session_id
+    )
+  end
+
   def find_by_user_id(user_id) do
     Repo.one(
-      from t in Session,
-      where: t.user_id == ^user_id
+      from s in Session,
+      where: s.user_id == ^user_id
     )
   end
 
@@ -30,8 +37,8 @@ defmodule Auth.Sessions do
       |> Timex.shift(days: -1 * @session_ttl)
 
     Repo.one(
-      from t in Session,
-      where: t.user_id == ^user_id and t.inserted_at > ^valid_from
+      from s in Session,
+      where: s.user_id == ^user_id and s.inserted_at > ^valid_from
     )
   end
 

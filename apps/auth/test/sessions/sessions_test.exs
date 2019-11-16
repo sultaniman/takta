@@ -10,6 +10,11 @@ defmodule Auth.SessionsTest do
       assert Sessions.all() |> length() > 0
     end
 
+    test "find by id works as expected" do
+      assert {:ok, session} = Sessions.create(UUID.uuid4())
+      assert (%Sessions.Session{} = _session) = Sessions.find_by_id(session.id)
+    end
+
     test "find by user id works as expected" do
       assert {:ok, session} = Sessions.create(UUID.uuid4())
       assert (%Sessions.Session{} = _session) = Sessions.find_by_user_id(session.user_id)
