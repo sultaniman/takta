@@ -9,7 +9,7 @@
 
 * ✅ Once token is valid then lookup valid active session and set it,
 * ✅ If not found create new session entry
-* ❌ Implement auth/session plug,
-* ❌ Implement session plug to attach current user to request,
+* ✅ Implement auth/session plug,
+* ✅ Implement session plug to attach current user to request,
 * ❌ Implement social auth sign in with magic token exchange,
 * ❌ Extract session helpers from magic controller,
