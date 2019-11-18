@@ -35,4 +35,6 @@ config :auth,
   # Argon2
   t_cost: 1,
   m_cost: 8,
-  hashlen: 4
+  hashlen: 4,
+
+  session_ttl_days: 1

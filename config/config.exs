@@ -38,13 +38,19 @@ config :auth, Auth.Magic,
 config :auth, Auth.SessionToken,
   issuer: "auth",
   secret_key: System.get_env("SECRET_KEY_BASE", "DEFAULT_SECRET_KEY"),
-  ttl: {2, :weeks}
+  ttl: {3, :weeks}
 
 config :auth,
   password_hash_salt: System.get_env("PASSWORD_HASH_SALT", "hash-hash"),
 
+  # corresponds to 1 minutes above
+  # `config :auth, Auth.Magic`
+  token_ttl_minutes: 15,
+
   # How long session should live in days?
-  session_ttl_days: 20,
+  # corresponds to 3 weeks above
+  # `config :auth, Auth.SessionToken`
+  session_ttl_days: 21,
 
   # Argon2
   t_cost: 1,
