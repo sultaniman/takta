@@ -1,4 +1,5 @@
 defmodule TaktaWeb.Plugs.AuthContext do
+  @moduledoc false
   import Plug.Conn
 
   alias Auth.Sessions
@@ -37,7 +38,7 @@ defmodule TaktaWeb.Plugs.AuthContext do
     case Sessions.is_valid?(session.token) do
       true -> Accounts.find_by_id(session.user_id)
       false ->
-        Logger.warn("Session<#{session.id}> is not valid anymore...")
+        Logger.warn("Session<id=#{session.id}> is not valid anymore...")
         nil
     end
   end
