@@ -1,6 +1,6 @@
 defmodule Auth.SessionsTest do
   @invalid_token "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-  @expired_token "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoIiwiZXhwIjoxNTc1ODM3MTI5LCJpYXQiOjE1NzQwMjI3MjksImlzcyI6ImF1dGgiLCJqdGkiOiI5YzY2NWMzYS1hODIyLTRlNTgtOTBmMy0wYmI1ZTM2YjA0NjUiLCJuYmYiOjE1NzQwMjI3MjgsInN1YiI6IjhjZmNjMGIxLTExODEtNGI0Ni1hY2UwLTU1NTU1N2U5YWU5MCIsInR5cCI6ImFjY2VzcyJ9.vk6Lzzv60F7pzKiYyU8N4CX-G3mVtkjkseY7q6QCD5wsVRrMNM8KX2P7Cs9p3L04m34aQe9HvHnpRlcL3nyk0w"
+  @expired_token "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoIiwiZXhwIjoxNTc2MTQ1NTM4LCJpYXQiOjE1NzQzMzExMzgsImlzcyI6ImF1dGgiLCJqdGkiOiI1MTg4ZDI5ZC01NWQ3LTQzZmQtYjA5Ny1jMWJkMzAyMjdiMjkiLCJuYmYiOjE1NzQzMzExMzcsInN1YiI6IjE2Y2M0NDBhLTFhNDAtNGVhZi05ZGNkLWIzMTUzYzFmNzA5OCIsInR5cCI6ImFjY2VzcyJ9.QdbsIzU2DYENA35irJopTci9QiAxyeVssUxb_6hWDAkbdV0o-DoIZOWhgjB1bisY6fs7C8zv9PxlSKhn6UqAhA"
 
   use Auth.DataCase
   use Auth.Query
@@ -40,6 +40,10 @@ defmodule Auth.SessionsTest do
 
     test "is_valid? session works as expected if token is invalid or malformed" do
       refute Sessions.is_valid?(@invalid_token)
+    end
+
+    test "is_valid? session works as expected if token has already expired" do
+      refute Sessions.is_valid?(@expired_token)
     end
   end
 end
