@@ -1,5 +1,7 @@
 defmodule TaktaWeb.Plugs.Util do
   @moduledoc false
+  import Plug.Conn, only: [get_session: 2]
+
   alias Auth.Sessions
   alias Takta.Accounts
 
@@ -12,6 +14,18 @@ defmodule TaktaWeb.Plugs.Util do
       false ->
         Logger.warn("Session<id=#{session.id}> is not valid anymore...")
         nil
+    end
+  end
+
+  def user_authenticated?(conn) do
+    session =
+      conn
+      |> get_session(:session_id)
+      |> Sessions.find_by_id()
+
+    case session |> get_user_from_session() do
+      nil -> false
+      _user -> conn.assigns != nil and conn.assigns.authenticated
     end
   end
 end
