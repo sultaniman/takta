@@ -5,7 +5,7 @@ defmodule TaktaWeb.AuthRequiredTest do
   alias Takta.Accounts
   alias TaktaWeb.Plugs.AuthRequired
 
-  describe "🔌 - auth required 🔐 ::" do
+  describe "plug 🔌 - auth required 🔐 ::" do
     test "it works as expected if session set and user exists for it", %{conn: conn} do
       {:ok, user} = Accounts.create(%{
         email: "auth-required@example.com",

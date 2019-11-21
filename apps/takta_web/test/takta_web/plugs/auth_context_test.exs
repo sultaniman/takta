@@ -5,7 +5,7 @@ defmodule TaktaWeb.AuthContextTest do
   alias Takta.Accounts
   alias TaktaWeb.Plugs.AuthContext
 
-  describe "🔌 - auth context 🍭 ::" do
+  describe "plug 🔌 - auth context 🍭 ::" do
     test "it works as expected if session is valid and user exists", %{conn: conn} do
       {:ok, user} = Accounts.create(%{
         email: "auth-context@example.com",
