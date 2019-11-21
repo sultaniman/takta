@@ -1,48 +1,18 @@
 defmodule TaktaWeb.MagicController do
+  @moduledoc false
   use TaktaWeb, :controller
-  alias Auth.{MagicTokens, Sessions}
-  alias Takta.Accounts
+  import TaktaWeb.AuthUtil, only: [deny: 1, maybe_authenticate: 2]
 
+  alias Auth.MagicTokens
+
+  @doc """
+  Signin with `MagicToken` and exchange it to
+  new session which is assigned to request.
+  """
   def magic_signin(conn, %{"magic_token" => token}) do
     case MagicTokens.find_token(token) do
       nil -> conn |> deny()
-      magic_token -> conn |> verify_token(magic_token)
+      magic_token -> conn |> maybe_authenticate(magic_token)
     end
-  end
-
-  # -------------
-  defp verify_token(conn, magic_token) do
-    case MagicTokens.is_valid?(magic_token.token) do
-      true -> conn |> sign_in(magic_token.user_id)
-      false -> conn |> deny()
-    end
-  end
-
-  defp sign_in(conn, user_id) do
-    case Accounts.find_by_id(user_id) do
-      nil -> conn |> deny()
-      _user ->
-        session = get_or_create_session(user_id)
-        conn
-        |> put_session(:session_id, session.id)
-        |> redirect(to: "/")
-    end
-  end
-
-  defp get_or_create_session(user_id) do
-    # Find valid session
-    case Sessions.find_active(user_id) do
-      nil ->
-        {:ok, session} = Sessions.create(user_id)
-        session
-
-      session -> session
-    end
-  end
-
-  defp deny(conn) do
-    conn
-    |> put_status(400)
-    |> json(%{error: :invalid_token})
   end
 end

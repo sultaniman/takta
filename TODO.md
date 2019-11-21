@@ -13,4 +13,4 @@
 * ✅ Implement session plug to attach current user to request,
 * ❌ Implement social auth sign in with token exchange,
 * ❌ Implement username & password sign in with token exchange,
-* ❌ Extract session helpers from magic controller,
+* ✅ Extract session helpers from magic controller,

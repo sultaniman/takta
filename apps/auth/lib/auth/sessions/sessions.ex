@@ -33,6 +33,10 @@ defmodule Auth.Sessions do
     )
   end
 
+  @doc """
+  Find active session record for `user_id`
+  or return `nil` if not found.
+  """
   def find_active(user_id) do
     valid_from =
       Timex.now("Etc/UTC")
@@ -48,6 +52,17 @@ defmodule Auth.Sessions do
     case Auth.SessionToken.decode_and_verify(token) do
       {:ok, _claims} -> true
       {:error, _reason} -> false
+    end
+  end
+
+  def get_or_create(user_id) do
+    # Find valid session
+    case find_active(user_id) do
+      nil ->
+        {:ok, session} = create(user_id)
+        session
+
+      session -> session
     end
   end
 end
