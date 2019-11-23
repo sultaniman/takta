@@ -5,12 +5,12 @@ defmodule Auth.MagicTokens do
 
   def all, do: Repo.all(MagicToken)
 
-  def create_token(user_id) do
+  def create_token(user_id, source) do
     {:ok, token, _claims} =
       user_id
       |> Auth.Magic.encode_and_sign()
 
-    %{token: token, user_id: user_id}
+    %{token: token, source: source, user_id: user_id}
     |> MagicToken.new()
     |> Repo.insert()
   end

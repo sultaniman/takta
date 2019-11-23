@@ -5,13 +5,14 @@ defmodule Auth.MagicTokens.MagicToken do
 
   schema "magic_tokens" do
     field :token, :string
+    field :source, :string
     field :user_id, :binary_id
 
     timestamps()
   end
 
   def new(params) do
-    fields = [:token, :user_id]
+    fields = [:token, :source, :user_id]
 
     %MagicToken{}
     |> cast(params, fields)

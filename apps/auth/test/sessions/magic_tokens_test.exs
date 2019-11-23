@@ -11,7 +11,7 @@ defmodule Auth.MagicTokensTest do
     end
 
     test "find by user id works as expected" do
-      assert {:ok, token} = MagicTokens.create_token(UUID.uuid4())
+      assert {:ok, token} = MagicTokens.create_token(UUID.uuid4(), "source")
       assert (%MagicTokens.MagicToken{} = _token) = MagicTokens.find_by_user_id(token.user_id)
     end
 
@@ -20,15 +20,15 @@ defmodule Auth.MagicTokensTest do
     end
 
     test "can create token works as expected" do
-      assert {:ok, token} = MagicTokens.create_token(UUID.uuid4())
+      assert {:ok, token} = MagicTokens.create_token(UUID.uuid4(), "social")
     end
 
     test "can create token fails if no input given" do
-      assert {:error, _changeset} = MagicTokens.create_token(nil)
+      assert {:error, _changeset} = MagicTokens.create_token(nil, "xyz")
     end
 
     test "is_valid? token works as expected" do
-      {:ok, token} = MagicTokens.create_token(UUID.uuid4())
+      {:ok, token} = MagicTokens.create_token(UUID.uuid4(), "email")
       assert MagicTokens.is_valid?(token.token)
     end
 
