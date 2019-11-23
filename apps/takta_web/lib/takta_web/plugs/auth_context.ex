@@ -3,7 +3,6 @@ defmodule TaktaWeb.Plugs.AuthContext do
   import Plug.Conn
 
   alias Auth.Sessions
-  alias Takta.Accounts
   alias TaktaWeb.Plugs.Util
 
   require Logger
