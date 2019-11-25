@@ -14,7 +14,7 @@ defmodule TaktaWeb.MixProject do
     {:ueberauth_google, "~> 0.8"},
     {:ueberauth_github, "~> 0.7"},
     {:poison, "~> 4.0"},
-    {:bypass, "~> 1.0"},
+    {:bypass, "~> 1.0", only: :test},
     {:ex_aws, "~> 2.1"},
     {:ex_aws_s3, "~> 2.0"},
     {:auth, in_umbrella: true},
