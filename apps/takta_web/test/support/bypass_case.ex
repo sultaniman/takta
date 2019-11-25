@@ -1,4 +1,5 @@
 defmodule TaktaWeb.BypassCase do
+  @moduledoc false
   def start_bypass(_) do
     bypass = Bypass.open
     [bypass: bypass]
