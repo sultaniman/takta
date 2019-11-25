@@ -1,9 +1,7 @@
 defmodule TaktaWeb.AuthController do
   use TaktaWeb, :controller
 
-  alias Auth.MagicTokens
   alias TaktaWeb.AuthHelper
-  alias TaktaWeb.Router
 
   plug Ueberauth
 
@@ -14,29 +12,25 @@ defmodule TaktaWeb.AuthController do
   end
 
   def signin(%{assigns: %{ueberauth_auth: auth}} = conn, %{"provider" => provider}) do
-    # TODO: token to session exchange
     case AuthHelper.login(conn, auth, provider |> String.to_atom()) do
       {:ok, user} ->
-        {:ok, magic_token} = MagicTokens.create_token(user.id, "social")
+        magic_link = AuthHelper.get_magic_link(conn, user.id, provider)
+        conn |> redirect(to: magic_link)
 
-        magic_signing =
-          conn
-          |> Router.Helpers.magic_path(:magic_signin, magic_token.token)
-
-        conn
-        |> put_flash(:info, "Welcome back...")
-        |> redirect(to: magic_signing)
-
+      # TODO: display message on signin page
       {:error, _reason} ->
+        conn |> redirect(to: "/")
+
+      # TODO: display message on signin page
+      conn ->
         conn
-        |> put_flash(:error, "Error signing in")
-        |> redirect(to: '/')
+        |> put_flash(:error, "You have already signed in with other platform")
     end
   end
 
   def signout(conn, _params) do
     conn
     |> configure_session(drop: true)
-    |> redirect(to: '/')
+    |> redirect(to: "/")
   end
 end
