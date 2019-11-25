@@ -13,7 +13,7 @@ defmodule TaktaWeb.MagicControllerTest do
         is_admin: true
       })
 
-      {:ok, magic_token} = MagicTokens.create_token(user1.id)
+      {:ok, magic_token} = MagicTokens.create_token(user1.id, "signin")
 
       conn
       |> get(Routes.magic_path(conn, :magic_signin, magic_token.token))
@@ -29,7 +29,7 @@ defmodule TaktaWeb.MagicControllerTest do
         is_admin: true
       })
 
-      {:ok, magic_token} = MagicTokens.create_token(user1.id)
+      {:ok, magic_token} = MagicTokens.create_token(user1.id, "signin")
 
       session_id =
         conn
