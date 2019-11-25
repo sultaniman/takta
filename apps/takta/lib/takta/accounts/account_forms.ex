@@ -13,7 +13,7 @@ defmodule Takta.Accounts.AccountForms do
   )
 
   def base(%User{} = user, attrs) do
-    fields = ~w(email full_name is_active is_admin)a
+    fields = ~w(email full_name is_active is_admin provider)a
     required_fields = ~w(email full_name)a
 
     user

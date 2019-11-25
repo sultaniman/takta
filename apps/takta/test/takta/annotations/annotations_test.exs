@@ -1,5 +1,6 @@
 defmodule Takta.AnnotationsTest do
   use Takta.{DataCase, Query}
+
   alias Takta.{
     Annotations,
     Comments,

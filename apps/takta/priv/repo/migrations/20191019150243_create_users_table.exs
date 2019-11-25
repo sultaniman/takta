@@ -10,11 +10,13 @@ defmodule Takta.Repo.Migrations.CreateUsersTable do
       add :password_hash, :string
       add :is_active, :boolean, default: false, null: false
       add :is_admin, :boolean, default: false, null: false
+      add :provider, :string, default: "none", null: false
 
       timestamps()
     end
 
     create unique_index(:users, [:email])
     create index(:users, [:full_name])
+    create index(:users, [:provider])
   end
 end

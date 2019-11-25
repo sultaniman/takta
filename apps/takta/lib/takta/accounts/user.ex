@@ -17,6 +17,8 @@ defmodule Takta.Accounts.User do
     field :password_hash, :string
     field :password, :string, virtual: true
 
+    field :provider, :string, default: "none"
+
     # Used to change password
     field :new_password, :string, virtual: true
     field :new_password_confirmation, :string, virtual: true

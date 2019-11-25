@@ -15,7 +15,8 @@ defmodule Takta.Fixtures do
       full_name: "Sudo name",
       password: "12345678",
       is_active: true,
-      is_admin: true
+      is_admin: true,
+      provider: "google"
     })
 
     {:ok, admin} = Accounts.create(%{
@@ -23,7 +24,8 @@ defmodule Takta.Fixtures do
       full_name: "Admin name",
       password: "12345678",
       is_active: true,
-      is_admin: true
+      is_admin: true,
+      provider: "google"
     })
 
     {:ok, consultant} = Accounts.create(%{
@@ -31,7 +33,8 @@ defmodule Takta.Fixtures do
       full_name: "Con1 name",
       password: "12345678",
       is_active: true,
-      is_admin: false
+      is_admin: false,
+      provider: "github"
     })
 
     Accounts.create(%{
@@ -39,7 +42,8 @@ defmodule Takta.Fixtures do
       full_name: "Con2 name",
       password: "12345678",
       is_active: true,
-      is_admin: false
+      is_admin: false,
+      provider: "github"
     })
 
     {:ok, wb1} = Whiteboards.create(%{
