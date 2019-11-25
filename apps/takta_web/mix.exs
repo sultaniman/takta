@@ -15,6 +15,8 @@ defmodule TaktaWeb.MixProject do
     {:ueberauth_github, "~> 0.7"},
     {:poison, "~> 4.0"},
     {:bypass, "~> 1.0"},
+    {:ex_aws, "~> 2.1"},
+    {:ex_aws_s3, "~> 2.0"},
     {:auth, in_umbrella: true},
     {:takta, in_umbrella: true},
     {:storage, in_umbrella: true}
