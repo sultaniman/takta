@@ -11,6 +11,6 @@
 * ✅ If not found create new session entry,
 * ✅ Implement auth/session plug,
 * ✅ Implement session plug to attach current user to request,
-* ❌ Implement social auth sign in with token exchange,
-* ❌ Implement username & password sign in with token exchange,
+* ✅ Implement social auth sign in with token exchange,
 * ✅ Extract session helpers from magic controller,
+* ❌ Implement username & password sign in with token exchange,
