@@ -32,6 +32,9 @@ config :takta_web, TaktaWeb.Endpoint,
   check_origin: false,
   watchers: []
 
+config :takta_web,
+  uplaoder: TaktaWeb.Uploaders.Local
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
