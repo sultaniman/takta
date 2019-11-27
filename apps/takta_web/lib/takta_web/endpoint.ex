@@ -25,7 +25,12 @@ defmodule TaktaWeb.Endpoint do
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
   plug Plug.Parsers,
-    parsers: [:urlencoded, :multipart, :json],
+    parsers: [
+      :urlencoded,
+      :multipart,
+      # 10Mb max payload size
+      {:json, length: 10_000_000}
+    ],
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
 
