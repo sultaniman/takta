@@ -8,11 +8,15 @@ config :takta_web,
   uplaoder: TaktaWeb.Uploaders.S3
 
 config :takta, Takta.Repo,
-  migration_timestamps: [type: :naive_datetime_usec],
+  migration_timestamps: [type: :utc_datetime_usec],
   url: System.fetch_env!("DATABASE_URL")
 
 config :auth, Auth.Repo,
-  migration_timestamps: [type: :naive_datetime_usec],
+  migration_timestamps: [type: :utc_datetime_usec],
+  url: System.fetch_env!("DATABASE_URL")
+
+config :storage, Storage.Repo,
+  migration_timestamps: [type: :utc_datetime_usec],
   url: System.fetch_env!("DATABASE_URL")
 
 config :auth,
