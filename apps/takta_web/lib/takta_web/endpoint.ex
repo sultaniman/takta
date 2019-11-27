@@ -39,7 +39,7 @@ defmodule TaktaWeb.Endpoint do
 
   plug Plug.Session,
     store: :cookie,
-    key: "_takta_web_key",
+    key: "takta",
     signing_salt: @signing_salt
 
   plug TaktaWeb.Router
