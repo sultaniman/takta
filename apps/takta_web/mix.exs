@@ -18,8 +18,7 @@ defmodule TaktaWeb.MixProject do
     {:ex_aws, "~> 2.1"},
     {:ex_aws_s3, "~> 2.0"},
     {:auth, in_umbrella: true},
-    {:takta, in_umbrella: true},
-    {:storage, in_umbrella: true}
+    {:takta, in_umbrella: true}
   ]
 
   @aliases [
@@ -31,7 +30,6 @@ defmodule TaktaWeb.MixProject do
     extra_applications: [
       :logger,
       :runtime_tools,
-      :storage,
       :auth,
       :ueberauth_google,
       :ueberauth_github
