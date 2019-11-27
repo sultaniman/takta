@@ -15,10 +15,6 @@ config :auth, Auth.Repo,
   migration_timestamps: [type: :utc_datetime_usec],
   url: System.fetch_env!("DATABASE_URL")
 
-config :storage, Storage.Repo,
-  migration_timestamps: [type: :utc_datetime_usec],
-  url: System.fetch_env!("DATABASE_URL")
-
 config :auth,
   password_hash_salt: System.fetch_env!("PASSWORD_HASH_SALT")
 

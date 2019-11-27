@@ -30,9 +30,6 @@ config :takta,
 config :auth,
   ecto_repos: [Auth.Repo]
 
-config :storage,
-  ecto_repos: [Storage.Repo]
-
 config :auth, Auth.Magic,
   issuer: "auth",
   secret_key: System.get_env("SECRET_KEY_BASE", "DEFAULT_SECRET_KEY"),
