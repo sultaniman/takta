@@ -19,6 +19,7 @@ defmodule TaktaWeb.Router do
     pipe_through :api
   end
 
+  # General purpose endpoints
   scope "/", TaktaWeb do
     pipe_through :browser
 
@@ -33,6 +34,32 @@ defmodule TaktaWeb.Router do
     post("/create", WhiteboardController, :create)
   end
 
+  # Members resource
+  scope "/members", TaktaWeb do
+    pipe_through :api
+  end
+
+  # Comments resource
+  scope "/comments", TaktaWeb do
+    pipe_through :api
+  end
+
+  # Annotations resource
+  scope "/annotations", TaktaWeb do
+    pipe_through :api
+  end
+
+  # Invites resource
+  scope "/invites", TaktaWeb do
+    pipe_through :api
+  end
+
+  # Accounts resource
+  scope "/accounts", TaktaWeb do
+    pipe_through :api
+  end
+
+  # Session & authentication
   scope "/auth", TaktaWeb do
     pipe_through :browser
 
