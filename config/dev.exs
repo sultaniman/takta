@@ -32,7 +32,7 @@ config :takta_web, TaktaWeb.Endpoint,
   watchers: []
 
 config :takta_web,
-  uplaoder: TaktaWeb.Uploaders.Local
+  uploader: TaktaWeb.Uploaders.Local
 
 # ## SSL Support
 #

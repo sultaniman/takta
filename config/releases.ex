@@ -5,7 +5,7 @@ config :takta_web, TaktaWeb.Endpoint,
   signing_salt: System.fetch_env!("SIGNING_SALT")
 
 config :takta_web,
-  uplaoder: TaktaWeb.Uploaders.S3
+  uploader: TaktaWeb.Uploaders.S3
 
 config :takta, Takta.Repo,
   migration_timestamps: [type: :utc_datetime_usec],
