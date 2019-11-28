@@ -3,6 +3,8 @@ defmodule TaktaWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug :put_secure_browser_headers
   end
 
   pipeline :browser do
@@ -22,6 +24,13 @@ defmodule TaktaWeb.Router do
 
     get("/", Redirect, to: "/api/v1/e")
     get("/signin", LoginController, :signin)
+  end
+
+  # Whiteboard resources
+  scope "/w", TaktaWeb do
+    pipe_through :api
+
+    post("/create", WhiteboardController, :create)
   end
 
   scope "/auth", TaktaWeb do
