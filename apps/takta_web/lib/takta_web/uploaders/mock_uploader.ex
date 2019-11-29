@@ -7,4 +7,7 @@ defmodule TaktaWeb.Uploaders.MockUploader do
 
   @impl true
   def upload(path, _data), do: {:ok, path}
+
+  @impl true
+  def name_only?, do: false
 end

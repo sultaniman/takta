@@ -11,6 +11,9 @@ defmodule TaktaWeb.Uploaders.Local do
     end
   end
 
+  @impl true
+  def name_only?, do: false
+
   defp ensure_directory(path) do
     unless File.exists?(path) do
       path
