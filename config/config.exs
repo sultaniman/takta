@@ -90,7 +90,13 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 # AWS
 config :ex_aws,
   access_key_id: [{:system, "AWS_ACCESS_KEY_ID"}, :instance_role],
-  secret_access_key: [{:system, "AWS_SECRET_ACCESS_KEY"}, :instance_role]
+  secret_access_key: [{:system, "AWS_SECRET_ACCESS_KEY"}, :instance_role],
+  region: "eu-central-1",
+  json_codec: Jason,
+  s3: [
+    scheme: "https://",
+    host: "takta-whiteboards.s3.eu-central-1.amazonaws.com"
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

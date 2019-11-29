@@ -25,7 +25,7 @@ config :takta_web, TaktaWeb.Endpoint,
 
 config :takta_web,
   uploader: TaktaWeb.Uploaders.MockUploader,
-  upload_to: "das-whiteboards"
+  upload_to: "takta-whiteboards"
 
 # Print only warnings and errors during test
 config :logger, level: :warn
