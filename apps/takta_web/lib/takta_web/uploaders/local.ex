@@ -4,9 +4,15 @@ defmodule TaktaWeb.Uploaders.Local do
 
   @impl true
   def upload(path, data) do
-    UUID.uuid4()
-    IO.inspect(path)
-    IO.inspect(data)
-    {:ok, path}
+    ensure_directory(path)
+    File.write!(path, data, [:raw, :binary])
+  end
+
+  defp ensure_directory(path) do
+    unless File.exists?(path) do
+      path
+      |> Path.dirname()
+      |> File.mkdir_p()
+    end
   end
 end
