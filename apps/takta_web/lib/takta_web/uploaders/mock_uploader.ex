@@ -1,5 +1,8 @@
 defmodule TaktaWeb.Uploaders.MockUploader do
-  @moduledoc false
+  @moduledoc """
+  Uploader which does nothing and only serves
+  testing purposes.
+  """
   @behaviour TaktaWeb.Uploaders
 
   @impl true
