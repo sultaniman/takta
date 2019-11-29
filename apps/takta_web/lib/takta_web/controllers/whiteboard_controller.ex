@@ -4,12 +4,14 @@ defmodule TaktaWeb.WhiteboardController do
   alias Takta.Whiteboards
   alias TaktaWeb.Uploaders.S3
 
-  def create(%Plug.Conn{assigns: %{user: user}} = conn, %{"whiteboard" => data}) do
+  @uploader Application.get_env(:takta_web, :uploader)
+
+  def create(%Plug.Conn{assigns: %{user: user}} = conn, %{"filename" => filename, "data" => data}) do
     # TODO: save file, get path, create whiteboard
-    case S3.upload(data.filename, data.data) do
+    case @uploader.upload(filename, data) do
       {:ok, path} ->
         {:ok, whiteboard} = Whiteboards.create(%{
-          name: data.filename,
+          name: filename,
           path: path,
           owner_id: user.id
         })

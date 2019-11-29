@@ -28,7 +28,7 @@ defmodule TaktaWeb.Router do
   end
 
   # Whiteboard resources
-  scope "/w", TaktaWeb do
+  scope "/api/v1/w", TaktaWeb do
     pipe_through :api
 
     post("/create", WhiteboardController, :create)

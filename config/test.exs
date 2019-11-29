@@ -23,6 +23,10 @@ config :takta_web, TaktaWeb.Endpoint,
   http: [port: 4002],
   server: false
 
+config :takta_web,
+  uploader: TaktaWeb.Uploaders.MockUploader,
+  upload_to: "das-whiteboards"
+
 # Print only warnings and errors during test
 config :logger, level: :warn
 

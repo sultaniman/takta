@@ -32,7 +32,8 @@ config :takta_web, TaktaWeb.Endpoint,
   watchers: []
 
 config :takta_web,
-  uploader: TaktaWeb.Uploaders.Local
+  uploader: TaktaWeb.Uploaders.Local,
+  upload_to: "/tmp/das-whiteboards"
 
 # ## SSL Support
 #

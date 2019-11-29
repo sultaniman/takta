@@ -3,7 +3,10 @@ defmodule TaktaWeb.Uploaders.Local do
   @behaviour TaktaWeb.Uploaders
 
   @impl true
-  def upload(filename, data) do
-
+  def upload(path, data) do
+    UUID.uuid4()
+    IO.inspect(path)
+    IO.inspect(data)
+    {:ok, path}
   end
 end
