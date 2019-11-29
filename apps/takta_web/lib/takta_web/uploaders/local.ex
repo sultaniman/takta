@@ -5,7 +5,10 @@ defmodule TaktaWeb.Uploaders.Local do
   @impl true
   def upload(path, data) do
     ensure_directory(path)
-    File.write!(path, data, [:raw, :binary])
+    case File.write(path, data, [:raw, :binary]) do
+      :ok -> {:ok, path}
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   defp ensure_directory(path) do
