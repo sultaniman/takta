@@ -25,7 +25,7 @@ defmodule TaktaWeb.Services.UploadService do
   ) do
     image = Base.decode64!(data)
 
-    case make_name(image) do
+    case make_name(image, user.id) do
       nil ->
         conn
         |> put_status(400)
@@ -63,15 +63,15 @@ defmodule TaktaWeb.Services.UploadService do
     end
   end
 
-  defp make_name(binary_image) do
+  defp make_name(binary_image, user_id) do
     ext = extension(binary_image)
     name = UUID.uuid4(:hex) <> ext
 
     if is_valid?(ext) do
       if @uploader.name_only? do
-        name
+        [user_id, name] |> Path.join()
       else
-        [@upload_to, name] |> Path.join()
+        [@upload_to, user_id, name] |> Path.join()
       end
     else
       nil
