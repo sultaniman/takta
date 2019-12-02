@@ -33,7 +33,7 @@ defmodule TaktaWeb.Services.UploadService do
 
       path ->
         case @uploader.upload(path, image) do
-          %{:status_code => 200} ->
+          {:ok, _s3_path} ->
             params = %{name: filename, path: path, owner_id: user.id}
             create_whiteboard(conn, params)
 
@@ -64,17 +64,20 @@ defmodule TaktaWeb.Services.UploadService do
   end
 
   defp make_name(binary_image, user_id) do
-    ext = extension(binary_image)
-    name = UUID.uuid4(:hex) <> ext
+    case extension(binary_image) do
+      nil -> nil
+      ext ->
+        name = UUID.uuid4(:hex) <> ext
 
-    if is_valid?(ext) do
-      if @uploader.name_only? do
-        [user_id, name] |> Path.join()
-      else
-        [@upload_to, user_id, name] |> Path.join()
-      end
-    else
-      nil
+        if is_valid?(ext) do
+          if @uploader.name_only? do
+            [user_id, name] |> Path.join()
+          else
+            [@upload_to, user_id, name] |> Path.join()
+          end
+        else
+          nil
+        end
     end
   end
 end
