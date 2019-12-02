@@ -6,7 +6,7 @@ defmodule TaktaWeb.Uploaders.S3 do
 
   @impl true
   def upload(filename, data) do
-    with {:ok, path} <- Briefly.create() do
+    with path <- Briefly.create!() do
       File.write!(path, data)
 
       ExAws.S3.Upload.stream_file(path)
