@@ -6,7 +6,7 @@ defmodule TaktaWeb.Plugs.AuthRequired do
 
   require Logger
 
-  @auth_required Jason.encode!(%{status: :authentication_required})
+  @auth_required Jason.encode!(%{error: :authentication_required})
 
   def init(_params) do
   end
@@ -17,6 +17,7 @@ defmodule TaktaWeb.Plugs.AuthRequired do
 
       false ->
         conn
+        |> put_resp_content_type("application/json")
         |> send_resp(401, @auth_required)
         |> halt()
     end
