@@ -20,6 +20,22 @@ defmodule TaktaWeb.AuthHelper do
     end
   end
 
+  def use_existing_signin(conn) do
+    conn
+    |> Phoenix.Controller.redirect(to: "/signin")
+    |> Plug.Conn.halt()
+  end
+
+  @doc """
+  Creates `MagicToken` and returns link to signing using it.
+  """
+  def get_magic_link(conn, user_id, source) do
+    {:ok, magic_token} = MagicTokens.create_token(user_id, source)
+
+    conn
+    |> Router.Helpers.magic_path(:magic_signin, magic_token.token)
+  end
+
   defp use_github(auth) do
     authenticate(%{
       email: auth.info.email,
@@ -63,21 +79,5 @@ defmodule TaktaWeb.AuthHelper do
         Accounts.update(user, changeset.changes)
         {:ok, user}
     end
-  end
-
-  def use_existing_signin(conn) do
-    conn
-    |> Phoenix.Controller.redirect(to: "/signin")
-    |> Plug.Conn.halt()
-  end
-
-  @doc """
-  Creates `MagicToken` and returns link to signing using it.
-  """
-  def get_magic_link(conn, user_id, source) do
-    {:ok, magic_token} = MagicTokens.create_token(user_id, source)
-
-    conn
-    |> Router.Helpers.magic_path(:magic_signin, magic_token.token)
   end
 end
