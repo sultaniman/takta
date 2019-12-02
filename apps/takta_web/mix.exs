@@ -33,7 +33,8 @@ defmodule TaktaWeb.MixProject do
     {:takta, in_umbrella: true},
 
     # Test deps
-    {:bypass, "~> 1.0", only: :test}
+    {:bypass, "~> 1.0", only: :test},
+    {:html_sanitize_ex, "~> 1.3.0-rc3", only: :test}
   ]
 
   @aliases [
