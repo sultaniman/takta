@@ -3,7 +3,6 @@ defmodule TaktaWeb.WhiteboardController do
   use TaktaWeb, :controller
   alias TaktaWeb.Services.UploadService
 
-  plug TaktaWeb.Plugs.AuthContext
   plug TaktaWeb.Plugs.AuthRequired
 
   def create(conn, params) do
