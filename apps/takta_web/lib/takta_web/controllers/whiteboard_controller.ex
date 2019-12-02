@@ -6,7 +6,6 @@ defmodule TaktaWeb.WhiteboardController do
   plug TaktaWeb.Plugs.AuthContext
   plug TaktaWeb.Plugs.AuthRequired
 
-  # def create() do
   def create(conn, params) do
     UploadService.handle_upload(conn, params)
   end
