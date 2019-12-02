@@ -21,4 +21,5 @@
   * ❌ View details of whiteboard,
 * ❌ Test if proper session set after social signin,
 * ✅ Implement aws s3 uploader,
+* ✅ Create initial test suites for authentication logic,
 * ❌ Implement username & password sign in with token exchange,
