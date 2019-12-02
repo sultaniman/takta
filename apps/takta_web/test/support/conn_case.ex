@@ -30,6 +30,8 @@ defmodule TaktaWeb.ConnCase do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Takta.Repo)
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Auth.Repo)
 
+    TaktaWeb.Fixtures.run()
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Takta.Repo, {:shared, self()})
       Ecto.Adapters.SQL.Sandbox.mode(Auth.Repo, {:shared, self()})
