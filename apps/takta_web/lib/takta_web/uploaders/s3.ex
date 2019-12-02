@@ -2,13 +2,17 @@ defmodule TaktaWeb.Uploaders.S3 do
   @moduledoc false
   @behaviour TaktaWeb.Uploaders
 
-  @upload_to Application.get_env(:takta_web, :upload_to)
+  @bucket Application.get_env(:takta_web, :upload_to)
 
   @impl true
   def upload(filename, data) do
-    @upload_to
-    |> ExAws.S3.put_object(filename, data)
-    |> ExAws.request!()
+    with {:ok, path} <- Briefly.create() do
+      File.write!(path, data)
+
+      ExAws.S3.Upload.stream_file(path)
+      |> ExAws.S3.upload(@bucket, filename)
+      |> ExAws.request!()
+    end
   end
 
   @impl true
