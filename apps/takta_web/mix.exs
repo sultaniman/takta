@@ -10,16 +10,30 @@ defmodule TaktaWeb.MixProject do
     {:phoenix_html, "~> 2.13.3"},
     {:gettext, "~> 0.11"},
     {:jason, "~> 1.0"},
+    {:poison, "~> 4.0"},
     {:plug_cowboy, "~> 2.0"},
+
+    # Authentication deps
     {:ueberauth_google, "~> 0.8"},
     {:ueberauth_github, "~> 0.7"},
-    {:poison, "~> 4.0"},
-    {:bypass, "~> 1.0", only: :test},
+
+    # AWS
     {:ex_aws, "~> 2.1"},
     {:ex_aws_s3, "~> 2.0"},
     {:hackney, "~> 1.15"},
+    {:sweet_xml, "~> 0.6"},
+    {:configparser_ex, "~> 4.0"},
+    {:ex_aws_sts, "~> 2.0"},
+
+    # To handle temporary files
+    {:briefly, github: "CargoSense/briefly"},
+
+    # Domain apps
     {:auth, in_umbrella: true},
-    {:takta, in_umbrella: true}
+    {:takta, in_umbrella: true},
+
+    # Test deps
+    {:bypass, "~> 1.0", only: :test}
   ]
 
   @aliases [
