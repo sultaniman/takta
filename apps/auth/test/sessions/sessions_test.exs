@@ -25,6 +25,15 @@ defmodule Auth.SessionsTest do
       assert Sessions.find_by_user_id(UUID.uuid4()) == nil
     end
 
+    test "find by token works as expected" do
+      assert {:ok, session} = Sessions.create(UUID.uuid4())
+      assert (%Sessions.Session{} = _session) = Sessions.find_by_token(session.token)
+    end
+
+    test "find by token returns nil if not found" do
+      assert Sessions.find_by_token(UUID.uuid4()) == nil
+    end
+
     test "can create session works as expected" do
       assert {:ok, token} = Sessions.create(UUID.uuid4())
     end
