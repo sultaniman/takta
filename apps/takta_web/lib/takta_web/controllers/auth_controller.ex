@@ -5,10 +5,9 @@ defmodule TaktaWeb.AuthController do
 
   plug Ueberauth
 
-  def signin(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
+  def signin(%{assigns: %{ueberauth_failure: fails}} = conn, _params) do
     conn
-    |> put_flash(:error, "Failed to authenticate.")
-    |> redirect(to: "/")
+    |> show_login(fails.errors, "Failed to authenticate.")
   end
 
   def signin(%{assigns: %{ueberauth_auth: auth}} = conn, %{"provider" => provider}) do
@@ -17,14 +16,13 @@ defmodule TaktaWeb.AuthController do
         magic_link = AuthHelper.get_magic_link(conn, user.id, provider)
         conn |> redirect(to: magic_link)
 
-      # TODO: display message on signin page
-      {:error, _reason} ->
-        conn |> redirect(to: "/")
+      {:error, reason} ->
+        conn
+        |> show_login(reason, "Something went wrong during signin.")
 
-      # TODO: display message on signin page
       conn ->
         conn
-        |> put_flash(:error, "You have already signed in with other platform")
+        |> put_flash(:error, "You have already signed in with other platform.")
     end
   end
 
@@ -32,5 +30,13 @@ defmodule TaktaWeb.AuthController do
     conn
     |> configure_session(drop: true)
     |> redirect(to: "/")
+  end
+
+  defp show_login(conn, errors, message) do
+    conn
+    |> assign(:errors, errors)
+    |> put_flash(:error, message)
+    |> put_view(TaktaWeb.LoginView)
+    |> render("signin.html")
   end
 end
