@@ -34,7 +34,8 @@ defmodule TaktaWeb.MixProject do
 
     # Test deps
     {:bypass, "~> 1.0", only: :test},
-    {:html_sanitize_ex, "~> 1.3.0-rc3", only: :test}
+    {:html_sanitize_ex, "~> 1.3.0-rc3", only: :test},
+    {:hammox, "~> 0.2.0", only: :test}
   ]
 
   @aliases [
