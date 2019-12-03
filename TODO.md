@@ -23,3 +23,4 @@
 * ✅ Implement aws s3 uploader,
 * ✅ Create initial test suites for authentication logic,
 * ❌ Implement username & password sign in with token exchange,
+* ❌ Implement linking social account and other login methods,

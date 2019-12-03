@@ -2,8 +2,7 @@ defmodule Auth.SessionsTest do
   @invalid_token "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
   @expired_token "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoIiwiZXhwIjoxNTc1MjgwODYzLCJpYXQiOjE1NzUzNjcyNjMsImlzcyI6ImF1dGgiLCJqdGkiOiI1ZjQ5MThkMC00NDFjLTQzNWYtYjYwZi03M2MwMjY2ZTdiZjMiLCJuYmYiOjE1NzUzNjcyNjIsInN1YiI6ImUxZjViYTEwLTExZmEtNGZiMi1hZTBjLWJkNjY1ZmY4MjE0NyIsInR5cCI6ImFjY2VzcyJ9.A75NZsXjiovasMPC_ktZhQHfZ7a92tfqkOBep_AFc6ReaHsoI06Soq1zEWTMy-IEX04EwKW8IOmpCCGQH9f3VQ"
 
-  use Auth.DataCase
-  use Auth.Query
+  use Auth.{DataCase, Query}
   alias Auth.Sessions
 
   describe "sessions 🍪 ::" do
