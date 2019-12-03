@@ -1,5 +1,8 @@
-defmodule TaktaWeb.AuthHelper do
+defmodule TaktaWeb.SocialAuthHelpers do
   use Takta.Query
+
+  import Plug.Conn, only: [assign: 3]
+  import Phoenix.Controller, only: [put_flash: 3, put_view: 2, redirect: 2, render: 2]
 
   alias Auth.MagicTokens
   alias Takta.Accounts
@@ -34,6 +37,29 @@ defmodule TaktaWeb.AuthHelper do
 
     conn
     |> Router.Helpers.magic_path(:magic_signin, magic_token.token)
+  end
+
+  def authenticate(conn, auth, provider) do
+    case login(conn, auth, provider) do
+      {:ok, user} ->
+        conn |> redirect(to: get_magic_link(conn, user.id, provider))
+
+      {:error, reason} ->
+        conn
+        |> show_login(reason, "Something went wrong during signin.")
+
+      conn ->
+        conn
+        |> put_flash(:error, "You have already signed in with other platform.")
+    end
+  end
+
+  def show_login(conn, errors, message) do
+    conn
+    |> assign(:errors, errors)
+    |> put_flash(:error, message)
+    |> put_view(TaktaWeb.LoginView)
+    |> render("signin.html")
   end
 
   defp use_github(auth) do
