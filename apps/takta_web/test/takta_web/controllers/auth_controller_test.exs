@@ -19,28 +19,28 @@ defmodule TaktaWeb.AuthControllerTest do
   end
 
   describe "auth controller 🍻 ::" do
-    # test "can authenticate using social auth provider", %{conn: conn} do
-    #   response =
-    #     conn
-    #     |> get(Routes.auth_path(conn, :signin, "github"), code: "bada55")
-    #     |> html_response(302)
+    test "can not authenticate using social auth if request is malformed", %{conn: conn} do
+      response =
+        conn
+        |> get(Routes.auth_path(conn, :signin, "github"), code: "bada55")
+        |> html_response(200)
+        |> HtmlSanitizeEx.strip_tags()
 
-    #   text = response |> HtmlSanitizeEx.strip_tags()
-
-    #   assert text =~ "You are being redirected"
-    #   assert response =~ "<a href=\"/\""
-    # end
+      assert response =~ "Sign using Google"
+      assert response =~ "Sign using Github"
+      assert response =~ "Sign using Twitter"
+    end
 
     test "redirects to /signing page if signing with another provider exists", %{conn: conn} do
       response =
         conn
         |> get(Routes.auth_path(conn, :signin, "google"))
+        |> html_response(200)
+        |> HtmlSanitizeEx.strip_tags()
 
-      text = response |> html_response(200) |> HtmlSanitizeEx.strip_tags()
-
-      assert text =~ "Sign using Google"
-      assert text =~ "Sign using Github"
-      assert text =~ "Sign using Twitter"
+      assert response =~ "Sign using Google"
+      assert response =~ "Sign using Github"
+      assert response =~ "Sign using Twitter"
     end
   end
 end
