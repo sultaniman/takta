@@ -3,6 +3,7 @@ defmodule Auth.Sessions do
   use Auth.Query
   alias Auth.Sessions.Session
 
+  @tz "Etc/UTC"
   @session_ttl Application.get_env(:auth, :session_ttl_days)
 
   def all, do: Repo.all(Session)
@@ -33,13 +34,21 @@ defmodule Auth.Sessions do
     )
   end
 
+  def find_by_token(nil), do: nil
+  def find_by_token(token) do
+    Repo.one(
+      from s in Session,
+      where: s.token == ^token
+    )
+  end
+
   @doc """
   Find active session record for `user_id`
   or return `nil` if not found.
   """
   def find_active(user_id) do
     valid_from =
-      Timex.now("Etc/UTC")
+      Timex.now(@tz)
       |> Timex.shift(days: -1 * @session_ttl)
 
     Repo.one(
