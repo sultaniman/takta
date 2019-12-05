@@ -2,6 +2,7 @@ defmodule Takta.Whiteboards do
   @moduledoc false
   use Takta.Query
   alias Takta.Whiteboards.{Whiteboard, WhiteboardForms}
+  alias Takta.Util.Changeset
 
   def all, do: Repo.all(Whiteboard)
 
@@ -31,6 +32,12 @@ defmodule Takta.Whiteboards do
     wb
     |> WhiteboardForms.update(params)
     |> Repo.update()
+  end
+
+  def delete(wid) do
+    wid
+    |> find_by_id()
+    |> Changeset.delete()
   end
 
   defp preloaded(wid, field) do

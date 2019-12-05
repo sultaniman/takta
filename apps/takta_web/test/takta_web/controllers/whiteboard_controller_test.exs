@@ -47,7 +47,7 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       assert data == %{"error" => "invalid_format"}
     end
 
-    test "works as expected with valid whiteboard and session", %{conn: conn, user: user} do
+    test "can create whiteboard with valid data and session", %{conn: conn, user: user} do
       payload = %{
         filename: "valid-whiteboard.jpg",
         data: @valid_data
@@ -61,6 +61,23 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       assert data |> Map.has_key?("id")
       assert data |> Map.get("name") == payload.filename
       assert data |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user.id}")
+    end
+
+    test "can delete whiteboard with valid owner and session", %{conn: conn, user: user} do
+      payload = %{
+        filename: "valid-whiteboard.jpg",
+        data: @valid_data
+      }
+
+      wid =
+        conn
+        |> post(Routes.whiteboard_path(conn, :create), payload)
+        |> json_response(200)
+        |> Map.get("id")
+
+      conn
+        |> delete(Routes.whiteboard_path(conn, :delete, wid))
+        |> json_response(200)
     end
   end
 end
