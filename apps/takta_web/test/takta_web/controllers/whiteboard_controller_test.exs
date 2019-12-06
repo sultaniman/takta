@@ -63,7 +63,7 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       assert data |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user.id}")
     end
 
-    test "can delete whiteboard with valid owner and session", %{conn: conn, user: user} do
+    test "can delete whiteboard with valid owner and session", %{conn: conn} do
       payload = %{
         filename: "valid-whiteboard.jpg",
         data: @valid_data
