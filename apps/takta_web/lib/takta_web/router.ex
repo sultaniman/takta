@@ -35,6 +35,7 @@ defmodule TaktaWeb.Router do
     pipe_through :api
 
     post("/create", WhiteboardController, :create)
+    delete("/create/:id", WhiteboardController, :delete)
   end
 
   # Members resource
