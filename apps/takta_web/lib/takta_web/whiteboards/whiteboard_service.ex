@@ -3,11 +3,30 @@ defmodule TaktaWeb.Whiteboards.WhiteboardService do
   Whiteboard service carries business logic of handling
   certain operations and related responses.
   """
-  alias Takta.Accounts
-  alias Takta.Whiteboards
+  alias Takta.{Accounts, Members, Whiteboards}
   alias Takta.Whiteboards.Whiteboard
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Whiteboards.WhiteboardMapper
+
+  def details_for_user(wid, user_id) do
+    wb = Whiteboards.find_by_id(wid)
+    user = Accounts.find_by_id(user_id)
+
+    if is_nil(wb) or is_nil(user) do
+      StatusResponse.not_found()
+    else
+      wb =
+        wb
+        |> Whiteboards.with_comments()
+        |> Whiteboards.with_annotations()
+
+      if Whiteboards.has_owner(wid, user_id) or Members.whiteboard_has_member?(wb.id, user.id) do
+        StatusResponse.ok(%{whiteboard: WhiteboardMapper.to_json_extended(wb)})
+      else
+        StatusResponse.permission_denied()
+      end
+    end
+  end
 
   def list_for_user(user_id) do
     whiteboards =

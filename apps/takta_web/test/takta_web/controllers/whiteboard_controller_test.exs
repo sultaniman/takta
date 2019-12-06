@@ -138,5 +138,30 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       assert wb |> Map.get("name") == payload.filename
       assert wb |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user.id}")
     end
+
+    test "can get whiteboard details for authenticated user", %{conn: conn, user: user} do
+      payload = %{
+        filename: "valid-whiteboard.jpg",
+        data: @valid_data
+      }
+
+      wid =
+        conn
+        |> post(Routes.whiteboard_path(conn, :create), payload)
+        |> json_response(200)
+        |> Map.get("id")
+
+      response =
+        conn
+        |> get(Routes.whiteboard_path(conn, :detail, wid))
+        |> json_response(200)
+
+      assert %{"whiteboard" => wb} = response
+      assert wb |> Map.has_key?("id")
+      assert wb |> Map.get("name") == payload.filename
+      assert wb |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user.id}")
+      assert wb |> Map.get("comments") == []
+      assert wb |> Map.get("annotations") == []
+    end
   end
 end

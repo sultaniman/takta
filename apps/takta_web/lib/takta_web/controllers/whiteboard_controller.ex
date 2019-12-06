@@ -11,7 +11,8 @@ defmodule TaktaWeb.WhiteboardController do
   end
 
   def detail(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => wid}) do
-
+    response = WhiteboardService.details_for_user(wid, user.id)
+    conn |> StatusResponse.send_response(response)
   end
 
   def create(conn, params) do
