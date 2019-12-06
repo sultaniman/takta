@@ -19,8 +19,8 @@ defmodule Takta.Util.Changeset do
   def delete(nil), do: {:error, :not_found}
   def delete(entity) do
     case Repo.delete(entity) do
-      {:ok, whiteboard} -> {:ok, whiteboard}
-      {:error, changeset} -> {:error, details: errors_to_json(changeset)}
+      {:ok, entity} -> {:ok, entity}
+      {:error, changeset} -> {:error, errors_to_json(changeset)}
     end
   end
 end
