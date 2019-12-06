@@ -18,6 +18,16 @@ defmodule Takta.Whiteboards do
     Repo.all(from w in Whiteboard, where: w.owner_id == ^user_id)
   end
 
+  def with_comments(wb) do
+    wb
+    |> Repo.preload(:comments)
+  end
+
+  def with_annotations(wb) do
+    wb
+    |> Repo.preload(:annotations)
+  end
+
   def find_comments(wid) do
     wid
     |> preloaded(:comments)
@@ -58,7 +68,7 @@ defmodule Takta.Whiteboards do
   defp preloaded(wid, field) do
     case find_by_id(wid) do
       nil -> {:error, :not_found}
-      user -> Repo.preload(user, field)
+      wb -> Repo.preload(wb, field)
     end
   end
 end
