@@ -6,8 +6,16 @@ defmodule Takta.Whiteboards do
 
   def all, do: Repo.all(Whiteboard)
 
-  def find_by_id(wb_id) do
-    Repo.one(from w in Whiteboard, where: w.id == ^wb_id)
+  def find_by_id(wid) do
+    Repo.one(from w in Whiteboard, where: w.id == ^wid)
+  end
+
+  def find_by_id!(wid) do
+    Repo.get!(Whiteboard, wid)
+  end
+
+  def find_for_user(user_id) do
+    Repo.all(from w in Whiteboard, where: w.owner_id == ^user_id)
   end
 
   def find_comments(wid) do
@@ -20,6 +28,13 @@ defmodule Takta.Whiteboards do
     wid
     |> preloaded(:annotations)
     |> Map.get(:annotations)
+  end
+
+  def has_owner(wid, user_id) do
+    case find_by_id(wid) do
+      nil -> false
+      wb -> wb.owner_id == user_id
+    end
   end
 
   def create(params) do
