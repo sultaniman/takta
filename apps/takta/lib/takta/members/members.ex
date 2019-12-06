@@ -9,6 +9,15 @@ defmodule Takta.Members do
     Repo.one(from m in Member, where: m.id == ^id)
   end
 
+  def whiteboard_has_member?(wid, user_id) do
+    query = from(
+      m in Member,
+      where: m.member_id == ^user_id and m.whiteboard_id == ^wid
+    )
+
+    Repo.exists?(query)
+  end
+
   def create(params) do
     %Member{}
     |> MemberForms.new(params)
