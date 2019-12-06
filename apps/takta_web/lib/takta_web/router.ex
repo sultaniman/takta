@@ -34,6 +34,8 @@ defmodule TaktaWeb.Router do
   scope "/api/v1/w", TaktaWeb do
     pipe_through :api
 
+    get("/", WhiteboardController, :list)
+    get("/:id", WhiteboardController, :detail)
     post("/create", WhiteboardController, :create)
     delete("/create/:id", WhiteboardController, :delete)
   end

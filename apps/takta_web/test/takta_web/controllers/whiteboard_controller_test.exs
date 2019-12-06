@@ -1,7 +1,8 @@
 defmodule TaktaWeb.WhiteboardControllerTest do
   use TaktaWeb.ConnCase, async: true
   alias Auth.MagicTokens
-  alias Takta.Accounts
+  alias Takta.{Accounts, Whiteboards}
+  alias TaktaWeb.Whiteboards.WhiteboardService
 
   @valid_data "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPUY8g9CQACZQFm8I6jQQAAAABJRU5ErkJggg=="
   @invalid_data "RG9uJ3Qgb25seSBwcmFjdGljZSB5b3VyIGFydCwgYnV0IGZvcmNlIHlvdXIgd2F5IGludG8gaXRzIHNlY3JldHMsIGZvciBpdCBhbmQga25vd2xlZGdlIGNhbiByYWlzZSBtZW4gdG8gdGhlIGRpdmluZS4="
@@ -78,6 +79,64 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       conn
         |> delete(Routes.whiteboard_path(conn, :delete, wid))
         |> json_response(200)
+    end
+
+    test "can not delete whiteboard with invalid owner and session", %{conn: conn} do
+      wb =
+        Whiteboards.all()
+        |> List.first()
+
+      response =
+        conn
+        |> delete(Routes.whiteboard_path(conn, :delete, wb.id))
+        |> json_response(403)
+
+      assert response == %{"error" => "permission_denied"}
+    end
+
+    test "returns HTTP 404 if whiteboard does not exist", %{conn: conn} do
+      response =
+        conn
+        |> delete(Routes.whiteboard_path(conn, :delete, UUID.uuid4()))
+        |> json_response(404)
+
+      assert response == %{"error" => "not_found"}
+    end
+
+    test "returns HTTP 404 if user does not exist" do
+      # We are testing this case indirectly because auth required
+      # plug is not going to allow unknown user ids to set :user
+      # in conn assigns dictionary.
+      wb =
+        Whiteboards.all()
+        |> List.first()
+
+      result = WhiteboardService.delete_for_user(wb.id, UUID.uuid4())
+      assert result == {404, %{error: :not_found}}
+    end
+
+    test "can list whiteboards for authenticated user", %{conn: conn, user: user} do
+      payload = %{
+        filename: "valid-whiteboard.jpg",
+        data: @valid_data
+      }
+
+      conn
+      |> post(Routes.whiteboard_path(conn, :create), payload)
+      |> json_response(200)
+
+      response =
+        conn
+        |> get(Routes.whiteboard_path(conn, :list))
+        |> json_response(200)
+
+      assert %{"whiteboards" => wbs} = response
+      assert length(wbs) == 1
+
+      wb = wbs |> List.first()
+      assert wb |> Map.has_key?("id")
+      assert wb |> Map.get("name") == payload.filename
+      assert wb |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user.id}")
     end
   end
 end
