@@ -11,4 +11,14 @@ defmodule TaktaWeb.Whiteboards.WhiteboardMapper do
       path: whiteboard.path
     }
   end
+
+  def to_json_extended(%Whiteboard{} = whiteboard) do
+    %{
+      id: whiteboard.id,
+      name: whiteboard.name,
+      path: whiteboard.path,
+      comments: whiteboard |> Map.get("comments", []),
+      annotations: whiteboard |> Map.get("annotations", [])
+    }
+  end
 end
