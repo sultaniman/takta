@@ -5,8 +5,8 @@ defmodule TaktaWeb.Whiteboards.WhiteboardService do
   """
   alias Takta.{Accounts, Members, Whiteboards}
   alias Takta.Whiteboards.Whiteboard
+  alias Takta.Whiteboards.WhiteboardMapper
   alias TaktaWeb.Base.StatusResponse
-  alias TaktaWeb.Whiteboards.WhiteboardMapper
 
   def details_for_user(wid, user_id) do
     wb = Whiteboards.find_by_id(wid)

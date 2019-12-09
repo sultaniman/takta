@@ -7,6 +7,10 @@ defmodule TaktaWeb.CommentController do
     conn |> StatusResponse.send_response(StatusResponse.ok())
   end
 
+  def detail(conn, _params) do
+    conn |> StatusResponse.send_response(StatusResponse.ok())
+  end
+
   def update(conn, _params) do
     conn |> StatusResponse.send_response(StatusResponse.ok())
   end
