@@ -20,7 +20,7 @@
   * ✅ Delete whiteboard (only owner),
   * ✅ Get list of whiteboards,
   * ✅ View details of whiteboard,
-* ❌ Implement comments & annotations resource,
+>>> * ❌ Implement comments & annotations resource,
   * ❌ Create comment,
   * ❌ Update comment,
   * ❌ Delete comment,
@@ -32,9 +32,22 @@
   * ❌ Create invite,
   * ❌ Update invite,
   * ❌ Delete invite,
+* ❌ Permission manager,
+  * ❌ Only owners of entities can update/delete,
+  * ❌ Admins can update/delete any entity,
 * ❌ Test if proper session set after social signin,
 * ✅ Implement aws s3 uploader,
 * ✅ Create initial test suites for authentication logic,
 * ❌ Implement username & password sign in with token exchange,
 * ❌ Implement linking social account and other login methods,
 * ❌ Create unified error response format,
+
+# Mailer
+
+* ❌ Generate mailer app,
+* ❌ Create gmail mailer app,
+* ❌ Create minimal template to send invite,
+
+# Cleanup & tech debt
+
+* ❌ Implement verical slicing,
