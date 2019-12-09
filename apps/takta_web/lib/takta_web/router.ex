@@ -46,8 +46,13 @@ defmodule TaktaWeb.Router do
   end
 
   # Comments resource
-  scope "/comments", TaktaWeb do
+  scope "/api/v1/c", TaktaWeb do
     pipe_through :api
+
+    get("/:id", CommentController, :detail)
+    post("/create", CommentController, :create)
+    put("/update/:id", CommentController, :update)
+    delete("/create/:id", CommentController, :delete)
   end
 
   # Annotations resource

@@ -165,5 +165,38 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       assert wb |> Map.get("comments") == []
       assert wb |> Map.get("annotations") == []
     end
+
+    test "can get whiteboard comments and annotations for authenticated user", %{conn: conn, user: user} do
+      whiteboard =
+        user.id
+        |> Whiteboards.find_for_user()
+        |> List.first()
+
+      response =
+        conn
+        |> get(Routes.whiteboard_path(conn, :detail, whiteboard.id))
+        |> json_response(200)
+
+      assert %{"whiteboard" => wb} = response
+
+      comment =
+        wb
+        |> Map.get("comments")
+        |> Enum.at(0)
+
+      annotation =
+        wb
+        |> Map.get("annotations")
+        |> Enum.at(0)
+
+      assert comment
+      assert comment |> Map.get("content") == "bla bla"
+      assert comment |> Map.get("whiteboard_id") == whiteboard.id
+
+      assert annotation
+      assert annotation |> Map.get("coords") == %{"x" => 1, "y" => 1}
+      assert annotation |> Map.get("comment_id") == comment |> Map.get("id")
+      assert annotation |> Map.get("whiteboard_id") == whiteboard.id
+    end
   end
 end
