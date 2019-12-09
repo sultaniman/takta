@@ -82,9 +82,11 @@ defmodule TaktaWeb.WhiteboardControllerTest do
     end
 
     test "can not delete whiteboard with invalid owner and session", %{conn: conn} do
+      # last whiteboard is not for the first user
+      # check fixtures.
       wb =
         Whiteboards.all()
-        |> List.first()
+        |> List.last()
 
       response =
         conn
@@ -131,9 +133,9 @@ defmodule TaktaWeb.WhiteboardControllerTest do
         |> json_response(200)
 
       assert %{"whiteboards" => wbs} = response
-      assert length(wbs) == 1
+      assert length(wbs) == 2
 
-      wb = wbs |> List.first()
+      wb = wbs |> List.last()
       assert wb |> Map.has_key?("id")
       assert wb |> Map.get("name") == payload.filename
       assert wb |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user.id}")
