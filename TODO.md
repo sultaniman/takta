@@ -51,3 +51,7 @@
 # Cleanup & tech debt
 
 * ❌ Implement verical slicing,
+
+# Misc
+
+* ✅ May be move mappers into context domain,
