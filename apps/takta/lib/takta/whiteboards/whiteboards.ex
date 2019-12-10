@@ -24,7 +24,7 @@ defmodule Takta.Whiteboards do
   """
   def with_annotations(wb), do: wb |> Repo.preload(:annotations)
 
-  def has_owner(wid, user_id) do
+  def has_owner?(wid, user_id) do
     case find_by_id(wid) do
       nil -> false
       wb -> wb.owner_id == user_id
