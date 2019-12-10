@@ -20,6 +20,18 @@ defmodule TaktaWeb.Router do
 
   scope "/api/v1", TaktaWeb do
     pipe_through :api
+
+    # Whiteboard resources
+    post    "/whiteboards",     WhiteboardController, :create
+    get     "/whiteboards",     WhiteboardController, :list
+    get     "/whiteboards/:id", WhiteboardController, :detail
+    delete  "/whiteboards/:id", WhiteboardController, :delete
+
+    # Comments resource
+    post    "/comments",      CommentController, :create
+    get     "/comments/:id",  CommentController, :detail
+    put     "/comments/:id",  CommentController, :update
+    delete  "/comments/:id",  CommentController, :delete
   end
 
   # General purpose endpoints
@@ -30,29 +42,14 @@ defmodule TaktaWeb.Router do
     get("/signin", LoginController, :signin)
   end
 
-  # Whiteboard resources
-  scope "/api/v1/w", TaktaWeb do
+  # TODO: render session with key=takta and value=signed_session
+  scope "/api/v1/e", TaktaWeb do
     pipe_through :api
-
-    get("/", WhiteboardController, :list)
-    post("/", WhiteboardController, :create)
-    get("/:id", WhiteboardController, :detail)
-    delete("/:id", WhiteboardController, :delete)
   end
 
   # Members resource
   scope "/members", TaktaWeb do
     pipe_through :api
-  end
-
-  # Comments resource
-  scope "/api/v1/c", TaktaWeb do
-    pipe_through :api
-
-    get("/:id", CommentController, :detail)
-    post("/", CommentController, :create)
-    put("/:id", CommentController, :update)
-    delete("/:id", CommentController, :delete)
   end
 
   # Annotations resource
