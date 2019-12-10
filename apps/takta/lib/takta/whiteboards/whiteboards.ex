@@ -10,23 +10,21 @@ defmodule Takta.Whiteboards do
     Repo.one(from w in Whiteboard, where: w.id == ^wid)
   end
 
-  def find_by_id!(wid) do
-    Repo.get!(Whiteboard, wid)
-  end
+  def find_by_id!(wid), do: Repo.get!(Whiteboard, wid)
 
   def find_for_user(user_id) do
     Repo.all(from w in Whiteboard, where: w.owner_id == ^user_id)
   end
 
-  def with_comments(wb) do
-    wb
-    |> Repo.preload(:comments)
-  end
+  @doc """
+  Preload comments
+  """
+  def with_comments(wb), do: wb |> Repo.preload(:comments)
 
-  def with_annotations(wb) do
-    wb
-    |> Repo.preload(:annotations)
-  end
+  @doc """
+  Preload annotations
+  """
+  def with_annotations(wb), do: wb |> Repo.preload(:annotations)
 
   def has_owner(wid, user_id) do
     case find_by_id(wid) do
