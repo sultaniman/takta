@@ -42,6 +42,36 @@ defmodule TaktaWeb.CommentControllerTest do
       assert response == %{"error" => "authentication_required"}
     end
 
+    test "unable to see comment if not authenticated" do
+      conn = build_conn()
+      response =
+        conn
+        |> get(Routes.comment_path(conn, :detail, UUID.uuid4()))
+        |> json_response(401)
+
+      assert response == %{"error" => "authentication_required"}
+    end
+
+    test "unable to update comment if not authenticated" do
+      conn = build_conn()
+      response =
+        conn
+        |> put(Routes.comment_path(conn, :update, UUID.uuid4()), %{content: "update"})
+        |> json_response(401)
+
+      assert response == %{"error" => "authentication_required"}
+    end
+
+    test "unable to delete comment if not authenticated" do
+      conn = build_conn()
+      response =
+        conn
+        |> delete(Routes.comment_path(conn, :delete, UUID.uuid4()))
+        |> json_response(401)
+
+      assert response == %{"error" => "authentication_required"}
+    end
+
     test "owners can comment on their whiteboards", %{conn1: conn1, user1: user1} do
       whiteboard =
         user1.id

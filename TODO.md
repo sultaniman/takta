@@ -22,6 +22,7 @@
   * ✅ View details of whiteboard,
 >>> * ❌ Implement comments & annotations resource,
   * ❌ Create comment,
+    * ❌ Accept annotation coordinates,
   * ❌ Update comment,
   * ❌ Delete comment,
 * ❌ Implement memberships,
