@@ -1,4 +1,4 @@
-defmodule TaktaWeb.Whiteboards.WhiteboardService do
+defmodule TaktaWeb.WhiteboardService do
   @moduledoc """
   Whiteboard service carries business logic of handling
   certain operations and related responses.

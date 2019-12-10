@@ -3,7 +3,7 @@ defmodule TaktaWeb.WhiteboardController do
   use TaktaWeb, :controller
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Services.UploadService
-  alias TaktaWeb.Whiteboards.WhiteboardService
+  alias TaktaWeb.WhiteboardService
 
   def list(%Plug.Conn{assigns: %{user: user}} = conn, _params) do
     response = WhiteboardService.list_for_user(user.id)
