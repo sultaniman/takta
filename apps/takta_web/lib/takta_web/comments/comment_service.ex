@@ -1,6 +1,6 @@
 defmodule TaktaWeb.CommentService do
   @moduledoc false
-  alias Takta.Comments
+  alias Takta.{Annotations, Comments}
   alias Takta.Comments.{Comment, CommentMapper}
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Permissions
@@ -9,7 +9,7 @@ defmodule TaktaWeb.CommentService do
     case Comments.create(params) do
       {:ok, comment} ->
         comment
-        |> CommentMapper.to_json_basic()
+        |> create_annotation(params)
         |> StatusResponse.ok()
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -70,6 +70,29 @@ defmodule TaktaWeb.CommentService do
         changeset
         |> Takta.Util.Changeset.errors_to_json()
         |> StatusResponse.bad_request()
+    end
+  end
+
+  defp create_annotation(comment, params) do
+    params = %{
+      comment_id: comment.id,
+      whiteboard_id: comment.whiteboard_id,
+      coords: params |> Map.get("coords")
+    }
+
+    case Annotations.create(params) do
+      {:ok, annotation} ->
+        comment
+        |> CommentMapper.to_json_basic()
+        |> Map.put("annotation", annotation)
+      {:error, %Ecto.Changeset{} = changeset} ->
+        errors =
+          changeset
+          |> Takta.Util.Changeset.errors_to_json()
+
+        comment
+        |> CommentMapper.to_json_basic()
+        |> Map.put("annotation", %{errors: errors})
     end
   end
 end
