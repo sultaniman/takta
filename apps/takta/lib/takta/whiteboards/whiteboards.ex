@@ -28,18 +28,6 @@ defmodule Takta.Whiteboards do
     |> Repo.preload(:annotations)
   end
 
-  def find_comments(wid) do
-    wid
-    |> preloaded(:comments)
-    |> Map.get(:comments)
-  end
-
-  def find_annotations(wid) do
-    wid
-    |> preloaded(:annotations)
-    |> Map.get(:annotations)
-  end
-
   def has_owner(wid, user_id) do
     case find_by_id(wid) do
       nil -> false
@@ -63,12 +51,5 @@ defmodule Takta.Whiteboards do
     wid
     |> find_by_id()
     |> Changeset.delete()
-  end
-
-  defp preloaded(wid, field) do
-    case find_by_id(wid) do
-      nil -> {:error, :not_found}
-      wb -> Repo.preload(wb, field)
-    end
   end
 end

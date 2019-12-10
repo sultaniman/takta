@@ -17,13 +17,21 @@ defmodule Takta.WhiteboarsTest do
     end
 
     test "can access comments" do
-      one = Whiteboards.all() |> List.first()
-      assert length(Whiteboards.find_comments(one.id)) == 4
+      wb =
+        Whiteboards.all()
+        |> List.first()
+        |> Whiteboards.with_comments()
+
+      assert length(wb.comments) == 4
     end
 
     test "can access annotations" do
-      one = Whiteboards.all() |> List.first()
-      assert length(Whiteboards.find_annotations(one.id)) == 2
+      wb =
+        Whiteboards.all()
+        |> List.first()
+        |> Whiteboards.with_annotations()
+
+      assert length(wb.annotations) == 2
     end
 
     test "can create new whiteboard" do
