@@ -9,13 +9,15 @@ defmodule TaktaWeb.CommentControllerTest do
   """
   use TaktaWeb.ConnCase, async: true
   alias Auth.MagicTokens
-  alias Takta.{Accounts, Whiteboards}
+  alias Takta.{Accounts, Comments, Whiteboards}
 
   setup do
     user1 = Accounts.find_by_email("web@example.com")
     user2 = Accounts.find_by_email("web-2@example.com")
+    admin = Accounts.find_by_email("web-admin@example.com")
     {:ok, magic_token1} = MagicTokens.create_token(user1.id, "github")
     {:ok, magic_token2} = MagicTokens.create_token(user2.id, "google")
+    {:ok, magic_token_admin} = MagicTokens.create_token(admin.id, "google")
 
     conn1 =
       build_conn()
@@ -25,15 +27,25 @@ defmodule TaktaWeb.CommentControllerTest do
       build_conn()
       |> get(Routes.magic_path(build_conn(), :magic_signin, magic_token2.token))
 
+    conn_admin =
+      build_conn()
+      |> get(Routes.magic_path(build_conn(), :magic_signin, magic_token_admin.token))
+
     {
       :ok,
-      conn1: conn1, conn2: conn2, user1: user1, user2: user2
+      conn1: conn1,
+      conn2: conn2,
+      conn_admin: conn_admin,
+      user1: user1,
+      user2: user2,
+      admin: admin
     }
   end
 
   describe "comments controller 💬 ::" do
     test "unable to comment if not authenticated" do
       conn = build_conn()
+
       response =
         conn
         |> post(Routes.comment_path(conn, :create), %{content: "bla bla"})
@@ -44,6 +56,7 @@ defmodule TaktaWeb.CommentControllerTest do
 
     test "unable to see comment if not authenticated" do
       conn = build_conn()
+
       response =
         conn
         |> get(Routes.comment_path(conn, :detail, UUID.uuid4()))
@@ -54,6 +67,7 @@ defmodule TaktaWeb.CommentControllerTest do
 
     test "unable to update comment if not authenticated" do
       conn = build_conn()
+
       response =
         conn
         |> put(Routes.comment_path(conn, :update, UUID.uuid4()), %{content: "update"})
@@ -64,6 +78,7 @@ defmodule TaktaWeb.CommentControllerTest do
 
     test "unable to delete comment if not authenticated" do
       conn = build_conn()
+
       response =
         conn
         |> delete(Routes.comment_path(conn, :delete, UUID.uuid4()))
@@ -125,6 +140,49 @@ defmodule TaktaWeb.CommentControllerTest do
       assert get_in(response, ["whiteboard_id"]) == whiteboard.id
       assert get_in(response, ["content"]) == "bla bla"
       assert get_in(response, ["author", "id"]) == user1.id
+    end
+
+    test "admins can request details for any comment", %{conn_admin: conn_admin} do
+      comment =
+        Comments.all()
+        |> List.first()
+
+      response =
+        conn_admin
+        |> get(Routes.comment_path(conn_admin, :detail, comment.id))
+        |> json_response(200)
+
+      assert get_in(response, ["id"]) == comment.id
+      assert get_in(response, ["whiteboard_id"])
+      assert get_in(response, ["content"])
+      assert get_in(response, ["author", "id"]) == comment.author_id
+    end
+
+    test "whiteboard members can request details for related comment", %{conn2: conn2, user1: user1} do
+      comment =
+        Comments.all()
+        |> Enum.filter(fn c -> c.author_id == user1.id end)
+        |> List.first()
+
+      response =
+        conn2
+        |> get(Routes.comment_path(conn2, :detail, comment.id))
+        |> json_response(200)
+
+      assert get_in(response, ["id"]) == comment.id
+      assert get_in(response, ["whiteboard_id"]) == comment.whiteboard_id
+      assert get_in(response, ["content"])
+      assert get_in(response, ["author", "id"]) == comment.author_id
+      assert get_in(response, ["author", "id"]) == user1.id
+    end
+
+    test "requesting unknown comment returns HTTP 404", %{conn1: conn1} do
+      response =
+        conn1
+        |> get(Routes.comment_path(conn1, :detail, UUID.uuid4()))
+        |> json_response(404)
+
+      assert response == %{"error" => "not_found"}
     end
   end
 end

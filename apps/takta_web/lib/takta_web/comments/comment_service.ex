@@ -1,6 +1,6 @@
 defmodule TaktaWeb.CommentService do
   @moduledoc false
-  alias Takta.{Comments, Members}
+  alias Takta.Comments
   alias Takta.Comments.{Comment, CommentMapper}
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Permissions
@@ -20,10 +20,13 @@ defmodule TaktaWeb.CommentService do
   end
 
   def detail_for_user(comment_id, user) do
-    comment = Comments.find_by_id(comment_id)
-    case Permissions.can_see_comment(user, comment) do
-      true -> detail(comment)
-      false -> StatusResponse.permission_denied()
+    case Comments.find_by_id(comment_id) do
+      nil -> StatusResponse.not_found()
+      comment ->
+        case Permissions.can_see_comment(user, comment) do
+          true -> detail(comment)
+          false -> StatusResponse.permission_denied()
+        end
     end
   end
 
