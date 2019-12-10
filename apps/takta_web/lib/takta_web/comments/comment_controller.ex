@@ -9,8 +9,9 @@ defmodule TaktaWeb.CommentController do
     conn |> StatusResponse.send_response(result)
   end
 
-  def detail(conn, _params) do
-    conn |> StatusResponse.send_response(StatusResponse.ok())
+  def detail(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => comment_id}) do
+    response = CommentService.detail_for_user(comment_id, user)
+    conn |> StatusResponse.send_response(response)
   end
 
   def update(conn, _params) do

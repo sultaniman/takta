@@ -3,7 +3,7 @@ defmodule TaktaWeb.WhiteboardService do
   Whiteboard service carries business logic of handling
   certain operations and related responses.
   """
-  alias Auth.Permissions
+  alias TaktaWeb.Permissions
   alias Takta.{Accounts, Members, Whiteboards}
   alias Takta.Whiteboards.Whiteboard
   alias Takta.Whiteboards.WhiteboardMapper
@@ -21,7 +21,7 @@ defmodule TaktaWeb.WhiteboardService do
         |> Whiteboards.with_comments()
         |> Whiteboards.with_annotations()
 
-      if Permissions.can_manage_whiteboard(user, wb) or Members.whiteboard_has_member?(wb.id, user.id) do
+      if Permissions.can_manage_whiteboard(user, wb) do
         StatusResponse.ok(%{whiteboard: WhiteboardMapper.to_json_extended(wb)})
       else
         StatusResponse.permission_denied()

@@ -78,6 +78,8 @@ defmodule TaktaWeb.CommentControllerTest do
         |> Whiteboards.find_for_user()
         |> List.first()
 
+      assert whiteboard.owner_id == user1.id
+
       payload = %{
         content: "bla bla",
         author_id: user1.id,
@@ -92,6 +94,37 @@ defmodule TaktaWeb.CommentControllerTest do
       assert response |> Map.has_key?("id")
       assert response |> Map.get("content") == "bla bla"
       assert response |> Map.get("whiteboard_id") == whiteboard.id
+    end
+
+    test "owners can request comment details on their whiteboards", %{conn1: conn1, user1: user1} do
+      whiteboard =
+        user1.id
+        |> Whiteboards.find_for_user()
+        |> List.first()
+
+      assert whiteboard.owner_id == user1.id
+
+      payload = %{
+        content: "bla bla",
+        author_id: user1.id,
+        whiteboard_id: whiteboard.id
+      }
+
+      comment_id =
+        conn1
+        |> post(Routes.comment_path(conn1, :create), payload)
+        |> json_response(200)
+        |> Map.get("id")
+
+      response =
+        conn1
+        |> get(Routes.comment_path(conn1, :detail, comment_id))
+        |> json_response(200)
+
+      assert get_in(response, ["id"]) == comment_id
+      assert get_in(response, ["whiteboard_id"]) == whiteboard.id
+      assert get_in(response, ["content"]) == "bla bla"
+      assert get_in(response, ["author", "id"]) == user1.id
     end
   end
 end
