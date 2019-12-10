@@ -1,4 +1,5 @@
 defmodule TaktaWeb.WhiteboardControllerTest do
+  @moduledoc false
   use TaktaWeb.ConnCase, async: true
   alias Auth.MagicTokens
   alias Takta.{Accounts, Whiteboards}
