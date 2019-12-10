@@ -26,6 +26,9 @@ defmodule TaktaWeb.Base.StatusResponse do
   def not_found, do: {404, %{error: :not_found}}
   def not_found(reason), do: {404, %{error: :not_found, details: reason}}
 
+  def bad_request, do: {400, %{error: :bad_request}}
+  def bad_request(reason), do: {400, %{error: :bad_request, details: reason}}
+
   def permission_denied, do: {403, %{error: :permission_denied}}
   def permission_denied(reason), do: {403, %{error: :permission_denied, details: reason}}
 
