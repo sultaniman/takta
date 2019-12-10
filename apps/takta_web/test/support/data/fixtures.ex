@@ -5,6 +5,7 @@ defmodule TaktaWeb.Fixtures do
     Accounts,
     Annotations,
     Comments,
+    Members,
     Whiteboards
   }
 
@@ -67,6 +68,12 @@ defmodule TaktaWeb.Fixtures do
         x: 1,
         y: 1
       }
+    })
+
+    # Create member for the whiteboard of `user1`
+    {:ok, _member} = Members.create(%{
+      member_id: user2.id,
+      whiteboard_id: wb1.id
     })
 
     Accounts.create(%{
