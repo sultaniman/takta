@@ -20,7 +20,7 @@
   * ✅ Delete whiteboard (only owner),
   * ✅ Get list of whiteboards,
   * ✅ View details of whiteboard,
->>> * ❌ Implement comments & annotations resource,
+* ❌ Implement comments & annotations resource,
   * ✅ Create comment,
     * ✅ Accept annotation coordinates,
   * ✅ Update comment,
@@ -60,3 +60,4 @@
 # Misc
 
 * ✅ May be move mappers into context domain,
+* ❌ Add missing tests
