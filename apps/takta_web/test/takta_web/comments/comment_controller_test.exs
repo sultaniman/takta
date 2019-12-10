@@ -184,5 +184,95 @@ defmodule TaktaWeb.CommentControllerTest do
 
       assert response == %{"error" => "not_found"}
     end
+
+    test "users can update their comments", %{conn1: conn1, user1: user1} do
+      whiteboard =
+        user1.id
+        |> Whiteboards.find_for_user()
+        |> List.first()
+
+      assert whiteboard.owner_id == user1.id
+
+      payload = %{
+        content: "bla bla",
+        author_id: user1.id,
+        whiteboard_id: whiteboard.id
+      }
+
+      comment_id =
+        conn1
+        |> post(Routes.comment_path(conn1, :create), payload)
+        |> json_response(200)
+        |> Map.get("id")
+
+      update_payload = %{
+        comment: %{
+          content: "toto"
+        }
+      }
+
+      conn1
+      |> put(Routes.comment_path(conn1, :update, comment_id), update_payload)
+      |> json_response(200)
+    end
+
+    test "admins can update any comments", %{conn_admin: conn_admin} do
+      comment =
+        Comments.all()
+        |> List.first()
+
+      update_payload = %{
+        comment: %{
+          content: "toto"
+        }
+      }
+
+      response =
+        conn_admin
+        |> put(Routes.comment_path(conn_admin, :update, comment.id), update_payload)
+        |> json_response(200)
+
+      assert response |> Map.get("content") == "toto"
+      assert response |> Map.get("author_id") == comment.author_id
+      assert response |> Map.get("whiteboard_id") == comment.whiteboard_id
+    end
+
+    test "users can not update comments for others", %{conn2: conn2} do
+      comment =
+        Comments.all()
+        |> List.first()
+
+      update_payload = %{
+        comment: %{
+          content: "toto"
+        }
+      }
+
+      response =
+        conn2
+        |> put(Routes.comment_path(conn2, :update, comment.id), update_payload)
+        |> json_response(403)
+
+      assert response == %{"error" => "permission_denied"}
+    end
+
+    test "strangers can not update any comments" do
+      comment =
+        Comments.all()
+        |> List.first()
+
+      update_payload = %{
+        comment: %{
+          content: "toto"
+        }
+      }
+
+      response =
+        build_conn()
+        |> put(Routes.comment_path(build_conn(), :update, comment.id), update_payload)
+        |> json_response(401)
+
+      assert response == %{"error" => "authentication_required"}
+    end
   end
 end

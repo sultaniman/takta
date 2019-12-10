@@ -30,6 +30,17 @@ defmodule TaktaWeb.CommentService do
     end
   end
 
+  def update_comment(comment_id, user, params) do
+    case Comments.find_by_id(comment_id) do
+      nil -> StatusResponse.not_found()
+      comment ->
+        case Permissions.can_manage_comment(user, comment) do
+          true -> update(comment, params)
+          false -> StatusResponse.permission_denied()
+        end
+    end
+  end
+
   defp detail(nil), do: StatusResponse.not_found()
   defp detail(%Comment{} = comment) do
     comment
@@ -45,6 +56,20 @@ defmodule TaktaWeb.CommentService do
         |> Comments.with_author()
         |> CommentMapper.to_json_extended()
         |> StatusResponse.ok()
+    end
+  end
+
+  defp update(comment, params) do
+    case Comments.update(comment, params) do
+      {:ok, updated_comment} ->
+        updated_comment
+        |> CommentMapper.to_json_basic()
+        |> StatusResponse.ok()
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        changeset
+        |> Takta.Util.Changeset.errors_to_json()
+        |> StatusResponse.bad_request()
     end
   end
 end

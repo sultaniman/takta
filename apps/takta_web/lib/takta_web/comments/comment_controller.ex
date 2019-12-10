@@ -14,8 +14,13 @@ defmodule TaktaWeb.CommentController do
     conn |> StatusResponse.send_response(response)
   end
 
+  def update(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => comment_id, "comment" => params}) do
+    response = CommentService.update_comment(comment_id, user, params)
+    conn |> StatusResponse.send_response(response)
+  end
+
   def update(conn, _params) do
-    conn |> StatusResponse.send_response(StatusResponse.ok())
+    conn |> StatusResponse.send_response(StatusResponse.not_found())
   end
 
   def delete(conn, _params) do

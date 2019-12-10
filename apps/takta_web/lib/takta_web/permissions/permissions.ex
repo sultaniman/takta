@@ -20,18 +20,30 @@ defmodule TaktaWeb.Permissions do
   Check if user can see comment
   considering the following conditions
 
-    1. User is active,
-    2. User is admin or,
-    3. User is the author of comment,
-    4. User has membership to see discussions,
-    5. User is the owner of related whiteboard.
+    1. User is admin or,
+    2. User is the author of comment,
+    3. User has membership to see discussions,
+    4. User is the owner of related whiteboard.
   """
   def can_see_comment(nil, _comment), do: false
   def can_see_comment(_user, nil), do: false
   def can_see_comment(user, comment) do
-    is_owner = Whiteboards.has_owner?(comment.whiteboard_id, user.id)
-    can_see = user.is_active and (is_owner or user.is_admin or user.id == comment.author_id)
+    is_whiteboard_owner = Whiteboards.has_owner?(comment.whiteboard_id, user.id)
+    can_see = is_whiteboard_owner or user.is_admin or user.id == comment.author_id
     has_membership = Members.whiteboard_has_member?(comment.whiteboard_id, user.id)
-    can_see or has_membership
+    has_membership or (user.is_active and can_see)
+  end
+
+  @doc """
+  Check if user can update
+  considering the following conditions
+
+    1. User is admin or,
+    2. User is the author of comment.
+  """
+  def can_manage_comment(nil, _comment), do: false
+  def can_manage_comment(_user, nil), do: false
+  def can_manage_comment(user, comment) do
+    user.is_active and (user.is_admin or user.id == comment.author_id)
   end
 end
