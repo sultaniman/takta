@@ -68,5 +68,14 @@ defmodule TaktaWeb.Fixtures do
         y: 1
       }
     })
+
+    Accounts.create(%{
+      email: "web-admin@example.com",
+      full_name: "Web admin name",
+      password: "12345678",
+      is_active: true,
+      is_admin: true,
+      provider: "github"
+    })
   end
 end
