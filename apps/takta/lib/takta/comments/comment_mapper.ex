@@ -19,7 +19,6 @@ defmodule Takta.Comments.CommentMapper do
   TODO: preload author record
   """
   def to_json_extended(%Comment{} = comment) do
-    User
     %{
       id: comment.id,
       content: comment.content,

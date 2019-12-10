@@ -1,7 +1,6 @@
 defmodule TaktaWeb.WhiteboardController do
   @moduledoc false
   use TaktaWeb, :controller
-  alias Takta.Comments
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Services.UploadService
   alias TaktaWeb.Whiteboards.WhiteboardService
