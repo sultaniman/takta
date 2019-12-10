@@ -2,7 +2,7 @@ defmodule TaktaWeb.WhiteboardControllerTest do
   use TaktaWeb.ConnCase, async: true
   alias Auth.MagicTokens
   alias Takta.{Accounts, Whiteboards}
-  alias TaktaWeb.Whiteboards.WhiteboardService
+  alias TaktaWeb.WhiteboardService
 
   @valid_data "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPUY8g9CQACZQFm8I6jQQAAAABJRU5ErkJggg=="
   @invalid_data "RG9uJ3Qgb25seSBwcmFjdGljZSB5b3VyIGFydCwgYnV0IGZvcmNlIHlvdXIgd2F5IGludG8gaXRzIHNlY3JldHMsIGZvciBpdCBhbmQga25vd2xlZGdlIGNhbiByYWlzZSBtZW4gdG8gdGhlIGRpdmluZS4="
