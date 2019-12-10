@@ -27,4 +27,6 @@ defmodule Takta.Comments do
       comment -> comment |> Repo.delete()
     end
   end
+
+  def with_author(comment), do: comment |> Repo.preload(:author)
 end
