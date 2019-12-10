@@ -35,9 +35,9 @@ defmodule TaktaWeb.Router do
     pipe_through :api
 
     get("/", WhiteboardController, :list)
+    post("/", WhiteboardController, :create)
     get("/:id", WhiteboardController, :detail)
-    post("/create", WhiteboardController, :create)
-    delete("/create/:id", WhiteboardController, :delete)
+    delete("/:id", WhiteboardController, :delete)
   end
 
   # Members resource
@@ -50,8 +50,8 @@ defmodule TaktaWeb.Router do
     pipe_through :api
 
     get("/:id", CommentController, :detail)
-    post("/create", CommentController, :create)
-    put("/update/:id", CommentController, :update)
+    post("/", CommentController, :create)
+    put("/:id", CommentController, :update)
     delete("/:id", CommentController, :delete)
   end
 
