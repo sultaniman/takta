@@ -10,8 +10,6 @@ defmodule Takta.Whiteboards do
     Repo.one(from w in Whiteboard, where: w.id == ^wid)
   end
 
-  def find_by_id!(wid), do: Repo.get!(Whiteboard, wid)
-
   def find_for_user(user_id) do
     Repo.all(from w in Whiteboard, where: w.owner_id == ^user_id)
   end
