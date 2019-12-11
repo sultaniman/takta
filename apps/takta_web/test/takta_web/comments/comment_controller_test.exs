@@ -288,5 +288,47 @@ defmodule TaktaWeb.CommentControllerTest do
       assert response |> Map.get("id") == comment.id
       assert response |> Map.get("content") == comment.content
     end
+
+    test "comment authors can delete their comments", %{conn2: conn2, user2: user2} do
+      comment =
+        Comments.all()
+        |> Enum.filter(fn c -> c.author_id == user2.id end)
+        |> List.first()
+
+      response =
+        conn2
+        |> delete(Routes.comment_path(conn2, :delete, comment.id))
+        |> json_response(200)
+
+      assert response |> Map.get("id") == comment.id
+      assert response |> Map.get("content") == comment.content
+    end
+
+    test "strangers can not delete comments" do
+      comment =
+        Comments.all()
+        |> List.first()
+
+      response =
+        build_conn()
+        |> delete(Routes.comment_path(build_conn(), :delete, comment.id))
+        |> json_response(401)
+
+      assert response == %{"error" => "authentication_required"}
+    end
+
+    test "users can not delete comments for others", %{conn2: conn2, user1: user1} do
+      comment =
+        Comments.all()
+        |> Enum.filter(fn c -> c.author_id == user1.id end)
+        |> List.first()
+
+      response =
+        conn2
+        |> delete(Routes.comment_path(conn2, :delete, comment.id))
+        |> json_response(403)
+
+      assert response == %{"error" => "permission_denied"}
+    end
   end
 end
