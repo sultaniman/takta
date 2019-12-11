@@ -274,5 +274,19 @@ defmodule TaktaWeb.CommentControllerTest do
 
       assert response == %{"error" => "authentication_required"}
     end
+
+    test "admins can delete any comment", %{conn_admin: conn_admin} do
+      comment =
+        Comments.all()
+        |> List.first()
+
+      response =
+        conn_admin
+        |> delete(Routes.comment_path(conn_admin, :delete, comment.id))
+        |> json_response(200)
+
+      assert response |> Map.get("id") == comment.id
+      assert response |> Map.get("content") == comment.content
+    end
   end
 end

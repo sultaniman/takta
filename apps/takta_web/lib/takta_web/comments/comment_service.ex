@@ -4,6 +4,7 @@ defmodule TaktaWeb.CommentService do
   alias Takta.Comments.{Comment, CommentMapper}
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Permissions
+  alias TaktaWeb.Services.ServiceHelpers
 
   def create(params) do
     case Comments.create(params) do
@@ -20,25 +21,31 @@ defmodule TaktaWeb.CommentService do
   end
 
   def detail_for_user(comment_id, user) do
-    case Comments.find_by_id(comment_id) do
-      nil -> StatusResponse.not_found()
-      comment ->
-        case Permissions.can_see_comment(user, comment) do
-          true -> detail(comment)
-          false -> StatusResponse.permission_denied()
-        end
-    end
+    comment = Comments.find_by_id(comment_id)
+    can_see = Permissions.can_see_comment(user, comment)
+    ServiceHelpers.call_if(&detail/1, comment, can_see)
   end
 
   def update_comment(comment_id, user, params) do
-    case Comments.find_by_id(comment_id) do
-      nil -> StatusResponse.not_found()
-      comment ->
-        case Permissions.can_manage_comment(user, comment) do
-          true -> update(comment, params)
-          false -> StatusResponse.permission_denied()
-        end
-    end
+    comment = Comments.find_by_id(comment_id)
+    can_manage = Permissions.can_manage_comment(user, comment)
+    ServiceHelpers.call_if(
+      fn _c -> update(comment, params) end,
+      comment,
+      can_manage
+    )
+  end
+
+  @doc """
+  Deletes comment if the folllowing conditions met
+
+    1. User is admin or,
+    2. User is the author of comment.
+  """
+  def delete_comment(comment_id, user) do
+    comment = Comments.find_by_id(comment_id)
+    can_manage = Permissions.can_manage_comment(user, comment)
+    ServiceHelpers.call_if(&delete/1, comment, can_manage)
   end
 
   defp detail(nil), do: StatusResponse.not_found()
@@ -70,6 +77,17 @@ defmodule TaktaWeb.CommentService do
         changeset
         |> Takta.Util.Changeset.errors_to_json()
         |> StatusResponse.bad_request()
+    end
+  end
+
+  def delete(comment) do
+    case Comments.delete(comment.id) do
+      {:ok, comment} ->
+        comment
+        |> CommentMapper.to_json_basic()
+        |> StatusResponse.ok()
+
+      {:error, :not_found} -> StatusResponse.not_found()
     end
   end
 
