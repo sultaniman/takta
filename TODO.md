@@ -28,7 +28,7 @@
   * ✅ Update comment,
   * ✅ Delete comment,
 * ❌ Implement memberships,
-  * ❌ Create annotation,
+  * ✅ Create annotation,
   * ❌ Update annotation,
   * ❌ Delete annotation,
 * ❌ Implement invites,
