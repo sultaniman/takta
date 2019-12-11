@@ -85,6 +85,7 @@ defmodule TaktaWeb.CommentService do
         comment
         |> CommentMapper.to_json_basic()
         |> Map.put("annotation", annotation)
+
       {:error, %Ecto.Changeset{} = changeset} ->
         errors =
           changeset
