@@ -75,7 +75,6 @@ defmodule TaktaWeb.CommentControllerTest do
 
       payload = %{
         content: "bla bla",
-        author_id: user1.id,
         whiteboard_id: whiteboard.id
       }
 
@@ -97,7 +96,6 @@ defmodule TaktaWeb.CommentControllerTest do
 
       payload = %{
         content: "huhu",
-        author_id: user2.id,
         whiteboard_id: member.whiteboard_id
       }
 
@@ -122,7 +120,6 @@ defmodule TaktaWeb.CommentControllerTest do
 
       payload = %{
         content: "bobo",
-        author_id: user1.id,
         whiteboard_id: whiteboard.id,
         coords: %{
           x: 8,
@@ -151,7 +148,6 @@ defmodule TaktaWeb.CommentControllerTest do
 
       payload = %{
         content: "bobo",
-        author_id: user1.id,
         whiteboard_id: whiteboard.id,
         coords: nil
       }
@@ -174,7 +170,6 @@ defmodule TaktaWeb.CommentControllerTest do
 
       payload = %{
         content: "bla bla",
-        author_id: user1.id,
         whiteboard_id: whiteboard.id
       }
 
@@ -248,7 +243,6 @@ defmodule TaktaWeb.CommentControllerTest do
 
       payload = %{
         content: "bla bla",
-        author_id: user1.id,
         whiteboard_id: whiteboard.id
       }
 

@@ -4,8 +4,8 @@ defmodule TaktaWeb.CommentController do
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.CommentService
 
-  def create(conn, params) do
-    result = CommentService.create(params)
+  def create(%Plug.Conn{assigns: %{user: user}} = conn, params) do
+    result = CommentService.create_comment(user, params)
     conn |> StatusResponse.send_response(result)
   end
 

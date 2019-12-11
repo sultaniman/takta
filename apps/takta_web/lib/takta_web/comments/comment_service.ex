@@ -1,24 +1,24 @@
 defmodule TaktaWeb.CommentService do
   @moduledoc false
-  alias Takta.{Annotations, Comments}
+  alias Takta.{Annotations, Comments, Whiteboards}
   alias Takta.Annotations.AnnotationMapper
   alias Takta.Comments.{Comment, CommentMapper}
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Permissions
   alias TaktaWeb.Services.ServiceHelpers
 
-  def create(params) do
-    case Comments.create(params) do
-      {:ok, comment} ->
-        comment
-        |> create_annotation(params)
-        |> StatusResponse.ok()
+  def create_comment(user, params) do
+    whiteboard =
+      params
+      |> Map.get("whiteboard_id")
+      |> Whiteboards.find_by_id()
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        changeset
-        |> Takta.Util.Changeset.errors_to_json()
-        |> StatusResponse.bad_request()
-    end
+    can_comment = Permissions.can_comment(user, whiteboard)
+    ServiceHelpers.call_if(
+      fn _c -> create(Map.put(params, "author_id", user.id)) end,
+      whiteboard,
+      can_comment
+    )
   end
 
   def detail_for_user(comment_id, user) do
@@ -47,6 +47,20 @@ defmodule TaktaWeb.CommentService do
     comment = Comments.find_by_id(comment_id)
     can_manage = Permissions.can_manage_comment(user, comment)
     ServiceHelpers.call_if(&delete/1, comment, can_manage)
+  end
+
+  defp create(params) do
+    case Comments.create(params) do
+      {:ok, comment} ->
+        comment
+        |> create_annotation(params)
+        |> StatusResponse.ok()
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        changeset
+        |> Takta.Util.Changeset.errors_to_json()
+        |> StatusResponse.bad_request()
+    end
   end
 
   defp detail(nil), do: StatusResponse.not_found()
