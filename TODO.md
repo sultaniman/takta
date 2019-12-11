@@ -24,6 +24,7 @@
   * ✅ Create comment,
     * ✅ Accept annotation coordinates,
     * ✅ Test it,
+    * ✅ Respect membership flags (to annotate, comment),
   * ✅ Update comment,
   * ✅ Delete comment,
 * ❌ Implement memberships,
@@ -42,7 +43,7 @@
 * ✅ Create initial test suites for authentication logic,
 * ❌ Implement username & password sign in with token exchange,
 * ❌ Implement linking social account and other login methods,
-* ❌ Create unified error response format,
+* ✅ Create unified error response format,
 
 # Mailer
 
@@ -52,7 +53,8 @@
 
 # Cleanup & tech debt
 
-* ❌ Implement verical slicing,
+* ✅ Implement verical slicing,
+* ❌ Apply vertical slicing,
 
 # Misc
 
