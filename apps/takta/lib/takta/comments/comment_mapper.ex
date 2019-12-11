@@ -23,6 +23,7 @@ defmodule Takta.Comments.CommentMapper do
       id: comment.id,
       content: comment.content,
       whiteboard_id: comment.whiteboard_id,
+      author_id: comment.author_id,
       author: UserMapper.to_json_basic(comment.author)
     }
   end
