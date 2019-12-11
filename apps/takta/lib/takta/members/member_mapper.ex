@@ -7,6 +7,8 @@ defmodule Takta.Members.MemberMapper do
   def to_json_basic(%Member{} = member) do
     %{
       id: member.id,
+      can_annotate: member.can_annotate,
+      can_comment: member.can_annotate,
       member_id: member.member_id,
       whiteboard_id: member.whiteboard_id
     }
@@ -17,10 +19,8 @@ defmodule Takta.Members.MemberMapper do
       id: member.id,
       can_annotate: member.can_annotate,
       can_comment: member.can_annotate,
-
       member_id: member.member_id,
       whiteboard_id: member.whiteboard_id,
-
       member: UserMapper.to_json_basic(member.member),
       whiteboard: WhiteboardMapper.to_json_basic(member.whiteboard)
     }
