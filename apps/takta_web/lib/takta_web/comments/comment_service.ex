@@ -1,6 +1,7 @@
 defmodule TaktaWeb.CommentService do
   @moduledoc false
   alias Takta.{Annotations, Comments}
+  alias Takta.Annotations.AnnotationMapper
   alias Takta.Comments.{Comment, CommentMapper}
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Permissions
@@ -102,7 +103,7 @@ defmodule TaktaWeb.CommentService do
       {:ok, annotation} ->
         comment
         |> CommentMapper.to_json_basic()
-        |> Map.put("annotation", annotation)
+        |> Map.put("annotation", annotation |> AnnotationMapper.to_json_basic())
 
       {:error, %Ecto.Changeset{} = changeset} ->
         errors =

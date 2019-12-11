@@ -1,4 +1,4 @@
-defmodule Takta.Accounts.AnnotationMapper do
+defmodule Takta.Annotations.AnnotationMapper do
   @moduledoc false
   alias Takta.Annotations.Annotation
 

@@ -3,7 +3,7 @@ defmodule Takta.Whiteboards.WhiteboardMapper do
   Contains mappers for whiteboard into different shapes.
   """
   alias Takta.Whiteboards.Whiteboard
-  alias Takta.Accounts.AnnotationMapper
+  alias Takta.Annotations.AnnotationMapper
   alias Takta.Comments.CommentMapper
 
   def to_json_basic(%Whiteboard{} = whiteboard) do
