@@ -9,10 +9,20 @@ defmodule Takta.Members do
     Repo.one(from m in Member, where: m.id == ^id)
   end
 
-  def whiteboard_has_member?(wid, user_id) do
+  # TODO: write test
+  def find_member(user_id, whiteboard_id) do
     query = from(
       m in Member,
-      where: m.member_id == ^user_id and m.whiteboard_id == ^wid
+      where: m.member_id == ^user_id and m.whiteboard_id == ^whiteboard_id
+    )
+
+    Repo.one(query)
+  end
+
+  def whiteboard_has_member?(whiteboard_id, user_id) do
+    query = from(
+      m in Member,
+      where: m.member_id == ^user_id and m.whiteboard_id == ^whiteboard_id
     )
 
     Repo.exists?(query)
@@ -30,8 +40,8 @@ defmodule Takta.Members do
     |> Repo.update()
   end
 
-  def delete(cid) do
-    case find_by_id(cid) do
+  def delete(member_id) do
+    case find_by_id(member_id) do
       nil -> {:error, :not_found}
       member -> member |> Repo.delete()
     end
