@@ -9,7 +9,7 @@ defmodule TaktaWeb.CommentControllerTest do
   """
   use TaktaWeb.ConnCase, async: true
   alias Auth.MagicTokens
-  alias Takta.{Accounts, Comments, Whiteboards}
+  alias Takta.{Accounts, Comments, Members, Whiteboards}
 
   setup do
     user1 = Accounts.find_by_email("web@example.com")
@@ -65,28 +65,6 @@ defmodule TaktaWeb.CommentControllerTest do
       assert response == %{"error" => "authentication_required"}
     end
 
-    test "unable to update comment if not authenticated" do
-      conn = build_conn()
-
-      response =
-        conn
-        |> put(Routes.comment_path(conn, :update, UUID.uuid4()), %{content: "update"})
-        |> json_response(401)
-
-      assert response == %{"error" => "authentication_required"}
-    end
-
-    test "unable to delete comment if not authenticated" do
-      conn = build_conn()
-
-      response =
-        conn
-        |> delete(Routes.comment_path(conn, :delete, UUID.uuid4()))
-        |> json_response(401)
-
-      assert response == %{"error" => "authentication_required"}
-    end
-
     test "owners can comment on their whiteboards", %{conn1: conn1, user1: user1} do
       whiteboard =
         user1.id
@@ -109,6 +87,81 @@ defmodule TaktaWeb.CommentControllerTest do
       assert response |> Map.has_key?("id")
       assert response |> Map.get("content") == "bla bla"
       assert response |> Map.get("whiteboard_id") == whiteboard.id
+    end
+
+    test "whiteboard members are able to leave comments", %{conn2: conn2, user2: user2} do
+      member =
+        Members.all()
+        |> Enum.filter(fn m -> m.member_id == user2.id end)
+        |> List.first()
+
+      payload = %{
+        content: "huhu",
+        author_id: user2.id,
+        whiteboard_id: member.whiteboard_id
+      }
+
+      response =
+        conn2
+        |> post(Routes.comment_path(conn2, :create), payload)
+        |> json_response(200)
+
+      assert response |> Map.has_key?("id")
+      assert response |> Map.get("content") == "huhu"
+      assert response |> Map.get("author_id") == user2.id
+      assert response |> Map.get("whiteboard_id") == member.whiteboard_id
+    end
+
+    test "users are able to pass comments with annotation", %{conn1: conn1, user1: user1}  do
+      whiteboard =
+        user1.id
+        |> Whiteboards.find_for_user()
+        |> List.first()
+
+      assert whiteboard.owner_id == user1.id
+
+      payload = %{
+        content: "bobo",
+        author_id: user1.id,
+        whiteboard_id: whiteboard.id,
+        coords: %{
+          x: 8,
+          y: 8
+        }
+      }
+
+      response =
+        conn1
+        |> post(Routes.comment_path(conn1, :create), payload)
+        |> json_response(200)
+
+      assert response |> Map.has_key?("id")
+      assert response |> Map.get("content") == "bobo"
+      assert response |> Map.get("whiteboard_id") == whiteboard.id
+      assert response |> get_in(["annotation", "coords"]) == %{"x" => 8, "y" => 8}
+    end
+
+    test "comment with invalid annotation returns annotation error", %{conn1: conn1, user1: user1}  do
+      whiteboard =
+        user1.id
+        |> Whiteboards.find_for_user()
+        |> List.first()
+
+      assert whiteboard.owner_id == user1.id
+
+      payload = %{
+        content: "bobo",
+        author_id: user1.id,
+        whiteboard_id: whiteboard.id,
+        coords: nil
+      }
+
+      response =
+        conn1
+        |> post(Routes.comment_path(conn1, :create), payload)
+        |> json_response(200)
+
+      assert response |> Map.get("annotation") == %{"errors" => %{"coords" => ["can't be blank"]}}
     end
 
     test "owners can request comment details on their whiteboards", %{conn1: conn1, user1: user1} do
@@ -256,6 +309,15 @@ defmodule TaktaWeb.CommentControllerTest do
       assert response == %{"error" => "permission_denied"}
     end
 
+    test "users can not update comments which do not exist and get HTTP 404", %{conn2: conn2} do
+      response =
+        conn2
+        |> put(Routes.comment_path(conn2, :update, UUID.uuid4()), %{})
+        |> json_response(404)
+
+      assert response == %{"error" => "not_found"}
+    end
+
     test "strangers can not update any comments" do
       comment =
         Comments.all()
@@ -329,6 +391,15 @@ defmodule TaktaWeb.CommentControllerTest do
         |> json_response(403)
 
       assert response == %{"error" => "permission_denied"}
+    end
+
+    test "users can not delete comments which do not exist and get HTTP 404", %{conn2: conn2} do
+      response =
+        conn2
+        |> delete(Routes.comment_path(conn2, :delete, UUID.uuid4()))
+        |> json_response(404)
+
+      assert response == %{"error" => "not_found"}
     end
   end
 end
