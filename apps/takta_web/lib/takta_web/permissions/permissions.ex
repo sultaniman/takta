@@ -17,6 +17,23 @@ defmodule TaktaWeb.Permissions do
   end
 
   @doc """
+  Check if user can comment on whiteboard
+  considering the following conditions
+
+    1. User is admin or,
+    2. User has membership to comment,
+    3. User is the owner of related whiteboard.
+  """
+  def can_comment(nil, _whiteboard), do: false
+  def can_comment(_user, nil), do: false
+  def can_comment(user, whiteboard) do
+    case Members.find_member(user.id, whiteboard.id) do
+      nil -> user.is_admin or whiteboard.owner_id == user.id
+      member -> member.can_comment
+    end
+  end
+
+  @doc """
   Check if user can see comment
   considering the following conditions
 
