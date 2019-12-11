@@ -5,8 +5,8 @@ defmodule Takta.Comments do
 
   def all, do: Repo.all(Comment)
 
-  def find_by_id(cid) do
-    Repo.one(from c in Comment, where: c.id == ^cid)
+  def find_by_id(comment_id) do
+    Repo.one(from c in Comment, where: c.id == ^comment_id)
   end
 
   def create(params) do
@@ -21,8 +21,8 @@ defmodule Takta.Comments do
     |> Repo.update()
   end
 
-  def delete(cid) do
-    case find_by_id(cid) do
+  def delete(comment_id) do
+    case find_by_id(comment_id) do
       nil -> {:error, :not_found}
       comment -> comment |> Repo.delete()
     end
