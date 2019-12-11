@@ -32,6 +32,12 @@ defmodule TaktaWeb.Router do
     get     "/comments/:id",  CommentController, :detail
     put     "/comments/:id",  CommentController, :update
     delete  "/comments/:id",  CommentController, :delete
+
+    # Members resource
+    post    "/members",      MemberController, :create
+    # get     "/members/:id",  MemberController, :detail
+    # put     "/members/:id",  MemberController, :update
+    # delete  "/members/:id",  MemberController, :delete
   end
 
   # General purpose endpoints
