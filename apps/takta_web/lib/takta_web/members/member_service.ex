@@ -6,6 +6,7 @@ defmodule TaktaWeb.MemberService do
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Services.ServiceHelpers
 
+  # TODO: create invite -> send by email
   def create_member(user, params) do
     whiteboard =
       params
@@ -17,24 +18,41 @@ defmodule TaktaWeb.MemberService do
       |> Map.get("member_id")
 
     if member_id == user.id do
-      StatusResponse.bad_request(%{message: :already_owner})
+      StatusResponse.bad_request(:already_owner)
     else
       can_manage = Permissions.can_manage_whiteboard(user, whiteboard)
       ServiceHelpers.call_if(&create/1, params, can_manage)
     end
   end
 
+  def update_member(member_id, user, permissions) do
+    case Members.find_by_id(member_id) do
+      nil -> StatusResponse.not_found()
+
+      member ->
+        whiteboard = Whiteboards.find_by_id(member.whiteboard_id)
+        can_manage = Permissions.can_manage_whiteboard(user, whiteboard)
+        ServiceHelpers.call_if(
+          fn _m ->
+            update(member, %{
+              can_comment: Map.get(permissions, "can_comment"),
+              can_annotate: Map.get(permissions, "can_annotate")
+            })
+          end,
+          member,
+          can_manage
+        )
+    end
+  end
+
   def delete_member(user, member_id) do
-    if member_id == user.id do
-      StatusResponse.bad_request(%{message: :already_owner})
-    else
-      case member_id |> Members.find_by_id() do
-        nil -> StatusResponse.not_found()
-        member ->
-          whiteboard = member.whiteboard_id |> Whiteboards.find_by_id()
-          can_manage = Permissions.can_manage_whiteboard(user, whiteboard)
-          ServiceHelpers.call_if(&delete/1, member, can_manage)
-      end
+    case Members.find_by_id(member_id) do
+      nil -> StatusResponse.not_found()
+
+      member ->
+        whiteboard = Whiteboards.find_by_id(member.whiteboard_id)
+        can_manage = Permissions.can_manage_whiteboard(user, whiteboard)
+        ServiceHelpers.call_if(&delete/1, member, can_manage)
     end
   end
 
@@ -42,6 +60,20 @@ defmodule TaktaWeb.MemberService do
     case Members.create(params) do
       {:ok, member} ->
         member
+        |> MemberMapper.to_json_basic()
+        |> StatusResponse.ok()
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        changeset
+        |> Takta.Util.Changeset.errors_to_json()
+        |> StatusResponse.bad_request()
+    end
+  end
+
+  defp update(member, params) do
+    case Members.update(member, params) do
+      {:ok, updated_member} ->
+        updated_member
         |> MemberMapper.to_json_basic()
         |> StatusResponse.ok()
 

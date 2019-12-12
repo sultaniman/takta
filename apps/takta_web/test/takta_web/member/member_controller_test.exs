@@ -63,8 +63,7 @@ defmodule TaktaWeb.MemberControllerTest do
 
     test "whiteboard owners can remove members", %{conn2: conn2, user1: user1, user2: user2} do
       whiteboard =
-        Whiteboards.all()
-        |> Enum.filter(fn w -> w.owner_id == user2.id end)
+        Whiteboards.find_for_user(user2.id)
         |> List.first()
 
       payload = %{

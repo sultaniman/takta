@@ -27,6 +27,7 @@ defmodule TaktaWeb.Router do
     get     "/whiteboards/:id",         WhiteboardController, :detail
     delete  "/whiteboards/:id",         WhiteboardController, :delete
     post    "/whiteboards/:id/comment", WhiteboardController, :comment
+    post    "/whiteboards/:id/member",  WhiteboardController, :create_member
 
     # Comments resource
     post    "/comments",      CommentController, :create
@@ -36,7 +37,7 @@ defmodule TaktaWeb.Router do
 
     # Members resource
     post    "/members",      MemberController, :create
-    # get     "/members/:id",  MemberController, :detail
+    get     "/members/:id",  MemberController, :detail
     # put     "/members/:id",  MemberController, :update
     delete  "/members/:id",  MemberController, :delete
   end

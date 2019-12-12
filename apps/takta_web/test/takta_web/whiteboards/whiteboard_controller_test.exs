@@ -277,5 +277,30 @@ defmodule TaktaWeb.WhiteboardControllerTest do
 
       assert response == %{"error" => "authentication_required"}
     end
+
+    test "whiteboard owners can add members", %{conn2: conn2, user1: user1, user2: user2} do
+      whiteboard =
+        Whiteboards.find_for_user(user2.id)
+        |> List.first()
+
+      payload = %{
+        member: %{
+          can_annotate: true,
+          can_comment: true,
+          member_id: user1.id
+        }
+      }
+
+      response =
+        conn2
+        |> post(Routes.whiteboard_path(conn2, :create_member, whiteboard.id), payload)
+        |> json_response(200)
+
+      assert response |> Map.has_key?("id")
+      assert response |> Map.get("can_annotate") == true
+      assert response |> Map.get("can_comment") == true
+      assert response |> Map.get("member_id") == user1.id
+      assert response |> Map.get("whiteboard_id") == whiteboard.id
+    end
   end
 end
