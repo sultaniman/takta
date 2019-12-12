@@ -32,6 +32,19 @@ defmodule TaktaWeb.InviteService do
     StatusResponse.ok(%{invites: invites})
   end
 
+  def delete_invite(user, invite_id) do
+    case Invites.find_by_id(invite_id) do
+      nil -> StatusResponse.not_found()
+      invite ->
+        invite = Invites.preload_all(invite)
+        if invite.created_by_id == user.id do
+          delete(invite)
+        else
+          StatusResponse.permission_denied()
+        end
+    end
+  end
+
   defp create(params) do
     case Invites.create(params) do
       {:ok, invite} ->
@@ -43,6 +56,18 @@ defmodule TaktaWeb.InviteService do
         changeset
         |> Takta.Util.Changeset.errors_to_json()
         |> StatusResponse.bad_request()
+    end
+  end
+
+  def delete(invite) do
+    case Invites.delete(invite.id) do
+      {:ok, deleted_invite} ->
+        deleted_invite
+        |> InviteMapper.to_json_basic()
+        |> StatusResponse.ok()
+
+      {:error, :not_found} ->
+        StatusResponse.not_found()
     end
   end
 end
