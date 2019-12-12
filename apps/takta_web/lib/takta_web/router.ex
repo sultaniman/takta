@@ -38,7 +38,7 @@ defmodule TaktaWeb.Router do
     # Members resource
     post    "/members",      MemberController, :create
     get     "/members/:id",  MemberController, :detail
-    # put     "/members/:id",  MemberController, :update
+    put     "/members/:id",  MemberController, :update
     delete  "/members/:id",  MemberController, :delete
   end
 

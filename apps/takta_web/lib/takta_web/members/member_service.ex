@@ -1,6 +1,6 @@
 defmodule TaktaWeb.MemberService do
   @moduledoc false
-  alias Takta.{Members, Whiteboards}
+  alias Takta.{Accounts, Members, Whiteboards}
   alias Takta.Members.MemberMapper
   alias TaktaWeb.Permissions
   alias TaktaWeb.Base.StatusResponse
@@ -22,6 +22,26 @@ defmodule TaktaWeb.MemberService do
     else
       can_manage = Permissions.can_manage_whiteboard(user, whiteboard)
       ServiceHelpers.call_if(&create/1, params, can_manage)
+    end
+  end
+
+  def detail_for_user(user, member_id) do
+    case Members.find_by_id(member_id) do
+      nil -> StatusResponse.not_found()
+      member ->
+        user = Accounts.find_by_id(user.id)
+        whiteboard =
+          member.whiteboard_id
+          |> Whiteboards.find_by_id()
+
+        if Permissions.can_manage_whiteboard(user, whiteboard) do
+          member
+          |> Members.preload_all()
+          |> MemberMapper.to_json_extended()
+          |> StatusResponse.ok()
+        else
+          StatusResponse.permission_denied()
+        end
     end
   end
 

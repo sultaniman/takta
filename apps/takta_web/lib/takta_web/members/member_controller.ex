@@ -5,8 +5,13 @@ defmodule TaktaWeb.MemberController do
   alias TaktaWeb.MemberService
 
   def create(%Plug.Conn{assigns: %{user: user}} = conn, params) do
-    result = MemberService.create_member(user, params)
-    conn |> StatusResponse.send_response(result)
+    response = MemberService.create_member(user, params)
+    conn |> StatusResponse.send_response(response)
+  end
+
+  def detail(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => member_id}) do
+    response = MemberService.detail_for_user(user, member_id)
+    conn |> StatusResponse.send_response(response)
   end
 
   def update(
