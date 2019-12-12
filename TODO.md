@@ -40,6 +40,7 @@
   * ✅ Get invite details,
   * ❌ Send invite when membership created,
   * ❌ Invite by email,
+  * ❌ Activate newly created user if was invited by email,
   * ✅ Delete invite,
 * ✅ Permission manager,
   * ✅ Only owners of entities can update/delete,
