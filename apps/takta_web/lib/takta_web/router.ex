@@ -42,10 +42,11 @@ defmodule TaktaWeb.Router do
     delete  "/members/:id",  MemberController, :delete
 
     # Invites resource
-    post    "/invites",       InviteController, :create
-    get     "/invites",       InviteController, :list
-    get     "/invites/:id",   InviteController, :detail
-    delete  "/invites/:id",   InviteController, :delete
+    post    "/invites",           InviteController, :create
+    get     "/invites",           InviteController, :list
+    get     "/invites/:id",       InviteController, :detail
+    delete  "/invites/:id",       InviteController, :delete
+    # post  "/invites/via/email",   InviteController, :email_invite
   end
 
   # General purpose endpoints
