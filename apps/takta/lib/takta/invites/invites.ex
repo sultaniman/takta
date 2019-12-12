@@ -33,6 +33,13 @@ defmodule Takta.Invites do
     Repo.all(from i in Invite, where: i.created_by_id == ^user_id)
   end
 
+  def preload_all(invite) do
+    invite
+    |> Repo.preload(:whiteboard)
+    |> Repo.preload(:used_by)
+    |> Repo.preload(:created_by)
+  end
+
   @valid_until 3600
   def is_valid(id) do
     case find_by_id(id) do
