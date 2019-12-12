@@ -14,8 +14,8 @@ defmodule TaktaWeb.InviteController do
     conn |> StatusResponse.send_response(response)
   end
 
-  # def delete(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => member_id}) do
-  #   response = InviteService.delete_member(user, member_id)
-  #   conn |> StatusResponse.send_response(response)
-  # end
+  def delete(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => invite_id}) do
+    response = InviteService.delete_invite(user, invite_id)
+    conn |> StatusResponse.send_response(response)
+  end
 end
