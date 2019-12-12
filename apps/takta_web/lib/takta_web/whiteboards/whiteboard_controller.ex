@@ -3,7 +3,7 @@ defmodule TaktaWeb.WhiteboardController do
   use TaktaWeb, :controller
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Services.UploadService
-  alias TaktaWeb.WhiteboardService
+  alias TaktaWeb.{CommentService, WhiteboardService}
 
   def list(%Plug.Conn{assigns: %{user: user}} = conn, _params) do
     response = WhiteboardService.list_for_user(user.id)
@@ -21,6 +21,15 @@ defmodule TaktaWeb.WhiteboardController do
 
   def delete(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => wid}) do
     response = WhiteboardService.delete_for_user(wid, user.id)
+    conn |> StatusResponse.send_response(response)
+  end
+
+  def comment(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => id, "content" => content}) do
+    response = CommentService.create_comment(user, %{
+      "whiteboard_id" => id,
+      "content" => content
+    })
+
     conn |> StatusResponse.send_response(response)
   end
 end

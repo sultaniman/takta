@@ -9,14 +9,31 @@ defmodule TaktaWeb.WhiteboardControllerTest do
   @invalid_data "RG9uJ3Qgb25seSBwcmFjdGljZSB5b3VyIGFydCwgYnV0IGZvcmNlIHlvdXIgd2F5IGludG8gaXRzIHNlY3JldHMsIGZvciBpdCBhbmQga25vd2xlZGdlIGNhbiByYWlzZSBtZW4gdG8gdGhlIGRpdmluZS4="
 
   setup do
-    user = Accounts.find_by_email("web@example.com")
-    {:ok, magic_token} = MagicTokens.create_token(user.id, "github")
+    user1 = Accounts.find_by_email("web@example.com")
+    user2 = Accounts.find_by_email("web-2@example.com")
+    admin = Accounts.find_by_email("web-admin@example.com")
+    {:ok, magic_token1} = MagicTokens.create_token(user1.id, "github")
+    {:ok, magic_token2} = MagicTokens.create_token(user2.id, "github")
+    {:ok, magic_token_admin} = MagicTokens.create_token(admin.id, "github")
 
-    conn =
+    conn1 =
       build_conn()
-      |> get(Routes.magic_path(build_conn(), :magic_signin, magic_token.token))
+      |> get(Routes.magic_path(build_conn(), :magic_signin, magic_token1.token))
 
-    {:ok, conn: conn, user: user}
+    conn2 =
+      build_conn()
+      |> get(Routes.magic_path(build_conn(), :magic_signin, magic_token2.token))
+
+    conn_admin =
+      build_conn()
+      |> get(Routes.magic_path(build_conn(), :magic_signin, magic_token_admin.token))
+
+    {
+      :ok,
+      conn1: conn1, user1: user1,
+      conn2: conn2, user2: user2,
+      conn_admin: conn_admin, admin: admin
+    }
   end
 
   describe "whiteboard controller 🕹  ::" do
@@ -35,54 +52,54 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       assert error == "authentication_required"
     end
 
-    test "unable to upload whiteboard for invalid files", %{conn: conn} do
+    test "unable to upload whiteboard for invalid files", %{conn1: conn1} do
       payload = %{
         filename: "invalid-payload.jpg",
         data: @invalid_data
       }
 
       data =
-        conn
-        |> post(Routes.whiteboard_path(conn, :create), payload)
+        conn1
+        |> post(Routes.whiteboard_path(conn1, :create), payload)
         |> json_response(400)
 
       assert data == %{"error" => "invalid_format"}
     end
 
-    test "can create whiteboard with valid data and session", %{conn: conn, user: user} do
+    test "can create whiteboard with valid data and session", %{conn1: conn1, user1: user1} do
       payload = %{
         filename: "valid-whiteboard.jpg",
         data: @valid_data
       }
 
       data =
-        conn
-        |> post(Routes.whiteboard_path(conn, :create), payload)
+        conn1
+        |> post(Routes.whiteboard_path(conn1, :create), payload)
         |> json_response(200)
 
       assert data |> Map.has_key?("id")
       assert data |> Map.get("name") == payload.filename
-      assert data |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user.id}")
+      assert data |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user1.id}")
     end
 
-    test "can delete whiteboard with valid owner and session", %{conn: conn} do
+    test "can delete whiteboard with valid owner and session", %{conn1: conn1} do
       payload = %{
         filename: "valid-whiteboard.jpg",
         data: @valid_data
       }
 
       wid =
-        conn
-        |> post(Routes.whiteboard_path(conn, :create), payload)
+        conn1
+        |> post(Routes.whiteboard_path(conn1, :create), payload)
         |> json_response(200)
         |> Map.get("id")
 
-      conn
-        |> delete(Routes.whiteboard_path(conn, :delete, wid))
-        |> json_response(200)
+      conn1
+      |> delete(Routes.whiteboard_path(conn1, :delete, wid))
+      |> json_response(200)
     end
 
-    test "can not delete whiteboard with invalid owner and session", %{conn: conn} do
+    test "can not delete whiteboard with invalid owner and session", %{conn1: conn1} do
       # last whiteboard is not for the first user
       # check fixtures.
       wb =
@@ -90,17 +107,17 @@ defmodule TaktaWeb.WhiteboardControllerTest do
         |> List.last()
 
       response =
-        conn
-        |> delete(Routes.whiteboard_path(conn, :delete, wb.id))
+        conn1
+        |> delete(Routes.whiteboard_path(conn1, :delete, wb.id))
         |> json_response(403)
 
       assert response == %{"error" => "permission_denied"}
     end
 
-    test "returns HTTP 404 if whiteboard does not exist", %{conn: conn} do
+    test "returns HTTP 404 if whiteboard does not exist", %{conn1: conn1} do
       response =
-        conn
-        |> delete(Routes.whiteboard_path(conn, :delete, UUID.uuid4()))
+        conn1
+        |> delete(Routes.whiteboard_path(conn1, :delete, UUID.uuid4()))
         |> json_response(404)
 
       assert response == %{"error" => "not_found"}
@@ -118,19 +135,19 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       assert result == {404, %{error: :not_found}}
     end
 
-    test "can list whiteboards for authenticated user", %{conn: conn, user: user} do
+    test "can list whiteboards for authenticated user", %{conn1: conn1, user1: user1} do
       payload = %{
         filename: "valid-whiteboard.jpg",
         data: @valid_data
       }
 
-      conn
-      |> post(Routes.whiteboard_path(conn, :create), payload)
+      conn1
+      |> post(Routes.whiteboard_path(conn1, :create), payload)
       |> json_response(200)
 
       response =
-        conn
-        |> get(Routes.whiteboard_path(conn, :list))
+        conn1
+        |> get(Routes.whiteboard_path(conn1, :list))
         |> json_response(200)
 
       assert %{"whiteboards" => wbs} = response
@@ -139,43 +156,43 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       wb = wbs |> List.last()
       assert wb |> Map.has_key?("id")
       assert wb |> Map.get("name") == payload.filename
-      assert wb |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user.id}")
+      assert wb |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user1.id}")
     end
 
-    test "can get whiteboard details for authenticated user", %{conn: conn, user: user} do
+    test "can get whiteboard details for authenticated user", %{conn1: conn1, user1: user1} do
       payload = %{
         filename: "valid-whiteboard.jpg",
         data: @valid_data
       }
 
       wid =
-        conn
-        |> post(Routes.whiteboard_path(conn, :create), payload)
+        conn1
+        |> post(Routes.whiteboard_path(conn1, :create), payload)
         |> json_response(200)
         |> Map.get("id")
 
       response =
-        conn
-        |> get(Routes.whiteboard_path(conn, :detail, wid))
+        conn1
+        |> get(Routes.whiteboard_path(conn1, :detail, wid))
         |> json_response(200)
 
       assert %{"whiteboard" => wb} = response
       assert wb |> Map.has_key?("id")
       assert wb |> Map.get("name") == payload.filename
-      assert wb |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user.id}")
+      assert wb |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user1.id}")
       assert wb |> Map.get("comments") == []
       assert wb |> Map.get("annotations") == []
     end
 
-    test "can get whiteboard comments and annotations for authenticated user", %{conn: conn, user: user} do
+    test "can get whiteboard comments and annotations for authenticated user", %{conn1: conn1, user1: user1} do
       whiteboard =
-        user.id
+        user1.id
         |> Whiteboards.find_for_user()
         |> List.first()
 
       response =
-        conn
-        |> get(Routes.whiteboard_path(conn, :detail, whiteboard.id))
+        conn1
+        |> get(Routes.whiteboard_path(conn1, :detail, whiteboard.id))
         |> json_response(200)
 
       assert %{"whiteboard" => wb} = response
@@ -198,6 +215,22 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       assert annotation |> Map.get("coords") == %{"x" => 1, "y" => 1}
       assert annotation |> Map.get("comment_id") == comment |> Map.get("id")
       assert annotation |> Map.get("whiteboard_id") == whiteboard.id
+    end
+
+    test "can comment on whiteboard if user has permissions", %{conn1: conn1, user1: user1} do
+      whiteboard =
+        user1.id
+        |> Whiteboards.find_for_user()
+        |> List.first()
+
+      response =
+        conn1
+        |> post(Routes.whiteboard_path(conn1, :comment, whiteboard.id), %{content: "toto"})
+        |> json_response(200)
+
+      refute response |> Map.has_key?("annotation")
+      assert response |> Map.get("content") == "toto"
+      assert response |> Map.get("whiteboard_id") == whiteboard.id
     end
   end
 end

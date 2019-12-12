@@ -22,10 +22,11 @@ defmodule TaktaWeb.Router do
     pipe_through :api
 
     # Whiteboard resources
-    post    "/whiteboards",     WhiteboardController, :create
-    get     "/whiteboards",     WhiteboardController, :list
-    get     "/whiteboards/:id", WhiteboardController, :detail
-    delete  "/whiteboards/:id", WhiteboardController, :delete
+    post    "/whiteboards",             WhiteboardController, :create
+    get     "/whiteboards",             WhiteboardController, :list
+    get     "/whiteboards/:id",         WhiteboardController, :detail
+    delete  "/whiteboards/:id",         WhiteboardController, :delete
+    post    "/whiteboards/:id/comment", WhiteboardController, :comment
 
     # Comments resource
     post    "/comments",      CommentController, :create

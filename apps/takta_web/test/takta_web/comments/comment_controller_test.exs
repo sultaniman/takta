@@ -184,6 +184,7 @@ defmodule TaktaWeb.CommentControllerTest do
         |> get(Routes.comment_path(conn1, :detail, comment_id))
         |> json_response(200)
 
+      refute response |> Map.has_key?("annotation")
       assert get_in(response, ["id"]) == comment_id
       assert get_in(response, ["whiteboard_id"]) == whiteboard.id
       assert get_in(response, ["content"]) == "bla bla"

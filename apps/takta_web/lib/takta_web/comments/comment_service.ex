@@ -52,9 +52,15 @@ defmodule TaktaWeb.CommentService do
   defp create(params) do
     case Comments.create(params) do
       {:ok, comment} ->
-        comment
-        |> create_annotation(params)
-        |> StatusResponse.ok()
+        if params |> Map.has_key?("coords") do
+          comment
+          |> create_annotation(params)
+          |> StatusResponse.ok()
+        else
+          comment
+          |> CommentMapper.to_json_basic()
+          |> StatusResponse.ok()
+        end
 
       {:error, %Ecto.Changeset{} = changeset} ->
         changeset

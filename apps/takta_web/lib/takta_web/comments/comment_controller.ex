@@ -5,8 +5,8 @@ defmodule TaktaWeb.CommentController do
   alias TaktaWeb.CommentService
 
   def create(%Plug.Conn{assigns: %{user: user}} = conn, params) do
-    result = CommentService.create_comment(user, params)
-    conn |> StatusResponse.send_response(result)
+    response = CommentService.create_comment(user, params)
+    conn |> StatusResponse.send_response(response)
   end
 
   def detail(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => comment_id}) do
