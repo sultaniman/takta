@@ -23,6 +23,21 @@ defmodule TaktaWeb.InviteService do
     end
   end
 
+  def detail_for_user(user, invite_id) do
+    case Invites.find_by_id(invite_id) do
+      nil -> StatusResponse.not_found()
+      invite ->
+        if invite.created_by_id == user.id do
+          invite
+          |> Invites.preload_all()
+          |> InviteMapper.to_json_extended()
+          |> StatusResponse.ok()
+        else
+          StatusResponse.permission_denied()
+        end
+    end
+  end
+
   def find_for_user(user) do
     invites =
       user.id
