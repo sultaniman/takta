@@ -40,6 +40,13 @@ defmodule TaktaWeb.Router do
     get     "/members/:id",  MemberController, :detail
     put     "/members/:id",  MemberController, :update
     delete  "/members/:id",  MemberController, :delete
+
+    # Invites resource
+    post    "/invites",       InviteController, :create
+    get     "/invites",       InviteController, :list
+    # get     "/invites/:id",   InviteController, :detail
+    # put     "/invites/:id",   InviteController, :update
+    # delete  "/invites/:id",   InviteController, :delete
   end
 
   # General purpose endpoints
