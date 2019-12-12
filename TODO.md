@@ -31,6 +31,7 @@
   * ✅ Delete comment,
 * ✅ Implement memberships,
   * ✅ Create memberships,
+  * ✅ Get membership details,
   * ✅ Update memberships,
   * ✅ Delete memberships,
 * ❌ Implement invites,
