@@ -14,15 +14,10 @@ defmodule TaktaWeb.MemberController do
   #   conn |> StatusResponse.send_response(response)
   # end
 
-  # def update(conn, _params) do
-  #   response = StatusResponse.not_found()
-  #   conn |> StatusResponse.send_response(response)
-  # end
-
-  # def delete(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => comment_id}) do
-  #   response = MemberService.delete_comment(comment_id, user)
-  #   conn |> StatusResponse.send_response(response)
-  # end
+  def delete(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => member_id}) do
+    response = MemberService.delete_member(user, member_id)
+    conn |> StatusResponse.send_response(response)
+  end
 
   # def delete(conn, _params) do
   #   response = StatusResponse.not_found()

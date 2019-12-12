@@ -60,5 +60,44 @@ defmodule TaktaWeb.MemberControllerTest do
       assert response |> Map.get("member_id") == user1.id
       assert response |> Map.get("whiteboard_id") == whiteboard.id
     end
+
+    test "whiteboard owners can remove members", %{conn2: conn2, user1: user1, user2: user2} do
+      whiteboard =
+        Whiteboards.all()
+        |> Enum.filter(fn w -> w.owner_id == user2.id end)
+        |> List.first()
+
+      payload = %{
+        can_annotate: true,
+        can_comment: true,
+        member_id: user1.id,
+        whiteboard_id: whiteboard.id
+      }
+
+      response =
+        conn2
+        |> post(Routes.member_path(conn2, :create), payload)
+        |> json_response(200)
+
+      assert response |> Map.has_key?("id")
+      assert response |> Map.get("can_annotate") == true
+      assert response |> Map.get("can_comment") == true
+      assert response |> Map.get("member_id") == user1.id
+      assert response |> Map.get("whiteboard_id") == whiteboard.id
+
+      member_id = response |> Map.get("id")
+      conn2
+      |> delete(Routes.member_path(conn2, :delete, member_id))
+      |> json_response(200)
+    end
+
+    test "deleting unknown member return HTTP 404", %{conn2: conn2} do
+      response =
+        conn2
+        |> delete(Routes.member_path(conn2, :delete, UUID.uuid4()))
+        |> json_response(404)
+
+      assert response == %{"error" => "not_found"}
+    end
   end
 end

@@ -285,9 +285,10 @@ defmodule TaktaWeb.CommentControllerTest do
       assert response |> Map.get("whiteboard_id") == comment.whiteboard_id
     end
 
-    test "users can not update comments for others", %{conn2: conn2} do
+    test "users can not update comments for others", %{conn2: conn2, user1: user1} do
       comment =
         Comments.all()
+        |> Enum.filter(fn c -> c.author_id == user1.id end)
         |> List.first()
 
       update_payload = %{

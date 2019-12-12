@@ -24,6 +24,20 @@ defmodule TaktaWeb.MemberService do
     end
   end
 
+  def delete_member(user, member_id) do
+    if member_id == user.id do
+      StatusResponse.bad_request(%{message: :already_owner})
+    else
+      case member_id |> Members.find_by_id() do
+        nil -> StatusResponse.not_found()
+        member ->
+          whiteboard = member.whiteboard_id |> Whiteboards.find_by_id()
+          can_manage = Permissions.can_manage_whiteboard(user, whiteboard)
+          ServiceHelpers.call_if(&delete/1, member, can_manage)
+      end
+    end
+  end
+
   defp create(params) do
     case Members.create(params) do
       {:ok, member} ->
@@ -35,6 +49,18 @@ defmodule TaktaWeb.MemberService do
         changeset
         |> Takta.Util.Changeset.errors_to_json()
         |> StatusResponse.bad_request()
+    end
+  end
+
+  defp delete(member) do
+    case Members.delete(member.id) do
+      {:ok, deleted_member} ->
+        deleted_member
+        |> MemberMapper.to_json_basic()
+        |> StatusResponse.ok()
+
+      {:error, :not_found} ->
+        StatusResponse.not_found()
     end
   end
 end
