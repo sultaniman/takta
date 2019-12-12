@@ -38,7 +38,7 @@ defmodule TaktaWeb.Router do
     post    "/members",      MemberController, :create
     # get     "/members/:id",  MemberController, :detail
     # put     "/members/:id",  MemberController, :update
-    # delete  "/members/:id",  MemberController, :delete
+    delete  "/members/:id",  MemberController, :delete
   end
 
   # General purpose endpoints
@@ -51,26 +51,6 @@ defmodule TaktaWeb.Router do
 
   # TODO: render session with key=takta and value=signed_session
   scope "/api/v1/e", TaktaWeb do
-    pipe_through :api
-  end
-
-  # Members resource
-  scope "/members", TaktaWeb do
-    pipe_through :api
-  end
-
-  # Annotations resource
-  scope "/annotations", TaktaWeb do
-    pipe_through :api
-  end
-
-  # Invites resource
-  scope "/invites", TaktaWeb do
-    pipe_through :api
-  end
-
-  # Accounts resource
-  scope "/accounts", TaktaWeb do
     pipe_through :api
   end
 
