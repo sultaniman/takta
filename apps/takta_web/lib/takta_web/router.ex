@@ -46,7 +46,7 @@ defmodule TaktaWeb.Router do
     get     "/invites",       InviteController, :list
     # get     "/invites/:id",   InviteController, :detail
     # put     "/invites/:id",   InviteController, :update
-    # delete  "/invites/:id",   InviteController, :delete
+    delete  "/invites/:id",   InviteController, :delete
   end
 
   # General purpose endpoints
