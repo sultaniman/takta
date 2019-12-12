@@ -28,6 +28,11 @@ defmodule Takta.Invites do
     end
   end
 
+  # TODO: write tests
+  def find_for_user(user_id) do
+    Repo.all(from i in Invite, where: i.created_by_id == ^user_id)
+  end
+
   @valid_until 3600
   def is_valid(id) do
     case find_by_id(id) do

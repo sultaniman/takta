@@ -4,7 +4,16 @@ defmodule Takta.Invites.InviteForms do
   alias Takta.Invites.Invite
 
   def base(%Invite{} = invite, attrs) do
-    fields = [:used, :code, :used_by_id, :created_by_id, :whiteboard_id]
+    fields = [
+      :used,
+      :code,
+      :can_annotate,
+      :can_comment,
+      :used_by_id,
+      :created_by_id,
+      :whiteboard_id
+    ]
+
     required_fields = [:code, :created_by_id, :whiteboard_id]
 
     invite
