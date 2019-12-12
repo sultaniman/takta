@@ -232,5 +232,50 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       assert response |> Map.get("content") == "toto"
       assert response |> Map.get("whiteboard_id") == whiteboard.id
     end
+
+    test "commenting on whiteboard also validates input", %{conn1: conn1, user1: user1} do
+      whiteboard =
+        user1.id
+        |> Whiteboards.find_for_user()
+        |> List.first()
+
+      response =
+        conn1
+        |> post(Routes.whiteboard_path(conn1, :comment, whiteboard.id), %{content: nil})
+        |> json_response(400)
+
+      assert response == %{
+        "details" => %{"content" => ["can't be blank"]},
+        "error" => "bad_request"
+      }
+    end
+
+    test "admins can comment on any whiteboard", %{conn_admin: conn_admin} do
+      whiteboard =
+        Whiteboards.all()
+        |> List.first()
+
+      response =
+        conn_admin
+        |> post(Routes.whiteboard_path(conn_admin, :comment, whiteboard.id), %{content: "toto"})
+        |> json_response(200)
+
+      refute response |> Map.has_key?("annotation")
+      assert response |> Map.get("content") == "toto"
+      assert response |> Map.get("whiteboard_id") == whiteboard.id
+    end
+
+    test "strangers are not allowed to comment on any whiteboard" do
+      whiteboard =
+        Whiteboards.all()
+        |> List.first()
+
+      response =
+        build_conn()
+        |> post(Routes.whiteboard_path(build_conn(), :comment, whiteboard.id), %{content: "toto"})
+        |> json_response(401)
+
+      assert response == %{"error" => "authentication_required"}
+    end
   end
 end
