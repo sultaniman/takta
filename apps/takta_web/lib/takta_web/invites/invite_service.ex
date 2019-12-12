@@ -60,6 +60,9 @@ defmodule TaktaWeb.InviteService do
     end
   end
 
+  def invite_by_email(user, params) do
+  end
+
   defp create(params) do
     case Invites.create(params) do
       {:ok, invite} ->
