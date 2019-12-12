@@ -85,5 +85,29 @@ defmodule TaktaWeb.InviteControllerTest do
 
       assert %{"invites" => invites} = response
     end
+
+    test "whiteboard owners can delete invites", %{conn2: conn2, user1: user1, user2: user2} do
+      whiteboard =
+        user2.id
+        |> Whiteboards.find_for_user()
+        |> List.first()
+
+      payload = %{
+        used_by_id: user1.id,
+        whiteboard_id: whiteboard.id,
+        can_annotate: true,
+        can_comment: true
+      }
+
+      invite_id =
+        conn2
+        |> post(Routes.invite_path(conn2, :create), payload)
+        |> json_response(200)
+        |> Map.get("id")
+
+      conn2
+      |> delete(Routes.invite_path(conn2, :delete, invite_id))
+      |> json_response(200)
+    end
   end
 end
