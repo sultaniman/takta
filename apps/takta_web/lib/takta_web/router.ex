@@ -44,8 +44,7 @@ defmodule TaktaWeb.Router do
     # Invites resource
     post    "/invites",       InviteController, :create
     get     "/invites",       InviteController, :list
-    # get     "/invites/:id",   InviteController, :detail
-    # put     "/invites/:id",   InviteController, :update
+    get     "/invites/:id",   InviteController, :detail
     delete  "/invites/:id",   InviteController, :delete
   end
 
