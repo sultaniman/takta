@@ -46,4 +46,10 @@ defmodule Takta.Members do
       member -> member |> Repo.delete()
     end
   end
+
+  def preload_all(member) do
+    member
+    |> Repo.preload(:member)
+    |> Repo.preload(:whiteboard)
+  end
 end
