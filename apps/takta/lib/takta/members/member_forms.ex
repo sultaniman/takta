@@ -3,6 +3,7 @@ defmodule Takta.Members.MemberForms do
   use Takta.{Model, Query}
 
   alias Takta.Members.Member
+  alias Takta.Validators
 
   def base(%Member{} = member, attrs) do
     fields = [:can_annotate, :can_comment, :member_id, :whiteboard_id, :collection_id]
@@ -11,6 +12,7 @@ defmodule Takta.Members.MemberForms do
     member
     |> cast(attrs, fields)
     |> validate_required(required_fields)
+    |> Validators.has_collection_or_whiteboard()
     |> foreign_key_constraint(:member_id)
     |> foreign_key_constraint(:whiteboard_id)
   end
