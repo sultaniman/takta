@@ -12,7 +12,8 @@ defmodule Takta.CollectionsTest do
 
     test "find_by_id works as expected" do
       one = Collections.all() |> List.first()
-      assert Collections.find_by_id(one.id)
+      assert collection = Collections.find_by_id(one.id)
+      assert length(collection.whiteboards) > 0
     end
 
     test "find_by_id returns nil if collection not found" do
