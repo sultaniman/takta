@@ -5,6 +5,7 @@ defmodule Takta.Whiteboards.Whiteboard do
   alias Takta.Accounts.User
   alias Takta.Annotations.Annotation
   alias Takta.Comments.Comment
+  alias Takta.Collections.Collection
   alias Takta.Members.Member
 
   # Boards are whiteboard
@@ -14,6 +15,8 @@ defmodule Takta.Whiteboards.Whiteboard do
     field :path, :string
 
     belongs_to :owner, User
+    belongs_to :collection, Collection
+
     has_many :members, Member
     has_many :comments, Comment
     has_many :annotations, Annotation
