@@ -43,7 +43,7 @@
   * ❌ Activate newly created user if was invited by email,
   * ✅ Delete invite,
 * ❌ Implement collections
-  * ❌ Create collections,
+  * ✅ Create collections context,
   * ❌ Create default collection when user created,
   * ❌ Get collection details,
   * ❌ Get whiteboards for collection,
