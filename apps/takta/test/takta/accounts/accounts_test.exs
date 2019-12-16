@@ -107,9 +107,11 @@ defmodule Takta.AccountsTest do
           new_password_confirmation: "newpasswörd"
         })
 
-      assert changeset.errors
-
-      assert changeset.errors == [new_password_confirmation: {"Passwords do not match", []}]
+      assert changeset.errors == [
+        new_password_confirmation: {
+          "does not match confirmation", [validation: :confirmation]
+        }
+      ]
     end
 
     test "can list comments for user" do

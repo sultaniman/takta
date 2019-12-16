@@ -41,7 +41,7 @@ defmodule Takta.Accounts.AccountForms do
     |> cast(params, fields)
     |> validate_required(fields)
     |> Validators.check_password(params[:password])
-    |> Validators.validate_password_confirmation()
+    |> validate_confirmation(:new_password)
     |> validate_length(:new_password, min: @password_min_length)
     |> update_password()
   end

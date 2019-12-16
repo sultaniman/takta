@@ -5,7 +5,7 @@ defmodule Takta.Members.MemberForms do
   alias Takta.Members.Member
 
   def base(%Member{} = member, attrs) do
-    fields = [:can_annotate, :can_comment, :member_id, :whiteboard_id]
+    fields = [:can_annotate, :can_comment, :member_id, :whiteboard_id, :collection_id]
     required_fields = [:member_id, :whiteboard_id]
 
     member
