@@ -1,7 +1,6 @@
 defmodule Takta.Whiteboards do
   @moduledoc false
   use Takta.Query
-  alias Takta.Members
   alias Takta.Whiteboards.{Whiteboard, WhiteboardForms}
   alias Takta.Util.Changeset
 
