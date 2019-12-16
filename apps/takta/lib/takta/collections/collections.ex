@@ -6,7 +6,11 @@ defmodule Takta.Collections do
   def all, do: Repo.all(Collection)
 
   def find_by_id(collection_id) do
-    Repo.one(from c in Collection, where: c.id == ^collection_id)
+    query = from c in Collection, where: c.id == ^collection_id
+
+    query
+    |> Repo.one()
+    |> preload_all()
   end
 
   def create(params) do
@@ -26,5 +30,11 @@ defmodule Takta.Collections do
       nil -> {:error, :not_found}
       annotation -> annotation |> Repo.delete()
     end
+  end
+
+  def preload_all(q) do
+    q
+    |> Repo.preload(:whiteboards)
+    |> Repo.preload(:members)
   end
 end
