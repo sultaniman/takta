@@ -53,10 +53,16 @@ defmodule Takta.Fixtures do
       owner_id: user1.id
     })
 
+    {:ok, collection1_user1} = Collections.create(%{
+      name: "Collection 1 user 1",
+      owner_id: user1.id
+    })
+
     {:ok, wb2} = Whiteboards.create(%{
       name: "xyz",
       path: "my/path.png",
-      owner_id: user1.id
+      owner_id: user1.id,
+      collection_id: collection1_user1.id,
     })
 
     {:ok, comment1} = Comments.create(%{
@@ -81,11 +87,6 @@ defmodule Takta.Fixtures do
       content: "Comment 4",
       author_id: user1.id,
       whiteboard_id: wb1.id
-    })
-
-    Collections.create(%{
-      name: "Collection 1 user 1",
-      owner_id: user1.id
     })
 
     Annotations.create(%{
