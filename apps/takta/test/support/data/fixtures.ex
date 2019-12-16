@@ -3,6 +3,7 @@ defmodule Takta.Fixtures do
   alias Takta.{
     Accounts,
     Annotations,
+    Collections,
     Comments,
     Invites,
     Members,
@@ -82,6 +83,11 @@ defmodule Takta.Fixtures do
       whiteboard_id: wb1.id
     })
 
+    Collections.create(%{
+      name: "Collection 1 user 1",
+      owner_id: user1.id
+    })
+
     Annotations.create(%{
       coords: %{
         x: 1,
@@ -135,6 +141,16 @@ defmodule Takta.Fixtures do
     Members.create(%{
       member_id: admin.id,
       whiteboard_id: wb2.id
+    })
+
+    Collections.create(%{
+      name: "Collection 1 consultant",
+      owner_id: consultant.id
+    })
+
+    Collections.create(%{
+      name: "Collection admin",
+      owner_id: admin.id
     })
   end
 end
