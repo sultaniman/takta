@@ -42,6 +42,13 @@
   * ❌ Invite by email,
   * ❌ Activate newly created user if was invited by email,
   * ✅ Delete invite,
+* ❌ Implement collections
+  * ❌ Create collections,
+  * ❌ Create default collection when user created,
+  * ❌ Get collection details,
+  * ❌ Get whiteboards for collection,
+  * ❌ Update collections,
+  * ❌ Delete collections,
 * ✅ Permission manager,
   * ✅ Only owners of entities can update/delete,
   * ✅ Admins can update/delete any entity,
