@@ -76,8 +76,8 @@ defmodule TaktaWeb.CommentService do
     |> CommentMapper.to_json_extended()
     |> StatusResponse.ok()
   end
-  defp detail(cid) do
-    case Comments.find_by_id(cid) do
+  defp detail(comment_id) do
+    case Comments.find_by_id(comment_id) do
       nil -> StatusResponse.not_found()
       comment ->
         comment

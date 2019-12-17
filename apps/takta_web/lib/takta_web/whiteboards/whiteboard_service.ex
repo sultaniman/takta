@@ -4,7 +4,7 @@ defmodule TaktaWeb.WhiteboardService do
   certain operations and related responses.
   """
   alias TaktaWeb.Permissions
-  alias Takta.{Accounts, Members, Whiteboards}
+  alias Takta.{Accounts, Whiteboards}
   alias Takta.Whiteboards.Whiteboard
   alias Takta.Whiteboards.WhiteboardMapper
   alias TaktaWeb.Base.StatusResponse

@@ -13,6 +13,14 @@ defmodule Takta.Collections do
     |> preload_all()
   end
 
+  # TODO: add unit test
+  def find_for_user(user_id) do
+    query = from c in Collection, where: c.owner_id == ^user_id
+    query
+    |> Repo.all()
+    |> preload_all()
+  end
+
   def create(params) do
     %Collection{}
     |> CollectionForms.new(params)
@@ -30,6 +38,16 @@ defmodule Takta.Collections do
       nil -> {:error, :not_found}
       annotation -> annotation |> Repo.delete()
     end
+  end
+
+  def has_owner?(collection_id, user_id) do
+    query = from(
+      c in Collection,
+      where: c.owner_id == ^user_id and c.id == ^collection_id
+    )
+
+    query
+    |> Repo.exists?()
   end
 
   def preload_all(q) do

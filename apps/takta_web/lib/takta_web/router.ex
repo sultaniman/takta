@@ -29,6 +29,14 @@ defmodule TaktaWeb.Router do
     post    "/whiteboards/:id/comment", WhiteboardController, :comment
     post    "/whiteboards/:id/member",  WhiteboardController, :create_member
 
+    # Collections resource
+    post    "/collections",                   CollectionController, :create
+    get     "/collections",                   CollectionController, :list
+    get     "/collections/:id",               CollectionController, :detail
+    get     "/collections/:id/whiteboards",   CollectionController, :show_whiteboards
+    put     "/collections/:id",               CollectionController, :update
+    delete  "/collections/:id",               CollectionController, :update
+
     # Comments resource
     post    "/comments",      CommentController, :create
     get     "/comments/:id",  CommentController, :detail
