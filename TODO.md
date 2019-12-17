@@ -45,17 +45,17 @@
 * ❌ Implement collections
   * ✅ Create collections context,
   * ❌ Create default collection when user created,
-  * ❌ Get collection details,
-  * ❌ Get whiteboards for collection,
-  * ❌ Update collections,
-  * ❌ Delete collections,
+  * ✅ Get collection details,
+  * ✅ Get whiteboards for collection,
+  * ✅ Update collections,
+  * ✅ Delete collections,
+  * ❌ Write collection resource tests,
 * ✅ Permission manager,
   * ✅ Only owners of entities can update/delete,
   * ✅ Admins can update/delete any entity,
 * ❌ Test if proper session set after social signin,
 * ✅ Implement aws s3 uploader,
 * ✅ Create initial test suites for authentication logic,
-* ❌ Implement username & password sign in with token exchange,
 * ❌ Implement linking social account and other login methods,
 * ✅ Create unified error response format,
 
@@ -68,7 +68,7 @@
 # Cleanup & tech debt
 
 * ✅ Implement verical slicing,
-* ❌ Apply vertical slicing,
+* ✅ Apply vertical slicing,
 
 # Misc
 
