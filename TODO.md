@@ -49,14 +49,13 @@
   * ✅ Get whiteboards for collection,
   * ✅ Update collections,
   * ✅ Delete collections,
+  * ❌ Add whiteboards to collection,
   * ❌ Write collection resource tests,
 * ✅ Permission manager,
   * ✅ Only owners of entities can update/delete,
   * ✅ Admins can update/delete any entity,
-* ❌ Test if proper session set after social signin,
 * ✅ Implement aws s3 uploader,
 * ✅ Create initial test suites for authentication logic,
-* ❌ Implement linking social account and other login methods,
 * ✅ Create unified error response format,
 
 # Mailer
@@ -73,4 +72,6 @@
 # Misc
 
 * ✅ May be move mappers into context domain,
+* ❌ Test if proper session set after social signin,
+* ❌ Implement linking social account and other login methods,
 * ❌ Add missing tests
