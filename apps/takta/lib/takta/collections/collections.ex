@@ -1,6 +1,7 @@
 defmodule Takta.Collections do
   @moduledoc false
   use Takta.Query
+  alias Takta.Members.Member
   alias Takta.Collections.{Collection, CollectionForms}
 
   def all, do: Repo.all(Collection)
@@ -44,6 +45,16 @@ defmodule Takta.Collections do
     query = from(
       c in Collection,
       where: c.owner_id == ^user_id and c.id == ^collection_id
+    )
+
+    query
+    |> Repo.exists?()
+  end
+
+  def has_member?(collection_id, user_id) do
+    query = from(
+      m in Member,
+      where: m.member_id == ^user_id and m.collection_id == ^collection_id
     )
 
     query

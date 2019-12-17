@@ -40,7 +40,7 @@ defmodule TaktaWeb.CollectionController do
     %Plug.Conn{assigns: %{user: user}} = conn,
     %{"id" => collection_id}
   ) do
-    response = CollectionService.delete_for_user(user, collection_id)
+    response = CollectionService.whiteboards_for_user(user, collection_id)
     StatusResponse.send_response(conn, response)
   end
 end

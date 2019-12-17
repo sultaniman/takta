@@ -2,6 +2,7 @@ defmodule TaktaWeb.CollectionService do
   @moduledoc false
   alias Takta.Collections
   alias Takta.Collections.CollectionMapper
+  alias Takta.Whiteboards.WhiteboardMapper
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Services
 
@@ -66,6 +67,23 @@ defmodule TaktaWeb.CollectionService do
             changeset
             |> Services.bad_request()
         end
+    end
+  end
+
+  def whiteboards_for_user(user, collection_id) do
+    has_owner = Collections.has_owner?(collection_id, user.id)
+    has_member = Collections.has_member?(collection_id, user.id)
+    if has_owner or has_member do
+      collection =
+        collection_id
+        |> Collections.find_by_id()
+        |> Collections.preload_all()
+
+      whiteboards =
+        collection.whiteboards
+        |> Enum.map(&WhiteboardMapper.to_json_basic/1)
+
+      StatusResponse.ok(%{whiteboards: whiteboards})
     end
   end
 
