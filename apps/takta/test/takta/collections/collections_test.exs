@@ -2,6 +2,7 @@ defmodule Takta.CollectionsTest do
   use Takta.{DataCase, Query}
   alias Takta.{
     Accounts,
+    Members,
     Collections
   }
 
@@ -63,6 +64,34 @@ defmodule Takta.CollectionsTest do
 
     test "can not delete collection if it does not exist" do
       assert {:error, :not_found} = Collections.delete(UUID.uuid4())
+    end
+
+    test "can add member to collection" do
+      user =
+        "su@example.com"
+        |> Accounts.find_by_email()
+
+      member_user =
+        "consultant1@example.com"
+        |> Accounts.find_by_email()
+
+      {:ok, collection} = Collections.create(%{
+        name: "test-collection",
+        owner_id: user.id
+      })
+
+      assert {:ok, member} = Members.create(%{
+        can_comment: true,
+        can_annotate: true,
+        member_id: member_user.id,
+        collection_id: collection.id
+      })
+
+      assert member.can_comment
+      assert member.can_annotate
+      assert member.member_id == member_user.id
+      assert member.collection_id == collection.id
+      refute member.whiteboard_id
     end
   end
 end
