@@ -9,6 +9,7 @@ defmodule Takta.Collections.CollectionForms do
     collection
     |> cast(attrs, fields)
     |> validate_required(fields)
+    |> validate_length(:name, min: 2, max: 100)
     |> foreign_key_constraint(:owner_id)
   end
 

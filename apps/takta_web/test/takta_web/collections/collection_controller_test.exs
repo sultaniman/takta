@@ -2,7 +2,7 @@ defmodule TaktaWeb.CollectionControllerTest do
   @moduledoc false
   use TaktaWeb.ConnCase, async: true
   alias Auth.MagicTokens
-  alias Takta.{Accounts, Comments, Members, Whiteboards}
+  alias Takta.{Accounts}
 
   setup do
     user1 = Accounts.find_by_email("web@example.com")
@@ -45,6 +45,60 @@ defmodule TaktaWeb.CollectionControllerTest do
         |> json_response(401)
 
       assert response == %{"error" => "authentication_required"}
+    end
+
+    test "can create collection with proper session", %{conn1: conn1, user1: user1} do
+      payload = %{
+        name: "toto"
+      }
+
+      response =
+        conn1
+        |> post(Routes.collection_path(conn1, :create), payload)
+        |> json_response(200)
+
+      assert response |> Map.has_key?("id")
+      assert response |> Map.get("name") == "toto"
+      assert response |> Map.get("owner_id") == user1.id
+    end
+
+    test "create endpoint accepts only collection name", %{conn1: conn1, user1: user1} do
+      payload = %{
+        name: "toto",
+        some_random_field: "bla bla",
+        uid: UUID.uuid4()
+      }
+
+      response =
+        conn1
+        |> post(Routes.collection_path(conn1, :create), payload)
+        |> json_response(200)
+
+      assert response |> Map.has_key?("id")
+      assert response |> Map.get("name") == "toto"
+      assert response |> Map.get("owner_id") == user1.id
+    end
+
+    test "it validates collection name", %{conn1: conn1} do
+      response =
+        conn1
+        |> post(Routes.collection_path(conn1, :create), %{name: "y"})
+        |> json_response(400)
+
+      assert response == %{
+        "error" => "bad_request",
+        "details" => %{"name" => ["should be at least 2 character(s)"]}
+      }
+
+      response =
+        conn1
+        |> post(Routes.collection_path(conn1, :create), %{name: nil})
+        |> json_response(400)
+
+      assert response == %{
+        "error" => "bad_request",
+        "details" => %{"name" => ["can't be blank"]}
+      }
     end
   end
 end

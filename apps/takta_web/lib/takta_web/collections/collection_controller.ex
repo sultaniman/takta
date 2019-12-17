@@ -5,8 +5,11 @@ defmodule TaktaWeb.CollectionController do
   alias TaktaWeb.Base.StatusResponse
 
   # TODO: add whiteboard test to check if can assign to collection
-  def create(%Plug.Conn{assigns: %{user: user}} = conn, params) do
-    response = CollectionService.create_for_user(user, params)
+  def create(
+    %Plug.Conn{assigns: %{user: user}} = conn,
+    %{"name" => name}
+  ) do
+    response = CollectionService.create_for_user(user, name)
     StatusResponse.send_response(conn, response)
   end
 

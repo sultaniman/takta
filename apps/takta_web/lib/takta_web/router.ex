@@ -22,38 +22,38 @@ defmodule TaktaWeb.Router do
     pipe_through :api
 
     # Whiteboard resources
-    post    "/whiteboards",             WhiteboardController, :create
-    get     "/whiteboards",             WhiteboardController, :list
-    get     "/whiteboards/:id",         WhiteboardController, :detail
-    delete  "/whiteboards/:id",         WhiteboardController, :delete
-    post    "/whiteboards/:id/comment", WhiteboardController, :comment
-    post    "/whiteboards/:id/member",  WhiteboardController, :create_member
+    post    "/whiteboards",                  WhiteboardController, :create
+    get     "/whiteboards",                  WhiteboardController, :list
+    get     "/whiteboards/:id",              WhiteboardController, :detail
+    delete  "/whiteboards/:id",              WhiteboardController, :delete
+    post    "/whiteboards/:id/comment",      WhiteboardController, :comment
+    post    "/whiteboards/:id/member",       WhiteboardController, :create_member
 
     # Collections resource
-    post    "/collections",                   CollectionController, :create
-    get     "/collections",                   CollectionController, :list
-    get     "/collections/:id",               CollectionController, :detail
-    get     "/collections/:id/whiteboards",   CollectionController, :show_whiteboards
-    put     "/collections/:id",               CollectionController, :update
-    delete  "/collections/:id",               CollectionController, :update
+    post    "/collections",                  CollectionController, :create
+    get     "/collections",                  CollectionController, :list
+    get     "/collections/:id",              CollectionController, :detail
+    get     "/collections/:id/whiteboards",  CollectionController, :show_whiteboards
+    put     "/collections/:id",              CollectionController, :update
+    delete  "/collections/:id",              CollectionController, :update
 
     # Comments resource
-    post    "/comments",      CommentController, :create
-    get     "/comments/:id",  CommentController, :detail
-    put     "/comments/:id",  CommentController, :update
-    delete  "/comments/:id",  CommentController, :delete
+    post    "/comments",                     CommentController, :create
+    get     "/comments/:id",                 CommentController, :detail
+    put     "/comments/:id",                 CommentController, :update
+    delete  "/comments/:id",                 CommentController, :delete
 
     # Members resource
-    post    "/members",      MemberController, :create
-    get     "/members/:id",  MemberController, :detail
-    put     "/members/:id",  MemberController, :update
-    delete  "/members/:id",  MemberController, :delete
+    post    "/members",                      MemberController, :create
+    get     "/members/:id",                  MemberController, :detail
+    put     "/members/:id",                  MemberController, :update
+    delete  "/members/:id",                  MemberController, :delete
 
     # Invites resource
-    post    "/invites",           InviteController, :create
-    get     "/invites",           InviteController, :list
-    get     "/invites/:id",       InviteController, :detail
-    delete  "/invites/:id",       InviteController, :delete
+    post    "/invites",                      InviteController, :create
+    get     "/invites",                      InviteController, :list
+    get     "/invites/:id",                  InviteController, :detail
+    delete  "/invites/:id",                  InviteController, :delete
     # post  "/invites/via/email",   InviteController, :email_invite
   end
 

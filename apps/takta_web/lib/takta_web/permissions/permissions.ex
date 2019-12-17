@@ -63,4 +63,17 @@ defmodule TaktaWeb.Permissions do
   def can_manage_comment(user, comment) do
     user.is_active and (user.is_admin or user.id == comment.author_id)
   end
+
+  @doc """
+  Check if user can manage
+  considering the following conditions
+
+    1. User is admin or,
+    2. User is the owner of collection.
+  """
+  def can_manage_collection?(nil, _collection), do: false
+  def can_manage_collection?(_user, nil), do: false
+  def can_manage_collection?(user, collection) do
+    user.is_active and (user.is_admin or user.id == collection.owner_id)
+  end
 end
