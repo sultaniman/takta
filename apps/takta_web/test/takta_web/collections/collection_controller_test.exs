@@ -2,7 +2,7 @@ defmodule TaktaWeb.CollectionControllerTest do
   @moduledoc false
   use TaktaWeb.ConnCase, async: true
   alias Auth.MagicTokens
-  alias Takta.{Accounts}
+  alias Takta.{Accounts, Whiteboards}
 
   setup do
     user1 = Accounts.find_by_email("web@example.com")
@@ -99,6 +99,146 @@ defmodule TaktaWeb.CollectionControllerTest do
         "error" => "bad_request",
         "details" => %{"name" => ["can't be blank"]}
       }
+    end
+
+    test "owners can delete collections", %{conn1: conn1} do
+      payload = %{
+        name: "toto"
+      }
+
+      collection =
+        conn1
+        |> post(Routes.collection_path(conn1, :create), payload)
+        |> json_response(200)
+
+      response =
+        conn1
+        |> delete(Routes.collection_path(conn1, :delete, collection["id"]))
+        |> json_response(200)
+
+      assert response == collection
+    end
+
+    test "owners can see their collections", %{conn1: conn1} do
+      created_collection =
+        conn1
+        |> post(Routes.collection_path(conn1, :create), %{name: "toto"})
+        |> json_response(200)
+
+      response =
+        conn1
+        |> get(Routes.collection_path(conn1, :list))
+        |> json_response(200)
+
+      assert %{"collections" => collections} = response
+      collection =
+        collections
+        |> Enum.at(0)
+
+      assert created_collection == collection
+    end
+
+    # TODO: write unit test
+    test "members can see their collections", %{conn1: conn1} do
+    end
+
+    test "owners can see collection details", %{conn1: conn1} do
+      collection =
+        conn1
+        |> post(Routes.collection_path(conn1, :create), %{name: "toto"})
+        |> json_response(200)
+
+      response =
+        conn1
+        |> get(Routes.collection_path(conn1, :detail, collection["id"]))
+        |> json_response(200)
+
+      assert response |> Enum.at(0) == collection
+    end
+
+    # TODO: write unit test
+    test "members can see collection details", %{conn1: conn1} do
+    end
+
+    test "owners can update collections", %{conn1: conn1} do
+      collection =
+        conn1
+        |> post(Routes.collection_path(conn1, :create), %{name: "toto"})
+        |> json_response(200)
+
+      response =
+        conn1
+        |> put(Routes.collection_path(conn1, :delete, collection["id"]), %{name: "bobo"})
+        |> json_response(200)
+
+      assert response |> Map.get("name") == "bobo"
+    end
+
+    test "users get not found HTTP 404 if collection not found", %{conn1: conn1} do
+      response =
+        conn1
+        |> get(Routes.collection_path(conn1, :detail, UUID.uuid4()))
+        |> json_response(404)
+
+      assert response == %{"error" => "not_found"}
+    end
+
+    test "owners can get whiteboards for collection", %{conn1: conn1, user1: user1} do
+      collection =
+        conn1
+        |> post(Routes.collection_path(conn1, :create), %{name: "toto"})
+        |> json_response(200)
+
+      {:ok, whiteboard} = Whiteboards.create(%{
+        name: "test-wb",
+        path: "path/to/file.png",
+        owner_id: user1.id,
+        collection_id: collection["id"]
+      })
+
+      response =
+        conn1
+        |> get(Routes.collection_path(conn1, :get_whiteboards, collection["id"]))
+        |> json_response(200)
+
+      assert %{"whiteboards" => whiteboards} = response
+      first = whiteboards |> Enum.at(0)
+      assert first |> Map.get("id") == whiteboard.id
+      assert first |> Map.get("name") == whiteboard.name
+      assert first |> Map.get("path") == whiteboard.path
+    end
+
+    test "owners can add whiteboards to collection", %{conn1: conn1, user1: user1} do
+      collection_id =
+        conn1
+        |> post(Routes.collection_path(conn1, :create), %{name: "toto"})
+        |> json_response(200)
+        |> Map.get("id")
+
+      {:ok, whiteboard} = Whiteboards.create(%{
+        name: "test-wb",
+        path: "path/to/file.png",
+        owner_id: user1.id
+      })
+
+      payload = %{
+        whiteboards: [whiteboard.id]
+      }
+
+      conn1
+      |> post(Routes.collection_path(conn1, :add_whiteboards, collection_id), payload)
+      |> json_response(200)
+
+      response =
+        conn1
+        |> get(Routes.collection_path(conn1, :get_whiteboards, collection_id))
+        |> json_response(200)
+
+      assert %{"whiteboards" => whiteboards} = response
+      first = whiteboards |> Enum.at(0)
+      assert first |> Map.get("id") == whiteboard.id
+      assert first |> Map.get("name") == whiteboard.name
+      assert first |> Map.get("path") == whiteboard.path
     end
   end
 end

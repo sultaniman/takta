@@ -2,6 +2,7 @@ defmodule Takta.Collections do
   @moduledoc false
   use Takta.Query
   alias Takta.Members.Member
+  alias Takta.Whiteboards.Whiteboard
   alias Takta.Collections.{Collection, CollectionForms}
 
   def all, do: Repo.all(Collection)
@@ -20,6 +21,17 @@ defmodule Takta.Collections do
     query
     |> Repo.all()
     |> preload_all()
+  end
+
+  # TODO: add unit test
+  def add_whiteboards(collection_id, whiteboards) do
+    query = from w in Whiteboard, where: w.id in ^whiteboards
+    update_with = [
+      collection_id: collection_id,
+      updated_at: DateTime.utc_now()
+    ]
+
+    query |> Repo.update_all(set: update_with)
   end
 
   def create(params) do

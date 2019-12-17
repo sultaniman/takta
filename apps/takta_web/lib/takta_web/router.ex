@@ -34,8 +34,8 @@ defmodule TaktaWeb.Router do
     get     "/collections",                   CollectionController, :list
     get     "/collections/:id",               CollectionController, :detail
     put     "/collections/:id",               CollectionController, :update
-    delete  "/collections/:id",               CollectionController, :update
-    get     "/collections/:id/whiteboards",   CollectionController, :show_whiteboards
+    delete  "/collections/:id",               CollectionController, :delete
+    get     "/collections/:id/whiteboards",   CollectionController, :get_whiteboards
     post    "/collections/:id/whiteboards",   CollectionController, :add_whiteboards
 
     # Comments resource

@@ -85,6 +85,20 @@ defmodule TaktaWeb.CollectionService do
     end
   end
 
+  def add_whiteboards(user, collection_id, whiteboards) do
+    case Collections.find_by_id(collection_id) do
+      nil -> StatusResponse.not_found()
+      collection ->
+        if Permissions.can_manage_collection?(user, collection) do
+          call_action(fn ->
+            Collections.add_whiteboards(collection_id, whiteboards)
+          end)
+        else
+          StatusResponse.permission_denied()
+        end
+    end
+  end
+
   defp call_action(action) do
     case action.() do
       {:ok, result} ->
@@ -95,6 +109,9 @@ defmodule TaktaWeb.CollectionService do
       {:error, %Ecto.Changeset{} = changeset} ->
         changeset
         |> Services.bad_request()
+
+      {_updated_rows, _} ->
+        StatusResponse.ok()
     end
   end
 

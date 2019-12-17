@@ -93,5 +93,10 @@ defmodule Takta.CollectionsTest do
       assert member.collection_id == collection.id
       refute member.whiteboard_id
     end
+
+    # TODO: fill in
+    test "deleting collection also deletes all whiteboards" do
+
+    end
   end
 end

@@ -39,11 +39,19 @@ defmodule TaktaWeb.CollectionController do
     StatusResponse.send_response(conn, response)
   end
 
-  def show_whiteboards(
+  def get_whiteboards(
     %Plug.Conn{assigns: %{user: user}} = conn,
     %{"id" => collection_id}
   ) do
     response = CollectionService.whiteboards_for_user(user, collection_id)
+    StatusResponse.send_response(conn, response)
+  end
+
+  def add_whiteboards(
+    %Plug.Conn{assigns: %{user: user}} = conn,
+    %{"id" => collection_id, "whiteboards" => whiteboards}
+  ) do
+    response = CollectionService.add_whiteboards(user, collection_id, whiteboards)
     StatusResponse.send_response(conn, response)
   end
 end
