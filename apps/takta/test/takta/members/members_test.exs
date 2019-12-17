@@ -39,10 +39,10 @@ defmodule Takta.MembersTest do
     test "can not create new member if input is not valid" do
       {:error, changeset} = Members.create(%{})
 
-      assert changeset.errors
       assert changeset.errors == [
-        member_id: {"can't be blank", [validation: :required]},
-        whiteboard_id: {"can't be blank", [validation: :required]}
+        whiteboard_id: {"set whiteboard or collection", []},
+        collection_id: {"set whiteboard or collection", []},
+        member_id: {"can't be blank", [validation: :required]}
       ]
     end
 
@@ -56,7 +56,6 @@ defmodule Takta.MembersTest do
       member = Members.all() |> List.first()
 
       assert {:error, changeset} = Members.update(member, %{member_id: nil})
-      assert changeset.errors
       assert changeset.errors == [
         member_id: {"can't be blank", [validation: :required]}
       ]
@@ -70,6 +69,15 @@ defmodule Takta.MembersTest do
 
     test "can not delete member if comment does not exist" do
       assert {:error, :not_found} = Members.delete(UUID.uuid4())
+    end
+
+    test "validation fails if collection and whiteboard are not provided" do
+      {:error, changeset} = Members.create(%{})
+      assert changeset.errors == [
+        whiteboard_id: {"set whiteboard or collection", []},
+        collection_id: {"set whiteboard or collection", []},
+        member_id: {"can't be blank", [validation: :required]}
+      ]
     end
   end
 end

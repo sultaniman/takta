@@ -8,6 +8,7 @@ defmodule Takta.Validators.MemberValidator do
   def has_collection_or_whiteboard(%Ecto.Changeset{} = changeset) do
     if all_empty?(changeset, [:collection_id, :whiteboard_id]) do
       changeset
+      |> add_error(:collection_id, "set whiteboard or collection")
       |> add_error(:whiteboard_id, "set whiteboard or collection")
     else
       changeset
