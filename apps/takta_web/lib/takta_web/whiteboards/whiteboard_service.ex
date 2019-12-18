@@ -21,7 +21,7 @@ defmodule TaktaWeb.WhiteboardService do
         |> Whiteboards.with_comments()
         |> Whiteboards.with_annotations()
 
-      if Permissions.can_manage_whiteboard(user, wb) do
+      if Permissions.can_manage_whiteboard?(user, wb) do
         StatusResponse.ok(%{whiteboard: WhiteboardMapper.to_json_extended(wb)})
       else
         StatusResponse.permission_denied()
@@ -52,7 +52,7 @@ defmodule TaktaWeb.WhiteboardService do
     if is_nil(wb) or is_nil(user) do
       StatusResponse.not_found()
     else
-      if Permissions.can_manage_whiteboard(user, wb) do
+      if Permissions.can_manage_whiteboard?(user, wb) do
         delete(wid)
       else
         StatusResponse.permission_denied()

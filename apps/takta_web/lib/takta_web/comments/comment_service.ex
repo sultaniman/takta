@@ -13,7 +13,7 @@ defmodule TaktaWeb.CommentService do
       |> Map.get("whiteboard_id")
       |> Whiteboards.find_by_id()
 
-    can_comment = Permissions.can_comment(user, whiteboard)
+    can_comment = Permissions.can_comment?(user, whiteboard)
     ServiceHelpers.call_if(
       fn _c -> create(Map.put(params, "author_id", user.id)) end,
       whiteboard,
@@ -23,13 +23,13 @@ defmodule TaktaWeb.CommentService do
 
   def detail_for_user(comment_id, user) do
     comment = Comments.find_by_id(comment_id)
-    can_see = Permissions.can_see_comment(user, comment)
+    can_see = Permissions.can_see_comment?(user, comment)
     ServiceHelpers.call_if(&detail/1, comment, can_see)
   end
 
   def update_comment(comment_id, user, params) do
     comment = Comments.find_by_id(comment_id)
-    can_manage = Permissions.can_manage_comment(user, comment)
+    can_manage = Permissions.can_manage_comment?(user, comment)
     ServiceHelpers.call_if(
       fn _c -> update(comment, params) end,
       comment,
@@ -45,7 +45,7 @@ defmodule TaktaWeb.CommentService do
   """
   def delete_comment(comment_id, user) do
     comment = Comments.find_by_id(comment_id)
-    can_manage = Permissions.can_manage_comment(user, comment)
+    can_manage = Permissions.can_manage_comment?(user, comment)
     ServiceHelpers.call_if(&delete/1, comment, can_manage)
   end
 

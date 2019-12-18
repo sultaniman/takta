@@ -1,26 +1,34 @@
 defmodule TaktaWeb.InviteService do
   @moduledoc false
-  alias Takta.{Invites, Whiteboards}
+  alias Takta.{Invites, Members, Whiteboards}
   alias Takta.Invites.InviteMapper
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Permissions
   alias TaktaWeb.Services.ServiceHelpers
 
-  def create_invite(user, whiteboard_id, params) do
-    case Whiteboards.find_by_id(whiteboard_id) do
-      nil -> StatusResponse.not_found()
-      whiteboard ->
-        can_manage = Permissions.can_manage_whiteboard(user, whiteboard)
-        ServiceHelpers.call_if(
-          fn _i ->
-            params
-            |> Map.merge(%{"code" => UUID.uuid4(), "used" => false, "created_by_id" => user.id})
-            |> create()
-          end,
-          params,
-          can_manage
-        )
+  def create_invite(user, params) do
+    # TODO: check if collection or whiteboard given
+    # check permissions if things are fine then
+    # Create membership then create invite
+    # Then send invite via email.
+    {:ok, member} = Members.create(params)
+    if params |> Map.has_key?("collection_id") do
+
     end
+    # case Whiteboards.find_by_id(whiteboard_id) do
+    #   nil -> StatusResponse.not_found()
+    #   whiteboard ->
+    #     can_manage = Permissions.can_manage_whiteboard?(user, whiteboard)
+    #     ServiceHelpers.call_if(
+    #       fn _i ->
+    #         params
+    #         |> Map.merge(%{"code" => UUID.uuid4(), "used" => false, "created_by_id" => user.id})
+    #         |> create()
+    #       end,
+    #       params,
+    #       can_manage
+    #     )
+    # end
   end
 
   def detail_for_user(user, invite_id) do

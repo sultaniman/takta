@@ -7,6 +7,7 @@
 * [ ] Invite by email,
 * [ ] Activate newly created user if was invited by email,
 * [ ] Create default collection when user created,
+* [ ] Adjust invite resource to follow the latest changes in context,
 
 Creating invite accepts
   * Accept permissions,
