@@ -1,6 +1,12 @@
 defmodule TaktaWeb.MemberService do
   @moduledoc false
-  alias Takta.{Accounts, Members, Whiteboards}
+  alias Takta.{
+    Accounts,
+    Collections,
+    Members,
+    Whiteboards
+  }
+
   alias Takta.Members.MemberMapper
   alias TaktaWeb.Permissions
   alias TaktaWeb.Base.StatusResponse
@@ -15,11 +21,9 @@ defmodule TaktaWeb.MemberService do
     collection =
       params
       |> Map.get("collection_id")
-      |> Whiteboards.find_by_id()
+      |> Collections.find_by_id()
 
-    member_id =
-      params
-      |> Map.get("member_id")
+    member_id = params |> get_in("member_id")
 
     if member_id == user.id do
       StatusResponse.bad_request(:already_owner)
