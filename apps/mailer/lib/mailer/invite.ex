@@ -21,7 +21,7 @@ defmodule Mailer.Invite do
       Thanks.
     )
 
-    new_mail(
+    new_email(
       to: email,
       from: Application.get_env(:mailer, :from_email),
       subject: "Call for collaboration",
