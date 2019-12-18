@@ -108,6 +108,8 @@ defmodule TaktaWeb.InviteService do
   defp create(params) do
     case Invites.create(params) do
       {:ok, invite} ->
+        invite |> send_invite()
+
         invite
         |> InviteMapper.to_json_basic()
         |> StatusResponse.ok()
@@ -129,5 +131,12 @@ defmodule TaktaWeb.InviteService do
       {:error, :not_found} ->
         StatusResponse.not_found()
     end
+  end
+
+  defp send_invite(_invite) do
+    # TODO: implement link generation
+    # and putting data together
+    # and sending email
+    # Mailer.Invite.create_invite(invite.member.user.email, "https://magiclink", is_collection)
   end
 end
