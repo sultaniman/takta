@@ -1,6 +1,6 @@
 defmodule Takta.InvitesTest do
   use Takta.{DataCase, Model, Query}
-  alias Takta.{Accounts, Invites, Whiteboards}
+  alias Takta.{Accounts, Invites, Members, Whiteboards}
 
   describe "invites 💌 ::" do
     test "find all works as expected" do
@@ -20,11 +20,18 @@ defmodule Takta.InvitesTest do
       user = Accounts.all() |> List.first()
       whiteboard = Whiteboards.all() |> List.first()
 
+      {:ok, member} = Members.create(%{
+        can_annotate: true,
+        can_comment: true,
+        member_id: user.id,
+        whiteboard_id: whiteboard.id
+      })
+
       {:ok, invite} = Invites.create(%{
-        content: "test-invite",
+        used: false,
         code: "test-code",
         created_by_id: user.id,
-        whiteboard_id: whiteboard.id
+        member_id: member.id
       })
 
       assert Invites.find_by_id(invite.id).id
@@ -32,31 +39,27 @@ defmodule Takta.InvitesTest do
 
     test "can not create new invite if input is not valid" do
       {:error, changeset} = Invites.create(%{
-        content: "test-invite",
+        used: true
       })
 
-      assert changeset.errors
       assert changeset.errors == [
         code: {"can't be blank", [validation: :required]},
         created_by_id: {"can't be blank", [validation: :required]},
-        whiteboard_id: {"can't be blank", [validation: :required]}
+        member_id: {"can't be blank", [validation: :required]}
       ]
     end
 
     test "can update invite if input is valid" do
       invite = Invites.all() |> List.first()
-      user = Accounts.find_by_email("consultant1@example.com")
-      {:ok, updated} = Invites.update(invite, %{used_by_id: user.id})
-      assert updated.used_by_id == user.id
+      {:ok, updated} = Invites.update(invite, %{used: true})
+      assert updated.used
     end
 
     test "can not update invite if input is not valid" do
       invite = Invites.all() |> List.first()
-      {:error, changeset} = Invites.update(invite, %{whiteboard_id: nil})
-
-      assert changeset.errors
+      assert {:error, changeset} = Invites.update(invite, %{member_id: nil})
       assert changeset.errors == [
-        whiteboard_id: {"can't be blank", [validation: :required]}
+        member_id: {"can't be blank", [validation: :required]}
       ]
     end
 
@@ -73,11 +76,17 @@ defmodule Takta.InvitesTest do
       user = Accounts.all() |> List.first()
       whiteboard = Whiteboards.all() |> List.first()
 
+      {:ok, member} = Members.create(%{
+        can_annotate: true,
+        can_comment: true,
+        member_id: user.id,
+        whiteboard_id: whiteboard.id
+      })
+
       {:ok, invite} = Invites.create(%{
-        content: "test-invite",
         code: "test-code",
         created_by_id: user.id,
-        whiteboard_id: whiteboard.id
+        member_id: member.id
       })
 
       assert Invites.is_valid(invite.id)
@@ -87,11 +96,17 @@ defmodule Takta.InvitesTest do
       user = Accounts.all() |> List.first()
       whiteboard = Whiteboards.all() |> List.first()
 
+      {:ok, member} = Members.create(%{
+        can_annotate: true,
+        can_comment: true,
+        member_id: user.id,
+        whiteboard_id: whiteboard.id
+      })
+
       {:ok, invite} = Invites.create(%{
-        content: "test-invite",
         code: "test-code",
         created_by_id: user.id,
-        whiteboard_id: whiteboard.id
+        member_id: member.id
       })
 
       invite
