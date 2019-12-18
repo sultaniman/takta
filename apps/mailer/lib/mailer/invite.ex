@@ -7,16 +7,12 @@ defmodule Mailer.Invite do
   Send email to user with link and
   """
   def create_invite(email, link, is_collection) do
-    collaborate_on = "whiteboard"
-    if is_collection do
-      collaborate_on = "collection"
-    end
-
     Logger.info("Send invite to #{email} with link #{link}")
+    on_what = collaborate_on(is_collection)
 
     body = ~s(
       Hey,
-      Someone invited you to collaborate on #{collaborate_on}
+      Someone invited you to collaborate on #{on_what}
       please follow the link below
 
       #{link}
@@ -33,4 +29,7 @@ defmodule Mailer.Invite do
   end
 
   def schedule_delivery(invite), do: invite |> Mailer.deliver_later()
+
+  defp collaborate_on(true), do: "whiteboard"
+  defp collaborate_on(false), do: "collection"
 end
