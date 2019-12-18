@@ -6,12 +6,15 @@ defmodule TaktaWeb.MemberService do
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Services.ServiceHelpers
 
-  # TODO: create invite -> send by email
-  # TODO: update method -> check collection_id as well
   def create_member(user, params) do
     whiteboard =
       params
       |> Map.get("whiteboard_id")
+      |> Whiteboards.find_by_id()
+
+    collection =
+      params
+      |> Map.get("collection_id")
       |> Whiteboards.find_by_id()
 
     member_id =
@@ -21,8 +24,9 @@ defmodule TaktaWeb.MemberService do
     if member_id == user.id do
       StatusResponse.bad_request(:already_owner)
     else
-      can_manage = Permissions.can_manage_whiteboard?(user, whiteboard)
-      ServiceHelpers.call_if(&create/1, params, can_manage)
+      can_manage_collection = Permissions.can_manage_collection?(user, collection)
+      can_manage_whiteboard = Permissions.can_manage_whiteboard?(user, whiteboard)
+      ServiceHelpers.call_if(&create/1, params, can_manage_whiteboard or can_manage_collection)
     end
   end
 
