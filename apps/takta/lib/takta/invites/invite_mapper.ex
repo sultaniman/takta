@@ -21,8 +21,7 @@ defmodule Takta.Invites.InviteMapper do
       used: invite.used,
       code: invite.code,
       created_by: UserMapper.to_json_basic(invite.created_by),
-      used_by: UserMapper.to_json_basic(invite.used_by),
-      whiteboard: WhiteboardMapper.to_json_basic(invite.whiteboard)
+      member: MemberMapper.to_json_basic(invite.member)
     }
   end
 end
