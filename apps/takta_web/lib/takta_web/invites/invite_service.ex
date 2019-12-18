@@ -1,6 +1,12 @@
 defmodule TaktaWeb.InviteService do
   @moduledoc false
-  alias Takta.{Invites, Members, Whiteboards}
+  alias Takta.{
+    Collections,
+    Invites,
+    Members,
+    Whiteboards
+  }
+
   alias Takta.Invites.InviteMapper
   alias TaktaWeb.Base.StatusResponse
   alias TaktaWeb.Permissions
@@ -11,24 +17,55 @@ defmodule TaktaWeb.InviteService do
     # check permissions if things are fine then
     # Create membership then create invite
     # Then send invite via email.
-    {:ok, member} = Members.create(params)
-    if params |> Map.has_key?("collection_id") do
+    whiteboard =
+      params
+      |> Map.get("whiteboard_id")
+      |> Whiteboards.find_by_id()
 
+    collection =
+      params
+      |> Map.get("collection_id")
+      |> Collections.find_by_id()
+
+    member_id = params |> get_in("member_id")
+
+    if is_nil(whiteboard) and is_nil(collection) do
+      StatusResponse.not_found()
+    else
+      if member_id == user.id do
+        StatusResponse.bad_request(:already_owner)
+      else
+        can_manage_collection = Permissions.can_manage_collection?(user, collection)
+        can_manage_whiteboard = Permissions.can_manage_whiteboard?(user, whiteboard)
+
+        if can_manage_collection or can_manage_whiteboard do
+          case Members.create(params) do
+            {:ok, member} ->
+              ServiceHelpers.call_if(
+                fn _i ->
+                  new_params =
+                    params
+                    |> Map.merge(%{
+                      "code" => UUID.uuid4(),
+                      "used" => false,
+                      "created_by_id" => user.id,
+                      "member_id" => member.id
+                    })
+
+                  new_params |> create()
+                end,
+                params,
+                true
+              )
+
+            {:error, %Ecto.Changeset{} = changeset} ->
+              changeset
+              |> Takta.Util.Changeset.errors_to_json()
+              |> StatusResponse.bad_request()
+          end
+        end
+      end
     end
-    # case Whiteboards.find_by_id(whiteboard_id) do
-    #   nil -> StatusResponse.not_found()
-    #   whiteboard ->
-    #     can_manage = Permissions.can_manage_whiteboard?(user, whiteboard)
-    #     ServiceHelpers.call_if(
-    #       fn _i ->
-    #         params
-    #         |> Map.merge(%{"code" => UUID.uuid4(), "used" => false, "created_by_id" => user.id})
-    #         |> create()
-    #       end,
-    #       params,
-    #       can_manage
-    #     )
-    # end
   end
 
   def detail_for_user(user, invite_id) do
@@ -66,9 +103,6 @@ defmodule TaktaWeb.InviteService do
           StatusResponse.permission_denied()
         end
     end
-  end
-
-  def invite_by_email(user, params) do
   end
 
   defp create(params) do
