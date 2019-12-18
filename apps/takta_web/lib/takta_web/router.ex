@@ -82,4 +82,9 @@ defmodule TaktaWeb.Router do
     # Login w/ JWT token
     get("/t/:magic_token", MagicController, :magic_signin)
   end
+
+  if Mix.env == :dev do
+    # If using Phoenix
+    forward "/sent-emails", Bamboo.SentEmailViewerPlug
+  end
 end

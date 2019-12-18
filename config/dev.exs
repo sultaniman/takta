@@ -35,6 +35,9 @@ config :takta_web,
   uploader: TaktaWeb.Uploaders.Local,
   upload_to: "/tmp/takta-whiteboards"
 
+config :mailer, Mailer,
+  adapter: Bamboo.LocalAdapter
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

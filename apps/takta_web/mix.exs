@@ -31,6 +31,7 @@ defmodule TaktaWeb.MixProject do
     # Domain apps
     {:auth, in_umbrella: true},
     {:takta, in_umbrella: true},
+    {:mailer, in_umbrella: true},
 
     # Test deps
     {:bypass, "~> 1.0", only: :test},
@@ -47,7 +48,6 @@ defmodule TaktaWeb.MixProject do
     extra_applications: [
       :logger,
       :runtime_tools,
-      :auth,
       :ueberauth_google,
       :ueberauth_github
     ]
