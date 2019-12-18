@@ -61,7 +61,7 @@
 # Mailer
 
 * ✅ Generate mailer app,
-* ❌ Create gmail mailer app,
+* ✅ Create gmail mailer app,
 * ❌ Create minimal templates to send invite,
 
 # Cleanup & tech debt

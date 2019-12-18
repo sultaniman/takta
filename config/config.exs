@@ -57,6 +57,17 @@ config :auth,
   m_cost: 8,
   hashlen: 4
 
+config :mailer, Mailer,
+  adapter: Bamboo.SMTPAdapter,
+  server: "smtp.gmail.com",
+  port: 587,
+  username: System.get_env("EMAIL_USERNAME")
+  password: System.get_env("EMAIL_PASSWORD"),
+  tls: :if_available,
+  allowed_tls_versions: [:"tlsv1", :"tlsv1.1", :"tlsv1.2"],
+  retries: 3,
+  auth: :if_available
+
 # config :oauth2, debug: true
 
 # Ueberauth
