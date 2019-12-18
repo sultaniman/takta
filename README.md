@@ -4,10 +4,20 @@
 
 ## Core
 * [x] Create mailer app and confgure Bamboo,
-* [ ] Send invite when membership created,
 * [ ] Invite by email,
 * [ ] Activate newly created user if was invited by email,
 * [ ] Create default collection when user created,
+
+Creating invite accepts
+  * Accept permissions,
+  * Whiteboard or collection,
+  * Accept email
+    * If does not exist, then create
+  * Send email at the end.
+
+If invite was accepted and user inactive
+Then activate user,
+And generate magic token for session exchange login.
 
 ## Docs
 * [ ] Write configuration & operational documentation,
