@@ -35,8 +35,7 @@ defmodule Takta.Invites do
 
   def preload_all(invite) do
     invite
-    |> Repo.preload(:whiteboard)
-    |> Repo.preload(:used_by)
+    |> Repo.preload(:member)
     |> Repo.preload(:created_by)
   end
 

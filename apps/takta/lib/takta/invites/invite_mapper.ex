@@ -2,6 +2,7 @@ defmodule Takta.Invites.InviteMapper do
   @moduledoc false
   alias Takta.Invites.Invite
   alias Takta.Accounts.UserMapper
+  alias Takta.Members.MemberMapper
   alias Takta.Whiteboards.WhiteboardMapper
 
   def to_json_basic(%Invite{} = invite) do
@@ -10,8 +11,7 @@ defmodule Takta.Invites.InviteMapper do
       used: invite.used,
       code: invite.code,
       created_by_id: invite.created_by_id,
-      used_by_id: invite.used_by_id,
-      whiteboard_id: invite.whiteboard_id
+      member_id: invite.member_id
     }
   end
 
