@@ -11,10 +11,11 @@ defmodule Takta.Invites.InviteForms do
       :can_comment,
       :used_by_id,
       :created_by_id,
+      :collection_id,
       :whiteboard_id
     ]
 
-    required_fields = [:code, :created_by_id, :whiteboard_id]
+    required_fields = [:code, :created_by_id, :used_by_id]
 
     invite
     |> cast(attrs, fields)
@@ -22,6 +23,7 @@ defmodule Takta.Invites.InviteForms do
     |> foreign_key_constraint(:used_by_id)
     |> foreign_key_constraint(:created_by_id)
     |> foreign_key_constraint(:whiteboard_id)
+    |> foreign_key_constraint(:collection_id)
   end
 
   def new(%Invite{} = invite, params), do: invite |> base(params)
