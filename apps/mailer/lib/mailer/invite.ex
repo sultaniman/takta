@@ -1,6 +1,7 @@
 defmodule Mailer.Invite do
   @moduledoc false
   import Bamboo.Email
+  require Logger
 
   @doc """
   Send email to user with link and
@@ -10,6 +11,8 @@ defmodule Mailer.Invite do
     if is_collection do
       collaborate_on = "collection"
     end
+
+    Logger.info("Send invite to #{email} with link #{link}")
 
     body = ~s(
       Hey,
@@ -29,5 +32,5 @@ defmodule Mailer.Invite do
     )
   end
 
-  def schedule_delivery(email), do: email |> Mailer.deliver_later()
+  def schedule_delivery(invite), do: invite |> Mailer.deliver_later()
 end

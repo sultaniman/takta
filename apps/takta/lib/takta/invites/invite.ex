@@ -1,8 +1,9 @@
 defmodule Takta.Invites.Invite do
   @moduledoc false
   use Takta.Model
-  alias Takta.Whiteboards.Whiteboard
   alias Takta.Accounts.User
+  alias Takta.Collections.Collection
+  alias Takta.Whiteboards.Whiteboard
 
   schema "invites" do
     field :used, :boolean, default: false
@@ -20,6 +21,7 @@ defmodule Takta.Invites.Invite do
     belongs_to :used_by, User
     belongs_to :created_by, User
     belongs_to :whiteboard, Whiteboard
+    belongs_to :collection, Collection
 
     timestamps()
   end

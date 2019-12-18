@@ -67,6 +67,9 @@ config :mailer, Mailer,
   retries: 3,
   auth: :if_available
 
+config :mailer,
+  from_email: System.get_env("FROM_EMAIL")
+
 # config :oauth2, debug: true
 
 # Ueberauth
