@@ -107,39 +107,17 @@ defmodule Takta.Fixtures do
       whiteboard_id: wb1.id
     })
 
-    Invites.create(%{
-      used: false,
-      code: "my-shiny-invite",
-      created_by_id: user1.id,
-      whiteboard_id: wb1.id
-    })
-
-    Invites.create(%{
-      used: false,
-      code: "my-1m-bucks-invite",
-      created_by_id: user1.id,
-      whiteboard_id: wb1.id
-    })
-
-    Invites.create(%{
-      used: false,
-      code: "my-1b-bucks-invite",
-      used_by_id: consultant.id,
-      created_by_id: user1.id,
-      whiteboard_id: wb1.id
-    })
-
-    Members.create(%{
+    {:ok, member_user1} = Members.create(%{
       member_id: user1.id,
       whiteboard_id: wb1.id
     })
 
-    Members.create(%{
+    {:ok, member_consultant} = Members.create(%{
       member_id: consultant.id,
       whiteboard_id: wb2.id
     })
 
-    Members.create(%{
+    {:ok, member_admin} = Members.create(%{
       member_id: admin.id,
       whiteboard_id: wb2.id
     })
@@ -152,6 +130,27 @@ defmodule Takta.Fixtures do
     Collections.create(%{
       name: "Collection admin",
       owner_id: admin.id
+    })
+
+    {:ok, _invite} =Invites.create(%{
+      used: false,
+      code: "my-shiny-invite",
+      created_by_id: user1.id,
+      member_id: member_user1.id
+    })
+
+    Invites.create(%{
+      used: false,
+      code: "my-1m-bucks-invite",
+      created_by_id: user1.id,
+      member_id: member_consultant.id
+    })
+
+    Invites.create(%{
+      used: false,
+      code: "my-1b-bucks-invite",
+      created_by_id: user1.id,
+      member_id: member_admin.id
     })
   end
 end
