@@ -4,7 +4,6 @@
 
 ## Core
 * [ ] Activate newly created user if was invited by email,
-* [ ] Create default collection when user created,
 
 ## Deployment & configuration
 * [ ] Generate releases configuration,
