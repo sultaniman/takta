@@ -139,7 +139,7 @@ defmodule TaktaWeb.CollectionControllerTest do
     end
 
     # TODO: write unit test
-    test "members can see their collections", %{conn1: conn1} do
+    test "members can see their collections", %{conn1: _conn1} do
     end
 
     test "owners can see collection details", %{conn1: conn1} do
@@ -157,7 +157,7 @@ defmodule TaktaWeb.CollectionControllerTest do
     end
 
     # TODO: write unit test
-    test "members can see collection details", %{conn1: conn1} do
+    test "members can see collection details", %{conn1: _conn1} do
     end
 
     test "owners can update collections", %{conn1: conn1} do
