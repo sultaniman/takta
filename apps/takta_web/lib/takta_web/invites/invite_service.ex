@@ -13,7 +13,6 @@ defmodule TaktaWeb.InviteService do
   alias Takta.Invites.InviteMapper
   alias Takta.Util.Changeset
   alias TaktaWeb.Permissions
-  alias TaktaWeb.Services.ServiceHelpers
   alias TaktaWeb.Router.Helpers
 
   import TaktaWeb.Base.StatusResponse
@@ -62,11 +61,8 @@ defmodule TaktaWeb.InviteService do
     case validate_member(user, params) do
       # Means both collection and whiteboard
       # do not exist in our database, thus HTTP 404
-      {nil, _, _, _} ->
-        not_found(:whiteboard_not_found)
-
-      {_, nil, _, _} ->
-        not_found(:collection_not_found)
+      {nil, nil, _, _} ->
+        not_found()
 
       # Means user has insufficient permissions
       {_c, _w, false, _} ->
@@ -169,10 +165,16 @@ defmodule TaktaWeb.InviteService do
     can_manage_collection or can_manage_whiteboard
   end
 
-  defp get_or_create_user(%{"member_id" => user_id, "email" => nil}) do
+  defp get_or_create_user(params) do
+    get_or_create_user(
+      Map.get(params, "member_id"),
+      Map.get(params, "email")
+    )
+  end
+  defp get_or_create_user(user_id, nil) do
     {:ok, Accounts.find_by_id(user_id)}
   end
-  defp get_or_create_user(%{"member_id" => nil, "email" => email}) do
+  defp get_or_create_user(nil, email) do
     params = %{
       email: email,
       full_name: "Awesome Stranger",
@@ -194,14 +196,13 @@ defmodule TaktaWeb.InviteService do
   defp send_invite(membership, code) do
     domain =
       :takta_web
-      |> Application.get_env(Endpoint)
-      |> Keyword.fetch!("host")
+      |> Application.get_env(TaktaWeb.Endpoint)
 
     path =
       TaktaWeb.Endpoint
       |> Helpers.invite_path(:accept_invite, code)
 
-    link = domain <> path
+    link = domain[:url][:host] <> path
 
     membership.member.email
     |> Invite.create_invite(link, membership.collection_id != nil)

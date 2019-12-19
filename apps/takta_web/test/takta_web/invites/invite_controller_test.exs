@@ -2,7 +2,7 @@ defmodule TaktaWeb.InviteControllerTest do
   @moduledoc false
   use TaktaWeb.ConnCase, async: true
   alias Auth.MagicTokens
-  alias Takta.{Accounts, Whiteboards}
+  alias Takta.{Accounts, Members, Whiteboards}
 
   setup do
     user1 = Accounts.find_by_email("web@example.com")
@@ -43,7 +43,7 @@ defmodule TaktaWeb.InviteControllerTest do
         |> List.first()
 
       payload = %{
-        used_by_id: user1.id,
+        member_id: user1.id,
         whiteboard_id: whiteboard.id,
         can_annotate: true,
         can_comment: true
@@ -54,11 +54,13 @@ defmodule TaktaWeb.InviteControllerTest do
         |> post(Routes.invite_path(conn2, :create), payload)
         |> json_response(200)
 
+      member = Members.find_member(user1.id, whiteboard.id)
+
       refute response |> Map.get("used")
       assert response |> Map.get("code")
       assert response |> Map.get("created_by_id") == user2.id
-      assert response |> Map.get("used_by_id") == user1.id
-      assert response |> Map.get("whiteboard_id") == whiteboard.id
+      assert response |> Map.get("member_id") == member.id
+      assert member.member_id == user1.id
     end
 
     test "owners can list their own invites", %{conn2: conn2, user1: user1, user2: user2} do
@@ -68,7 +70,7 @@ defmodule TaktaWeb.InviteControllerTest do
         |> List.first()
 
       payload = %{
-        used_by_id: user1.id,
+        member_id: user1.id,
         whiteboard_id: whiteboard.id,
         can_annotate: true,
         can_comment: true
@@ -93,7 +95,7 @@ defmodule TaktaWeb.InviteControllerTest do
         |> List.first()
 
       payload = %{
-        used_by_id: user1.id,
+        member_id: user1.id,
         whiteboard_id: whiteboard.id,
         can_annotate: true,
         can_comment: true
@@ -113,13 +115,9 @@ defmodule TaktaWeb.InviteControllerTest do
       refute response |> Map.get("used")
       assert response |> Map.get("id") == invite_id
       assert response |> Map.has_key?("code")
-      assert response |> get_in(["used_by", "id"]) == user1.id
-      assert response |> get_in(["used_by", "is_active"])
-      assert response |> get_in(["used_by", "full_name"]) == "Web name"
       assert response |> get_in(["created_by", "id"]) == user2.id
       assert response |> get_in(["created_by", "is_active"])
       assert response |> get_in(["created_by", "full_name"]) == "Web 2 name"
-      assert response |> get_in(["whiteboard", "id"]) == whiteboard.id
     end
 
     test "whiteboard owners can delete invites", %{conn2: conn2, user1: user1, user2: user2} do
@@ -129,7 +127,7 @@ defmodule TaktaWeb.InviteControllerTest do
         |> List.first()
 
       payload = %{
-        used_by_id: user1.id,
+        member_id: user1.id,
         whiteboard_id: whiteboard.id,
         can_annotate: true,
         can_comment: true

@@ -5,6 +5,7 @@ defmodule Takta.Accounts do
 
   def all, do: Repo.all(User)
 
+  def find_by_id(nil), do: nil
   def find_by_id(user_id) do
     Repo.one(from u in User, where: u.id == ^user_id)
   end
