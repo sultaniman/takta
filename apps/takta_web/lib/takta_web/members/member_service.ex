@@ -23,7 +23,7 @@ defmodule TaktaWeb.MemberService do
       |> Map.get("collection_id")
       |> Collections.find_by_id()
 
-    member_id = params |> get_in("member_id")
+    member_id = params |> Map.get("member_id")
 
     if member_id == user.id do
       StatusResponse.bad_request(:already_owner)

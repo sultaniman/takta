@@ -141,9 +141,11 @@ defmodule TaktaWeb.WhiteboardControllerTest do
         data: @valid_data
       }
 
-      conn1
-      |> post(Routes.whiteboard_path(conn1, :create), payload)
-      |> json_response(200)
+      whiteboard_id =
+        conn1
+        |> post(Routes.whiteboard_path(conn1, :create), payload)
+        |> json_response(200)
+        |> Map.get("id")
 
       response =
         conn1
@@ -153,7 +155,11 @@ defmodule TaktaWeb.WhiteboardControllerTest do
       assert %{"whiteboards" => wbs} = response
       assert length(wbs) == 2
 
-      wb = wbs |> List.last()
+      wb =
+        wbs
+        |> Enum.filter(fn w -> w["id"] == whiteboard_id end)
+        |> List.first()
+
       assert wb |> Map.has_key?("id")
       assert wb |> Map.get("name") == payload.filename
       assert wb |> Map.get("path") |> String.starts_with?("takta-whiteboards/#{user1.id}")
@@ -207,14 +213,16 @@ defmodule TaktaWeb.WhiteboardControllerTest do
         |> Map.get("annotations")
         |> Enum.at(0)
 
-      assert comment
-      assert comment |> Map.get("content") == "bla bla"
-      assert comment |> Map.get("whiteboard_id") == whiteboard.id
+      assert comment |> Map.take(["content", "whiteboard_id"]) == %{
+        "content" => "bla bla",
+        "whiteboard_id" => whiteboard.id
+      }
 
-      assert annotation
-      assert annotation |> Map.get("coords") == %{"x" => 1, "y" => 1}
-      assert annotation |> Map.get("comment_id") == comment |> Map.get("id")
-      assert annotation |> Map.get("whiteboard_id") == whiteboard.id
+      assert annotation |> Map.take(["coords", "comment_id", "whiteboard_id"]) == %{
+        "coords" => %{"x" => 1, "y" => 1},
+        "comment_id" => comment |> Map.get("id"),
+        "whiteboard_id" => whiteboard.id
+      }
     end
 
     test "can comment on whiteboard if user has permissions", %{conn1: conn1, user1: user1} do
