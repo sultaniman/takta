@@ -21,6 +21,7 @@ config :auth, Auth.Repo,
 # you can enable the server option below.
 config :takta_web, TaktaWeb.Endpoint,
   http: [port: 4002],
+  url: [host: "localhost"],
   server: false
 
 config :takta_web,
