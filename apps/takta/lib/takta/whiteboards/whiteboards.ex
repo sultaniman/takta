@@ -6,6 +6,7 @@ defmodule Takta.Whiteboards do
 
   def all, do: Repo.all(Whiteboard)
 
+  def find_by_id(nil), do: nil
   def find_by_id(whiteboard_id) do
     Repo.one(from w in Whiteboard, where: w.id == ^whiteboard_id)
   end

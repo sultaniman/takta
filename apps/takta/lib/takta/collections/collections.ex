@@ -7,6 +7,7 @@ defmodule Takta.Collections do
 
   def all, do: Repo.all(Collection)
 
+  def find_by_id(nil), do: nil
   def find_by_id(collection_id) do
     query = from c in Collection, where: c.id == ^collection_id
 
