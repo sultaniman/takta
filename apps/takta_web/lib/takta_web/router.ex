@@ -55,7 +55,7 @@ defmodule TaktaWeb.Router do
     get     "/invites",                       InviteController, :list
     get     "/invites/:id",                   InviteController, :detail
     delete  "/invites/:id",                   InviteController, :delete
-    # post  "/invites/via/email",   InviteController, :email_invite
+    post    "/invites/accept/:code",          InviteController, :accept_invite
   end
 
   # General purpose endpoints

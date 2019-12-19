@@ -8,7 +8,7 @@ defmodule TaktaWeb.InviteController do
     %Plug.Conn{assigns: %{user: user}} = conn,
     params
   ) do
-    response = InviteService.create_invite(user, params)
+    response = InviteService.create_with_member(user, params)
     conn |> StatusResponse.send_response(response)
   end
 
@@ -27,8 +27,13 @@ defmodule TaktaWeb.InviteController do
   #   conn |> StatusResponse.send_response(response)
   # end
 
-  # def email_invite(%Plug.Conn{assigns: %{user: user}} = conn, params) do
-  #   response = InviteService.invite_by_email(user, params)
-  #   conn |> StatusResponse.send_response(response)
-  # end
+  def accept_invite(
+    %Plug.Conn{assigns: %{user: _user}} = _conn,
+    %{"code" => _code}
+  ) do
+    # TODO: implement
+    # validate & check
+    # create magic token
+    # exchange token to session
+  end
 end
