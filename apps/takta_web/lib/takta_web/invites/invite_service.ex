@@ -121,7 +121,7 @@ defmodule TaktaWeb.InviteService do
     end
   end
 
-  def delete(invite) do
+  defp delete(invite) do
     case Invites.delete(invite.id) do
       {:ok, deleted_invite} ->
         deleted_invite
