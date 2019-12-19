@@ -92,6 +92,7 @@ defmodule TaktaWeb.InviteService do
     end
   end
 
+  ### Helper code
   defp create(params, member) do
     case Invites.create(params) do
       {:ok, invite} ->
