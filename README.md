@@ -5,9 +5,11 @@
 ## Core
 
 ## Deployment & configuration
+* [ ] Add Dockerfile,
 * [ ] Generate releases configuration,
 
 ## Docs
+* [ ] Add typespecs,
 * [ ] Write configuration & operational documentation,
 * [ ] Document business logic in sources,
 
