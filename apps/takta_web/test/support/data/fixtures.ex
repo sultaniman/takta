@@ -4,6 +4,7 @@ defmodule TaktaWeb.Fixtures do
   alias Takta.{
     Accounts,
     Annotations,
+    Collections,
     Comments,
     Members,
     Whiteboards
@@ -70,10 +71,20 @@ defmodule TaktaWeb.Fixtures do
       }
     })
 
+    {:ok, collection1} = Collections.create(%{
+      name: "test-collection",
+      owner_id: user1.id
+    })
+
     # Create member for the whiteboard of `user1`
     {:ok, _member} = Members.create(%{
       member_id: user2.id,
       whiteboard_id: wb1.id
+    })
+
+    {:ok, _member} = Members.create(%{
+      member_id: user2.id,
+      collection_id: collection1.id
     })
 
     Accounts.create(%{

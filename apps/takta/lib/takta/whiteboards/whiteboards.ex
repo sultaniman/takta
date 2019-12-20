@@ -2,7 +2,6 @@ defmodule Takta.Whiteboards do
   @moduledoc false
   use Takta.Query
   alias Takta.Whiteboards.{Whiteboard, WhiteboardForms}
-  alias Takta.Util.Changeset
 
   def all, do: Repo.all(Whiteboard)
 

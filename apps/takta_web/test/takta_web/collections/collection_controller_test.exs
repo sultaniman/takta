@@ -2,7 +2,7 @@ defmodule TaktaWeb.CollectionControllerTest do
   @moduledoc false
   use TaktaWeb.ConnCase, async: true
   alias Auth.MagicTokens
-  alias Takta.{Accounts, Whiteboards}
+  alias Takta.{Accounts, Members, Whiteboards}
 
   setup do
     user1 = Accounts.find_by_email("web@example.com")
@@ -133,13 +133,9 @@ defmodule TaktaWeb.CollectionControllerTest do
       assert %{"collections" => collections} = response
       collection =
         collections
-        |> Enum.at(0)
+        |> Enum.filter(fn i -> i["id"] == created_collection["id"] end)
 
-      assert created_collection == collection
-    end
-
-    # TODO: write unit test
-    test "members can see their collections", %{conn1: _conn1} do
+      assert collection == [created_collection]
     end
 
     test "owners can see collection details", %{conn1: conn1} do
@@ -153,11 +149,22 @@ defmodule TaktaWeb.CollectionControllerTest do
         |> get(Routes.collection_path(conn1, :detail, collection["id"]))
         |> json_response(200)
 
-      assert response |> Enum.at(0) == collection
+      assert response == collection
     end
 
-    # TODO: write unit test
-    test "members can see collection details", %{conn1: _conn1} do
+    test "members can see collection details", %{conn2: conn2, user1: user1, user2: user2} do
+      member =
+        user2.id
+        |> Members.find_by_user_id()
+        |> Enum.reject(fn m -> m.collection_id == nil end)
+        |> List.first()
+
+      response =
+        conn2
+        |> get(Routes.collection_path(conn2, :detail, member.collection_id))
+        |> json_response(200)
+
+      assert response |> Map.get("owner_id") == user1.id
     end
 
     test "owners can update collections", %{conn1: conn1} do

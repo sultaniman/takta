@@ -3,6 +3,7 @@
 # TODO
 
 ## Core
+* [ ] On collection/whiteboard listing endpoints return shared items as well,
 
 ## Deployment & configuration
 * [ ] Add Dockerfile,

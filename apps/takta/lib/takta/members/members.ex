@@ -11,6 +11,16 @@ defmodule Takta.Members do
   end
 
   # TODO: write test
+  def find_by_user_id(user_id) do
+    query = from(
+      m in Member,
+      where: m.member_id == ^user_id
+    )
+
+    Repo.all(query)
+  end
+
+  # TODO: write test
   def find_member(user_id, whiteboard_id) do
     query = from(
       m in Member,

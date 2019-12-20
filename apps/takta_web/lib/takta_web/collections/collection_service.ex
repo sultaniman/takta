@@ -3,9 +3,9 @@ defmodule TaktaWeb.CollectionService do
   alias Takta.Collections
   alias Takta.Collections.CollectionMapper
   alias Takta.Whiteboards.WhiteboardMapper
-  alias TaktaWeb.Base.StatusResponse
-  alias TaktaWeb.Services
-  alias TaktaWeb.Permissions
+  alias TaktaWeb.{Permissions, Services}
+
+  import TaktaWeb.Base.StatusResponse
 
   def create_for_user(user, name) do
     params = %{name: name, owner_id: user.id}
@@ -14,7 +14,7 @@ defmodule TaktaWeb.CollectionService do
       {:ok, collection} ->
         collection
         |> CollectionMapper.to_json_basic()
-        |> StatusResponse.ok()
+        |> ok()
 
       {:error, %Ecto.Changeset{} = changeset} ->
         changeset
@@ -23,47 +23,50 @@ defmodule TaktaWeb.CollectionService do
   end
 
   def list_for_user(user) do
-    StatusResponse.ok(%{collections: json_for_user(user.id)})
+    ok(%{collections: json_for_user(user.id)})
   end
 
   def detail_for_user(user, collection_id) do
     case Collections.find_by_id(collection_id) do
-      nil -> StatusResponse.not_found()
+      nil -> not_found()
       collection ->
-        if Permissions.can_manage_collection?(user, collection) do
-          user.id
-          |> json_for_user()
-          |> StatusResponse.ok()
+        is_member = Collections.has_member?(collection_id, user.id)
+        can_manage = Permissions.can_manage_collection?(user, collection)
+
+        if is_member or can_manage do
+          collection
+          |> CollectionMapper.to_json_basic()
+          |> ok()
         else
-          StatusResponse.permission_denied()
+          permission_denied()
         end
     end
   end
 
   def update_for_user(user, collection_id, new_name) do
     case Collections.find_by_id(collection_id) do
-      nil -> StatusResponse.not_found()
+      nil -> not_found()
       collection ->
         if Permissions.can_manage_collection?(user, collection) do
           call_action(fn ->
             Collections.update(collection, %{name: new_name})
           end)
         else
-          StatusResponse.permission_denied()
+          permission_denied()
         end
     end
   end
 
   def delete_for_user(user, collection_id) do
     case Collections.find_by_id(collection_id) do
-      nil -> StatusResponse.not_found()
+      nil -> not_found()
       collection ->
         if Permissions.can_manage_collection?(user, collection) do
           call_action(fn ->
             Collections.delete(collection_id)
           end)
         else
-          StatusResponse.permission_denied()
+          permission_denied()
         end
     end
   end
@@ -81,20 +84,20 @@ defmodule TaktaWeb.CollectionService do
         collection.whiteboards
         |> Enum.map(&WhiteboardMapper.to_json_basic/1)
 
-      StatusResponse.ok(%{whiteboards: whiteboards})
+      ok(%{whiteboards: whiteboards})
     end
   end
 
   def add_whiteboards(user, collection_id, whiteboards) do
     case Collections.find_by_id(collection_id) do
-      nil -> StatusResponse.not_found()
+      nil -> not_found()
       collection ->
         if Permissions.can_manage_collection?(user, collection) do
           call_action(fn ->
             Collections.add_whiteboards(collection_id, whiteboards)
           end)
         else
-          StatusResponse.permission_denied()
+          permission_denied()
         end
     end
   end
@@ -104,14 +107,14 @@ defmodule TaktaWeb.CollectionService do
       {:ok, result} ->
         result
         |> CollectionMapper.to_json_basic()
-        |> StatusResponse.ok()
+        |> ok()
 
       {:error, %Ecto.Changeset{} = changeset} ->
         changeset
         |> Services.bad_request()
 
       {_updated_rows, _} ->
-        StatusResponse.ok()
+        ok()
     end
   end
 
