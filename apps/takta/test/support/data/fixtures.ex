@@ -132,7 +132,7 @@ defmodule Takta.Fixtures do
       owner_id: admin.id
     })
 
-    {:ok, _invite} =Invites.create(%{
+    {:ok, _invite} = Invites.create(%{
       used: false,
       code: "my-shiny-invite",
       created_by_id: user1.id,

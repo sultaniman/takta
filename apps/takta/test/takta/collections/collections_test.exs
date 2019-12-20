@@ -2,8 +2,9 @@ defmodule Takta.CollectionsTest do
   use Takta.{DataCase, Query}
   alias Takta.{
     Accounts,
+    Collections,
     Members,
-    Collections
+    Whiteboards
   }
 
   describe "collections 🗃 ::" do
@@ -94,9 +95,33 @@ defmodule Takta.CollectionsTest do
       refute member.whiteboard_id
     end
 
-    # TODO: fill in
     test "deleting collection also deletes all whiteboards" do
+      user =
+        "su@example.com"
+        |> Accounts.find_by_email()
 
+      {:ok, collection} = Collections.create(%{
+        name: "test-collection",
+        owner_id: user.id
+      })
+
+      {:ok, _whiteboard} = Whiteboards.create(%{
+        name: "abc",
+        path: "my/abc.png",
+        owner_id: user.id,
+        collection_id: collection.id,
+      })
+
+      {:ok, _whiteboard} = Whiteboards.create(%{
+        name: "xyz",
+        path: "my/path.png",
+        owner_id: user.id,
+        collection_id: collection.id,
+      })
+
+      Collections.delete(collection.id)
+
+      refute Collections.find_by_id(user.id)
     end
   end
 end
