@@ -66,11 +66,6 @@ defmodule TaktaWeb.Router do
     get "/join/:code",  InviteController, :accept_invite
   end
 
-  # TODO: render session with key=takta and value=signed_session
-  scope "/api/v1/e", TaktaWeb do
-    pipe_through :api
-  end
-
   # Session & authentication
   scope "/auth", TaktaWeb do
     pipe_through :browser

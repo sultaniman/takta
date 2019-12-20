@@ -11,7 +11,6 @@ defmodule TaktaWeb.Services.UploadService do
   @uploader Application.get_env(:takta_web, :uploader)
   @upload_to Application.get_env(:takta_web, :upload_to)
 
-  # TODO: get user from conn
   @doc """
   Handle upload and return response.
   Depending on environemnt takes responsibility to

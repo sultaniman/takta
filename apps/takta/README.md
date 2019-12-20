@@ -1,3 +1,1 @@
 # Takta
-
-**TODO: Add description**
