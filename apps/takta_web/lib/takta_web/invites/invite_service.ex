@@ -41,6 +41,10 @@ defmodule TaktaWeb.InviteService do
     ok(%{invites: invites})
   end
 
+  def find_invite_by_code(code) do
+
+  end
+
   def delete_invite(user, invite_id) do
     case Invites.find_by_id(invite_id) do
       nil -> not_found()
@@ -175,21 +179,17 @@ defmodule TaktaWeb.InviteService do
     {:ok, Accounts.find_by_id(user_id)}
   end
   defp get_or_create_user(nil, email) do
-    params = %{
-      email: email,
-      full_name: "Awesome Stranger",
-      password: UUID.uuid4(),
-      is_active: false,
-      is_admin: false,
-      provider: "none"
-    }
+    case Accounts.find_by_email(email) do
+      nil ->
+        case Accounts.create_from_email(email) do
+          {:ok, user} -> {:ok, user}
+          {:error, %Ecto.Changeset{} = changeset} ->
+            changeset
+            |> Changeset.errors_to_json()
+            |> bad_request()
+        end
 
-    case Accounts.create(params) do
-      {:ok, user} -> {:ok, user}
-      {:error, %Ecto.Changeset{} = changeset} ->
-        changeset
-        |> Changeset.errors_to_json()
-        |> bad_request()
+      user -> {:ok, user}
     end
   end
 
