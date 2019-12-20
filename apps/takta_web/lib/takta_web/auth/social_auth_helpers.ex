@@ -102,7 +102,7 @@ defmodule TaktaWeb.SocialAuthHelpers do
         Repo.insert(changeset)
 
       user ->
-        Accounts.update(user, changeset.changes)
+        Accounts.update_user(user, changeset.changes)
         {:ok, user}
     end
   end

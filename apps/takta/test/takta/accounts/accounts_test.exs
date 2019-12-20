@@ -51,7 +51,7 @@ defmodule Takta.AccountsTest do
       user = Accounts.find_by_email("admin@example.com")
       update_params = %{full_name: "FULL BULL DULL HULL"}
 
-      with {:ok, updated_user} <- Accounts.update(user, update_params) do
+      with {:ok, updated_user} <- Accounts.update_user(user, update_params) do
         assert updated_user.full_name == update_params[:full_name]
       end
     end
@@ -60,7 +60,7 @@ defmodule Takta.AccountsTest do
       user = Accounts.find_by_email("admin@example.com")
       update_params = %{full_name: nil, email: nil}
 
-      with {:error, changeset} <- Accounts.update(user, update_params) do
+      with {:error, changeset} <- Accounts.update_user(user, update_params) do
         assert changeset.errors
 
         assert changeset.errors == [
