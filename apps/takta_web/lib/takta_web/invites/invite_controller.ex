@@ -27,10 +27,11 @@ def delete(%Plug.Conn{assigns: %{user: user}} = conn, %{"id" => invite_id}) do
   conn |> StatusResponse.send_response(response)
 end
 
-  def accept_invite(
-    %Plug.Conn{assigns: %{user: _user}} = _conn,
-    %{"code" => _code}
-  ) do
+  def accept_invite(conn, %{"code" => code}) do
+    case InviteService.accept_invite(code) do
+      {:ok, magic_token} ->
+        conn |> redirect(to: "/")
+    end
     # TODO: implement
     # validate & check
     # create magic token
