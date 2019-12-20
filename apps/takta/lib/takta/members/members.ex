@@ -28,6 +28,7 @@ defmodule Takta.Members do
     Repo.one(query)
   end
 
+  def whiteboard_has_member?(nil, _user_id), do: false
   def whiteboard_has_member?(whiteboard_id, user_id) do
     query = from(
       m in Member,

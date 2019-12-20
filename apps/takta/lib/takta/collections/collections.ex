@@ -64,6 +64,7 @@ defmodule Takta.Collections do
     |> Repo.exists?()
   end
 
+  def has_member?(nil, _user_id), do: false
   def has_member?(collection_id, user_id) do
     query = from(
       m in Member,

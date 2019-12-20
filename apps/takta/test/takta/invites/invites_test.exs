@@ -16,6 +16,40 @@ defmodule Takta.InvitesTest do
       refute Invites.find_by_id(UUID.uuid4())
     end
 
+    test "find_by_code works as expected" do
+      one = Invites.all() |> List.first()
+      assert Invites.find_by_code(one.code)
+    end
+
+    test "find_by_code returns nil if code not found" do
+      refute Invites.find_by_id(UUID.uuid4())
+    end
+
+    test "find_for_user works as expected" do
+      user = Accounts.all() |> List.first()
+      whiteboard = Whiteboards.all() |> List.first()
+
+      {:ok, member} = Members.create(%{
+        can_annotate: true,
+        can_comment: true,
+        member_id: user.id,
+        whiteboard_id: whiteboard.id
+      })
+
+      {:ok, _invite} = Invites.create(%{
+        used: false,
+        code: "test-code",
+        created_by_id: user.id,
+        member_id: member.id
+      })
+
+      user.id
+      |> Invites.find_for_user()
+      |> Enum.map(fn i ->
+        assert Members.find_by_id(i.member_id)
+      end)
+    end
+
     test "can create new invite" do
       user = Accounts.all() |> List.first()
       whiteboard = Whiteboards.all() |> List.first()

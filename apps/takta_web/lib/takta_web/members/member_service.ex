@@ -13,14 +13,20 @@ defmodule TaktaWeb.MemberService do
   alias TaktaWeb.Services.ServiceHelpers
 
   def create_member(user, params) do
-    whiteboard =
+    whiteboard_id =
       params
       |> Map.get("whiteboard_id")
+
+    whiteboard =
+      whiteboard_id
       |> Whiteboards.find_by_id()
 
-    collection =
+    collection_id =
       params
       |> Map.get("collection_id")
+
+    collection =
+      collection_id
       |> Collections.find_by_id()
 
     member_id = params |> Map.get("member_id")
@@ -28,9 +34,13 @@ defmodule TaktaWeb.MemberService do
     if member_id == user.id do
       StatusResponse.bad_request(:already_owner)
     else
-      can_manage_collection = Permissions.can_manage_collection?(user, collection)
-      can_manage_whiteboard = Permissions.can_manage_whiteboard?(user, whiteboard)
-      ServiceHelpers.call_if(&create/1, params, can_manage_whiteboard or can_manage_collection)
+      if already_member?(member_id, collection_id, whiteboard_id) do
+        StatusResponse.bad_request(:already_member)
+      else
+        can_manage_collection = Permissions.can_manage_collection?(user, collection)
+        can_manage_whiteboard = Permissions.can_manage_whiteboard?(user, whiteboard)
+        ServiceHelpers.call_if(&create/1, params, can_manage_whiteboard or can_manage_collection)
+      end
     end
   end
 
@@ -83,6 +93,12 @@ defmodule TaktaWeb.MemberService do
         can_manage = Permissions.can_manage_whiteboard?(user, whiteboard)
         ServiceHelpers.call_if(&delete/1, member, can_manage)
     end
+  end
+
+  defp already_member?(user_id, collection_id, whiteboard_id) do
+    has_collection_member = Collections.has_member?(collection_id, user_id)
+    has_whiteboard_member = Members.whiteboard_has_member?(whiteboard_id, user_id)
+    has_collection_member or has_whiteboard_member
   end
 
   defp create(params) do

@@ -37,19 +37,21 @@ defmodule Takta.MembersTest do
     end
 
     test "find_member works as expected" do
-      wb = Whiteboards.all() |> List.first()
       user = Accounts.all() |> List.first()
+      {:ok, wb} = Whiteboards.create(%{
+        name: "test-wb-xyz",
+        path: "path/to/file.png",
+        owner_id: user.id
+      })
 
-      {:ok, _member} = Members.create(%{
+      {:ok, new_member} = Members.create(%{
         can_annotate: false,
         member_id: user.id,
         whiteboard_id: wb.id
       })
 
-      members = Members.find_member(user.id, wb.id)
-      assert length(members) > 0
-      members
-      |> Enum.map(fn m -> assert m.member_id == user.id end)
+      member = Members.find_member(user.id, wb.id)
+      assert member == new_member
     end
 
     test "can create new member" do

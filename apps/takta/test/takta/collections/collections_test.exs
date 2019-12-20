@@ -14,7 +14,11 @@ defmodule Takta.CollectionsTest do
 
     test "find_by_id works as expected" do
       one = Collections.all() |> List.first()
-      assert collection = Collections.find_by_id(one.id)
+      collection =
+        one.id
+        |> Collections.find_by_id()
+        |> Collections.preload_all()
+
       assert length(collection.whiteboards) > 0
     end
 

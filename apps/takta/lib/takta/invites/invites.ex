@@ -10,7 +10,6 @@ defmodule Takta.Invites do
     Repo.one(from i in Invite, where: i.id == ^id)
   end
 
-  # TODO: write tests
   def find_by_code(nil), do: nil
   def find_by_code(code) do
     query = from(i in Invite, where: i.code == ^code)
@@ -38,7 +37,6 @@ defmodule Takta.Invites do
     end
   end
 
-  # TODO: write tests
   def find_for_user(user_id) do
     Repo.all(from i in Invite, where: i.created_by_id == ^user_id)
   end
