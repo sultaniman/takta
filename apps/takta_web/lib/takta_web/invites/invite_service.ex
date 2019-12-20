@@ -1,6 +1,7 @@
 defmodule TaktaWeb.InviteService do
   @moduledoc false
   alias Auth.Magic
+  alias Auth.MagicTokens
   alias Mailer.Invite
   alias Takta.{
     Accounts,
@@ -41,8 +42,19 @@ defmodule TaktaWeb.InviteService do
     ok(%{invites: invites})
   end
 
-  def find_invite_by_code(code) do
-
+  # TODO: write unit test
+  def accept_invite(code) do
+    case Invites.find_by_code(code) do
+      nil -> {:error, :not_found}
+      invite ->
+        case Magic.decode_and_verify(invite.code) do
+          {:ok, _claims} ->
+            {:ok, magic_token} = MagicTokens.create_token(invite.member.member_id, "invite")
+            Accounts.activate_user(invite.member.member_id)
+            {:ok, magic_token.token}
+          {:error, _reason} -> {:error, :invalid_invite}
+        end
+    end
   end
 
   def delete_invite(user, invite_id) do

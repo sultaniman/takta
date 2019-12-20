@@ -2,7 +2,7 @@ defmodule TaktaWeb.InviteController do
   @moduledoc false
   use TaktaWeb, :controller
   alias TaktaWeb.Base.StatusResponse
-  alias TaktaWeb.InviteService
+  alias TaktaWeb.{InviteService, Router}
 
   def create(
     %Plug.Conn{assigns: %{user: user}} = conn,
@@ -30,11 +30,17 @@ end
   def accept_invite(conn, %{"code" => code}) do
     case InviteService.accept_invite(code) do
       {:ok, magic_token} ->
-        conn |> redirect(to: "/")
+        signin_link =
+          conn
+          |> Router.Helpers.magic_path(:magic_signin, magic_token)
+
+        conn |> redirect(to: signin_link)
+
+      {:error, :not_found} ->
+        conn |> StatusResponse.send_response(StatusResponse.not_found())
+
+      {:error, :invalid_invite} ->
+        conn |> StatusResponse.send_response(StatusResponse.bad_request(:invalid_invite))
     end
-    # TODO: implement
-    # validate & check
-    # create magic token
-    # exchange token to session
   end
 end
