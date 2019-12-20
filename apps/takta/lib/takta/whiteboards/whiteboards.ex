@@ -50,8 +50,9 @@ defmodule Takta.Whiteboards do
   end
 
   def delete(whiteboard_id) do
-    whiteboard_id
-    |> find_by_id()
-    |> Changeset.delete()
+    case find_by_id(whiteboard_id) do
+      nil -> {:error, :not_found}
+      whiteboard -> Repo.delete(whiteboard)
+    end
   end
 end
