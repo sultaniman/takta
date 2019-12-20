@@ -14,16 +14,13 @@ defmodule Takta.Whiteboards do
     Repo.all(from w in Whiteboard, where: w.owner_id == ^user_id)
   end
 
-  # TODO: write test
   def with_members(whiteboard), do: whiteboard |> Repo.preload(:members)
 
-  # TODO: write test
   @doc """
   Preload comments
   """
   def with_comments(whiteboard), do: whiteboard |> Repo.preload(:comments)
 
-  # TODO: write test
   @doc """
   Preload annotations
   """

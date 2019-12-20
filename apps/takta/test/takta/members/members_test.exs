@@ -20,6 +20,38 @@ defmodule Takta.MembersTest do
       refute Members.find_by_id(UUID.uuid4())
     end
 
+    test "find_by_user_id works as expected" do
+      wb = Whiteboards.all() |> List.first()
+      user = Accounts.all() |> List.first()
+
+      {:ok, _member} = Members.create(%{
+        can_annotate: false,
+        member_id: user.id,
+        whiteboard_id: wb.id
+      })
+
+      members = Members.find_by_user_id(user.id)
+      assert length(members) > 0
+      members
+      |> Enum.map(fn m -> assert m.member_id == user.id end)
+    end
+
+    test "find_member works as expected" do
+      wb = Whiteboards.all() |> List.first()
+      user = Accounts.all() |> List.first()
+
+      {:ok, _member} = Members.create(%{
+        can_annotate: false,
+        member_id: user.id,
+        whiteboard_id: wb.id
+      })
+
+      members = Members.find_member(user.id, wb.id)
+      assert length(members) > 0
+      members
+      |> Enum.map(fn m -> assert m.member_id == user.id end)
+    end
+
     test "can create new member" do
       wb = Whiteboards.all() |> List.first()
       user = Accounts.all() |> List.first()

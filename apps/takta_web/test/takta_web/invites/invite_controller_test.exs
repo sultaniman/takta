@@ -55,7 +55,6 @@ defmodule TaktaWeb.InviteControllerTest do
         |> json_response(200)
 
       member = Members.find_member(user1.id, whiteboard.id)
-
       refute response |> Map.get("used")
       assert response |> Map.get("code")
       assert response |> Map.get("created_by_id") == user2.id
