@@ -10,6 +10,15 @@ defmodule Takta.Invites do
     Repo.one(from i in Invite, where: i.id == ^id)
   end
 
+  # TODO: write tests
+  def find_by_code(nil), do: nil
+  def find_by_code(code) do
+    query = from(i in Invite, where: i.code == ^code)
+    query
+    |> Repo.one()
+    |> preload_all()
+  end
+
   def create(params) do
     %Invite{}
     |> InviteForms.new(params)
