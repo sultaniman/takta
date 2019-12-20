@@ -43,3 +43,6 @@ config :auth,
   hashlen: 4,
 
   session_ttl_days: 1
+
+config :mailer, Mailer,
+  adapter: Bamboo.TestAdapter
