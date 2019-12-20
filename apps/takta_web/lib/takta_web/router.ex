@@ -55,15 +55,15 @@ defmodule TaktaWeb.Router do
     get     "/invites",                       InviteController, :list
     get     "/invites/:id",                   InviteController, :detail
     delete  "/invites/:id",                   InviteController, :delete
-    post    "/invites/accept/:code",          InviteController, :accept_invite
   end
 
   # General purpose endpoints
   scope "/", TaktaWeb do
     pipe_through :browser
 
-    get("/", Redirect, to: "/api/v1/e")
-    get("/signin", LoginController, :signin)
+    get "/",            Redirect, to: "/api/v1/e"
+    get "/signin",      LoginController, :signin
+    get "/join/:code",  InviteController, :accept_invite
   end
 
   # TODO: render session with key=takta and value=signed_session
@@ -83,8 +83,8 @@ defmodule TaktaWeb.Router do
     get("/t/:magic_token", MagicController, :magic_signin)
   end
 
+  # Enable develpment mailbox
   if Mix.env == :dev do
-    # If using Phoenix
     forward "/sent-emails", Bamboo.SentEmailViewerPlug
   end
 end
