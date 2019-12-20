@@ -32,6 +32,22 @@ defmodule Takta.Accounts do
     |> Repo.insert()
   end
 
+  # TODO: write unit test
+  def create_from_email(email) do
+    params = params = %{
+      email: email,
+      full_name: "Awesome Stranger",
+      password: UUID.uuid4(),
+      is_active: false,
+      is_admin: false,
+      provider: "none"
+    }
+
+    %User{}
+    |> AccountForms.new(params)
+    |> Repo.insert()
+  end
+
   def update(%User{} = user, params) do
     user
     |> AccountForms.update(params)
