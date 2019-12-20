@@ -32,6 +32,19 @@ defmodule Takta.Accounts do
     |> Repo.insert()
   end
 
+  # TODO: write tests
+  def activate_user(user_id) do
+    user =
+      user_id
+      |> find_by_id()
+
+    unless user.is_active do
+      user |> update_user(%{is_active: true})
+    end
+
+    {:ok, user}
+  end
+
   # TODO: write unit test
   def create_from_email(email) do
     params = params = %{
@@ -48,7 +61,7 @@ defmodule Takta.Accounts do
     |> Repo.insert()
   end
 
-  def update(%User{} = user, params) do
+  def update_user(%User{} = user, params) do
     user
     |> AccountForms.update(params)
     |> Repo.update()
