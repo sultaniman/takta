@@ -5,6 +5,7 @@ defmodule Takta.Invites do
 
   def all, do: Repo.all(Invite)
 
+  def find_by_id(nil), do: nil
   def find_by_id(id) do
     Repo.one(from i in Invite, where: i.id == ^id)
   end

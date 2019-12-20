@@ -61,7 +61,7 @@ defmodule TaktaWeb.InviteService do
     case validate_member(user, params) do
       # Means both collection and whiteboard
       # do not exist in our database, thus HTTP 404
-      {nil, nil, _, _} ->
+      {nil, nil, _has_permission, _same_user} ->
         not_found()
 
       # Means user has insufficient permissions

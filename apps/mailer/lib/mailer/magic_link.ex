@@ -13,7 +13,7 @@ defmodule Mailer.MagicLink do
     body = ~s(
       Hey,
 
-      Please us the following link to sing in to your account
+      Please use the following link to sing in to your account
 
       #{link}
 
