@@ -4,6 +4,7 @@
 
 ## Core
 * [ ] Activate newly created user if was invited by email,
+* [ ] Implement accept invite endpoint,
 
 ## Deployment & configuration
 * [ ] Generate releases configuration,

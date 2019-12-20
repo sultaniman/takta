@@ -65,17 +65,17 @@ defmodule TaktaWeb.InviteService do
         not_found()
 
       # Means user has insufficient permissions
-      {_c, _w, false, _} ->
+      {_collection, _whiteboard, false, _} ->
         permission_denied()
 
       # Means user can not invite himself
-      {_c, _w, _, true} ->
+      {_collection, _whiteboard, _, true} ->
         bad_request(:already_owner)
 
       # Happy path, when user is the
       # owner of collection or whiteboard
       # and has 0
-      {_c, _w, true, false} ->
+      {_collection, _whiteboard, true, false} ->
         with {:ok, member_user} <- get_or_create_user(params) do
           member_params =
             params
