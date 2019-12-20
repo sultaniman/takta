@@ -3,6 +3,7 @@
 # TODO
 
 ## Core
+* [ ] Setup database schema indexes,
 * [ ] On collection/whiteboard listing endpoints return shared items as well,
 
 ## Deployment & configuration
